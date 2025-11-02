@@ -3,7 +3,10 @@ import { DashboardDto, ProjectMetricsDto, UserMetricsDto } from '@/types';
 
 export const dashboardApi = {
   getSummary: async (): Promise<DashboardDto> => {
+    console.log('Fetching dashboard summary...');
+    console.log('Token:', localStorage.getItem('token'));
     const response = await apiClient.get<DashboardDto>('/dashboard/summary');
+    console.log('Dashboard summary response:', response);
     return response.data;
   },
 

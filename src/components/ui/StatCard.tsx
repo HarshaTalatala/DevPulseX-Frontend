@@ -31,16 +31,19 @@ export const StatCard: React.FC<StatCardProps> = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay }}
-      className="group relative overflow-hidden rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-200"
+      className="group relative overflow-hidden rounded-xl bg-white dark:bg-[#0a0a0a] border border-gray-200/60 dark:border-white/10 shadow-sm hover:shadow-md hover:border-gray-300 dark:hover:border-white/20 transition-all duration-200"
     >
+      {/* Subtle gradient background on hover */}
+      <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-gray-50/50 dark:to-white/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      
       {/* Content */}
-      <div className="p-6">
-        <div className="flex items-center justify-between">
+      <div className="relative p-6">
+        <div className="flex items-start justify-between">
           <div className="flex-1">
-            <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
+            <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
               {name}
             </p>
-            <div className="flex items-baseline gap-2">
+            <div className="flex items-baseline gap-2 mt-3">
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -61,11 +64,8 @@ export const StatCard: React.FC<StatCardProps> = ({
               )}
             </div>
           </div>
-          <div className={cn(
-            'flex-shrink-0 p-3 rounded-lg',
-            color
-          )}>
-            <Icon className="h-6 w-6" />
+          <div className="flex-shrink-0 p-2.5 rounded-lg bg-gray-100 dark:bg-white/5 transition-all duration-200 group-hover:bg-gray-200 dark:group-hover:bg-white/10 group-hover:scale-105">
+            <Icon className="h-5 w-5 text-gray-700 dark:text-gray-300" />
           </div>
         </div>
       </div>

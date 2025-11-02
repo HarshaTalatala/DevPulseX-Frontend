@@ -24,8 +24,10 @@ function CallbackInner() {
         setAuth(resp.user, resp.token);
         toast.success('Signed in with GitHub!');
         router.replace('/dashboard');
-      } catch (e) {
-        toast.error('GitHub login failed');
+      } catch (e: any) {
+        console.error('GitHub login error:', e);
+        const errorMsg = e.response?.data?.message || e.message || 'GitHub login failed';
+        toast.error(errorMsg);
         router.replace('/');
       }
     })();
