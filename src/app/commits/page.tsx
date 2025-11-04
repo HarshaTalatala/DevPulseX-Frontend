@@ -7,10 +7,10 @@ import { Button } from '@/components/ui/Button';
 import { useCommits, useDeleteCommit } from '@/hooks/useCommits';
 import { useProjects } from '@/hooks/useProjects';
 import { useUsers } from '@/hooks/useUsers';
-import { Plus, Trash2, Search, List, BarChart3, GitCommit, Calendar, User, FolderKanban } from 'lucide-react';
+import { Plus, Trash2, Search, List, BarChart3, GitCommit, Calendar, User, FolderKanban, Sparkles, GitBranch } from 'lucide-react';
 import { formatDateTime } from '@/lib/utils';
 import { toast } from 'sonner';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ResponsiveContainer, BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 
 type ViewMode = 'list' | 'chart';
@@ -94,7 +94,7 @@ export default function CommitsPage() {
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-              className="rounded-full h-12 w-12 border-4 border-t-blue-600 border-r-transparent border-b-transparent border-l-transparent"
+              className="rounded-full h-12 w-12 border-4 border-t-gray-600 border-r-gray-200/20 border-b-gray-200/20 border-l-gray-200/20 dark:border-t-gray-400 dark:border-r-gray-800/20 dark:border-b-gray-800/20 dark:border-l-gray-800/20"
             />
           </div>
         </DashboardLayout>
@@ -105,166 +105,313 @@ export default function CommitsPage() {
   return (
     <ProtectedRoute>
       <DashboardLayout>
-        <div className="space-y-6">
-          {/* Header */}
+        {/* Vercel-style monochrome background gradient */}
+        <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-gray-400/10 via-gray-500/10 to-gray-600/10 dark:from-gray-600/20 dark:via-gray-700/20 dark:to-gray-800/20 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute top-60 -left-40 w-96 h-96 bg-gradient-to-br from-gray-300/8 via-gray-400/8 to-gray-500/8 dark:from-gray-700/15 dark:via-gray-800/15 dark:to-gray-900/15 rounded-full blur-3xl animate-pulse delay-1000" />
+        </div>
+
+        <div className="space-y-8 relative">
+          {/* Header with Vercel-style glass effect */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="relative"
           >
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Commits</h1>
-              <p className="text-gray-600 dark:text-gray-400 flex items-center gap-2">
-                <GitCommit className="h-4 w-4" />
-                Explore code activity across projects
-              </p>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+              <div className="space-y-3">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-gray-500/10 via-gray-600/10 to-gray-700/10 border border-gray-400/20 dark:border-gray-500/20"
+                >
+                  <GitBranch className="h-3.5 w-3.5 text-gray-600 dark:text-gray-400" />
+                  <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Version Control</span>
+                </motion.div>
+                <h1 className="text-4xl sm:text-5xl font-bold bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-100 dark:to-white bg-clip-text text-transparent">
+                  Commits
+                </h1>
+                <p className="text-base text-gray-600 dark:text-gray-400 flex items-center gap-2 max-w-2xl">
+                  <GitCommit className="h-4 w-4" />
+                  Track code changes and development activity across all projects
+                </p>
+              </div>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                <Button className="w-full sm:w-auto bg-gradient-to-r from-gray-900 to-gray-800 dark:from-white dark:to-gray-100 text-white dark:text-black hover:shadow-lg hover:shadow-gray-900/20 dark:hover:shadow-white/20 transition-all duration-300 border-0">
+                  <Plus className="h-4 w-4 mr-2" />
+                  New Commit
+                </Button>
+              </motion.div>
             </div>
-            <Button className="w-full sm:w-auto">
-              <Plus className="h-4 w-4 mr-2" />
-              New Commit
-            </Button>
           </motion.div>
 
-          {/* Stats */}
+          {/* Stats - Vercel Style */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }} className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg p-5 shadow-sm">
-              <div className="flex items-center justify-between">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              whileHover={{ y: -2, transition: { duration: 0.2 } }}
+              className="group relative overflow-hidden bg-white/60 dark:bg-black/40 backdrop-blur-xl border border-gray-200/50 dark:border-white/10 rounded-2xl p-6 shadow-[0_1px_0_0_rgba(255,255,255,0.5)_inset,0_1px_2px_rgba(0,0,0,0.05)] dark:shadow-[0_1px_0_0_rgba(255,255,255,0.05)_inset,0_8px_16px_rgba(0,0,0,0.4)] hover:shadow-lg dark:hover:shadow-2xl transition-all duration-300"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="relative flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Commits</p>
-                  <p className="text-2xl font-semibold text-gray-900 dark:text-white mt-1">{stats.total}</p>
+                  <p className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Total Commits</p>
+                  <p className="text-3xl font-bold bg-gradient-to-br from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent mt-2">{stats.total}</p>
                 </div>
-                <div className="p-3 bg-blue-50 dark:bg-blue-950/30 rounded-lg"><GitCommit className="h-6 w-6 text-blue-600 dark:text-blue-400"/></div>
+                <motion.div 
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.3, delay: 0.4 }}
+                  className="p-3 bg-gray-100/80 dark:bg-white/10 rounded-xl backdrop-blur-sm"
+                >
+                  <GitCommit className="h-6 w-6 text-gray-600 dark:text-gray-400"/>
+                </motion.div>
               </div>
             </motion.div>
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.2 }} className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg p-5 shadow-sm">
-              <div className="flex items-center justify-between">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ duration: 0.5, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+              whileHover={{ y: -2, transition: { duration: 0.2 } }}
+              className="group relative overflow-hidden bg-white/60 dark:bg-black/40 backdrop-blur-xl border border-gray-200/50 dark:border-white/10 rounded-2xl p-6 shadow-[0_1px_0_0_rgba(255,255,255,0.5)_inset,0_1px_2px_rgba(0,0,0,0.05)] dark:shadow-[0_1px_0_0_rgba(255,255,255,0.05)_inset,0_8px_16px_rgba(0,0,0,0.4)] hover:shadow-lg dark:hover:shadow-2xl transition-all duration-300"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="relative flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Contributors</p>
-                  <p className="text-2xl font-semibold text-gray-900 dark:text-white mt-1">{stats.uniqueUsers}</p>
+                  <p className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Contributors</p>
+                  <p className="text-3xl font-bold bg-gradient-to-br from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent mt-2">{stats.uniqueUsers}</p>
                 </div>
-                <div className="p-3 bg-green-50 dark:bg-green-950/30 rounded-lg"><User className="h-6 w-6 text-green-600 dark:text-green-400"/></div>
+                <motion.div 
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.3, delay: 0.45 }}
+                  className="p-3 bg-gray-100/80 dark:bg-white/10 rounded-xl backdrop-blur-sm"
+                >
+                  <User className="h-6 w-6 text-gray-600 dark:text-gray-400"/>
+                </motion.div>
               </div>
             </motion.div>
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.3 }} className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg p-5 shadow-sm">
-              <div className="flex items-center justify-between">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ duration: 0.5, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              whileHover={{ y: -2, transition: { duration: 0.2 } }}
+              className="group relative overflow-hidden bg-white/60 dark:bg-black/40 backdrop-blur-xl border border-gray-200/50 dark:border-white/10 rounded-2xl p-6 shadow-[0_1px_0_0_rgba(255,255,255,0.5)_inset,0_1px_2px_rgba(0,0,0,0.05)] dark:shadow-[0_1px_0_0_rgba(255,255,255,0.05)_inset,0_8px_16px_rgba(0,0,0,0.4)] hover:shadow-lg dark:hover:shadow-2xl transition-all duration-300"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="relative flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Today</p>
-                  <p className="text-2xl font-semibold text-gray-900 dark:text-white mt-1">{stats.commitsToday}</p>
+                  <p className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Today</p>
+                  <p className="text-3xl font-bold bg-gradient-to-br from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent mt-2">{stats.commitsToday}</p>
                 </div>
-                <div className="p-3 bg-orange-50 dark:bg-orange-950/30 rounded-lg"><Calendar className="h-6 w-6 text-orange-600 dark:text-orange-400"/></div>
+                <motion.div 
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.3, delay: 0.5 }}
+                  className="p-3 bg-gray-100/80 dark:bg-white/10 rounded-xl backdrop-blur-sm"
+                >
+                  <Calendar className="h-6 w-6 text-gray-600 dark:text-gray-400"/>
+                </motion.div>
               </div>
             </motion.div>
           </div>
 
-          {/* Search & Filters */}
+          {/* Search & Filters - Vercel Style */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="flex flex-col lg:flex-row gap-4 items-center justify-between"
+            transition={{ duration: 0.5, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            className="relative overflow-hidden bg-white/60 dark:bg-black/40 backdrop-blur-xl border border-gray-200/50 dark:border-white/10 rounded-2xl p-5 shadow-[0_1px_0_0_rgba(255,255,255,0.5)_inset,0_1px_2px_rgba(0,0,0,0.05)] dark:shadow-[0_1px_0_0_rgba(255,255,255,0.05)_inset,0_8px_16px_rgba(0,0,0,0.4)]"
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 w-full">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400"/>
-                <input
-                  placeholder="Search message or ID..."
-                  value={searchQuery}
-                  onChange={(e)=>setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm"
-                />
+            <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 w-full">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500"/>
+                  <input
+                    placeholder="Search message or ID..."
+                    value={searchQuery}
+                    onChange={(e)=>setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2.5 bg-white/80 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400/50 dark:focus:ring-white/20 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 text-sm transition-all duration-200"
+                  />
+                </div>
+                <select 
+                  value={projectFilter} 
+                  onChange={(e)=> setProjectFilter(e.target.value==='ALL'?'ALL':Number(e.target.value))} 
+                  className="w-full px-3 py-2.5 bg-white/80 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400/50 dark:focus:ring-white/20 text-gray-900 dark:text-white text-sm transition-all duration-200 cursor-pointer"
+                >
+                  <option value="ALL">All Projects</option>
+                  {projects?.map(p=> (<option key={p.id} value={p.id}>{p.name}</option>))}
+                </select>
+                <select 
+                  value={userFilter} 
+                  onChange={(e)=> setUserFilter(e.target.value==='ALL'?'ALL':Number(e.target.value))} 
+                  className="w-full px-3 py-2.5 bg-white/80 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400/50 dark:focus:ring-white/20 text-gray-900 dark:text-white text-sm transition-all duration-200 cursor-pointer"
+                >
+                  <option value="ALL">All Users</option>
+                  {users?.map(u=> (<option key={u.id} value={u.id}>{u.name}</option>))}
+                </select>
+                <div className="flex gap-2">
+                  <input 
+                    type="date" 
+                    value={fromDate} 
+                    onChange={(e)=>setFromDate(e.target.value)} 
+                    className="w-full px-3 py-2.5 bg-white/80 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400/50 dark:focus:ring-white/20 text-gray-900 dark:text-white text-sm transition-all duration-200"
+                  />
+                  <input 
+                    type="date" 
+                    value={toDate} 
+                    onChange={(e)=>setToDate(e.target.value)} 
+                    className="w-full px-3 py-2.5 bg-white/80 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400/50 dark:focus:ring-white/20 text-gray-900 dark:text-white text-sm transition-all duration-200"
+                  />
+                </div>
               </div>
-              <select value={projectFilter} onChange={(e)=> setProjectFilter(e.target.value==='ALL'?'ALL':Number(e.target.value))} className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-sm">
-                <option value="ALL">All Projects</option>
-                {projects?.map(p=> (<option key={p.id} value={p.id}>{p.name}</option>))}
-              </select>
-              <select value={userFilter} onChange={(e)=> setUserFilter(e.target.value==='ALL'?'ALL':Number(e.target.value))} className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-sm">
-                <option value="ALL">All Users</option>
-                {users?.map(u=> (<option key={u.id} value={u.id}>{u.name}</option>))}
-              </select>
-              <div className="flex gap-2">
-                <input type="date" value={fromDate} onChange={(e)=>setFromDate(e.target.value)} className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-sm"/>
-                <input type="date" value={toDate} onChange={(e)=>setToDate(e.target.value)} className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-sm"/>
-              </div>
-            </div>
 
-            <div className="flex gap-2 bg-gray-100 dark:bg-gray-800 rounded-lg p-1 self-start">
-              <button onClick={()=>setViewMode('list')} className={`px-3 py-2 rounded-md transition-colors text-sm font-medium ${viewMode==='list'?'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm':'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}>
-                <List className="h-4 w-4 inline mr-1"/> List
-              </button>
-              <button onClick={()=>setViewMode('chart')} className={`px-3 py-2 rounded-md transition-colors text-sm font-medium ${viewMode==='chart'?'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm':'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}>
-                <BarChart3 className="h-4 w-4 inline mr-1"/> Chart
-              </button>
+              <div className="flex gap-1 p-1 bg-gray-100/50 dark:bg-white/5 rounded-xl border border-gray-200/30 dark:border-white/5 self-start">
+                <motion.button 
+                  onClick={()=>setViewMode('list')} 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`px-4 py-2.5 rounded-lg transition-all duration-200 text-sm font-medium flex items-center gap-2 ${viewMode==='list'?'bg-gradient-to-br from-gray-900 to-gray-800 dark:from-white dark:to-gray-100 text-white dark:text-gray-900 shadow-md':'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
+                >
+                  <List className="h-4 w-4"/> List
+                </motion.button>
+                <motion.button 
+                  onClick={()=>setViewMode('chart')} 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`px-4 py-2.5 rounded-lg transition-all duration-200 text-sm font-medium flex items-center gap-2 ${viewMode==='chart'?'bg-gradient-to-br from-gray-900 to-gray-800 dark:from-white dark:to-gray-100 text-white dark:text-gray-900 shadow-md':'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
+                >
+                  <BarChart3 className="h-4 w-4"/> Chart
+                </motion.button>
+              </div>
             </div>
           </motion.div>
 
-          {/* Content */}
+          {/* Content - Vercel Style */}
           {viewMode === 'chart' ? (
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.5 }} className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg p-6 shadow-sm">
-              <div className="mb-4">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Commits (last 14 days)</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Daily commit activity</p>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ duration: 0.5, delay: 0.4, ease: [0.22, 1, 0.36, 1] }} 
+              className="relative overflow-hidden bg-white/60 dark:bg-black/40 backdrop-blur-xl border border-gray-200/50 dark:border-white/10 rounded-2xl p-6 shadow-[0_1px_0_0_rgba(255,255,255,0.5)_inset,0_1px_2px_rgba(0,0,0,0.05)] dark:shadow-[0_1px_0_0_rgba(255,255,255,0.05)_inset,0_8px_16px_rgba(0,0,0,0.4)]"
+            >
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold bg-gradient-to-br from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">Commits (last 14 days)</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Daily commit activity</p>
               </div>
               <ResponsiveContainer width="100%" height={320}>
                 <BarChart data={commitsPerDay}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" className="dark:stroke-gray-700" opacity={0.3}/>
-                  <XAxis dataKey="date" stroke="#6b7280" style={{ fontSize: '11px' }}/>
-                  <YAxis stroke="#6b7280" style={{ fontSize: '11px' }}/>
-                  <Tooltip contentStyle={{ backgroundColor: 'white', border: '1px solid #e5e7eb', borderRadius: '0.5rem', fontSize: '12px' }}/>
-                  <Bar dataKey="count" fill="#3b82f6" radius={[6,6,0,0]}/>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" className="dark:stroke-gray-700" opacity={0.2}/>
+                  <XAxis dataKey="date" stroke="#9ca3af" style={{ fontSize: '11px' }}/>
+                  <YAxis stroke="#9ca3af" style={{ fontSize: '11px' }}/>
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: 'rgba(255, 255, 255, 0.95)', 
+                      border: '1px solid rgba(229, 231, 235, 0.5)', 
+                      borderRadius: '12px', 
+                      fontSize: '12px',
+                      backdropFilter: 'blur(12px)'
+                    }}
+                    cursor={{ fill: 'rgba(156, 163, 175, 0.1)' }}
+                  />
+                  <Bar dataKey="count" fill="url(#barGradient)" radius={[8,8,0,0]}/>
+                  <defs>
+                    <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#374151" stopOpacity={0.9}/>
+                      <stop offset="100%" stopColor="#6b7280" stopOpacity={0.6}/>
+                    </linearGradient>
+                  </defs>
                 </BarChart>
               </ResponsiveContainer>
             </motion.div>
           ) : (
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.5 }} className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg shadow-sm overflow-hidden">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ duration: 0.5, delay: 0.4, ease: [0.22, 1, 0.36, 1] }} 
+              className="relative overflow-hidden bg-white/60 dark:bg-black/40 backdrop-blur-xl border border-gray-200/50 dark:border-white/10 rounded-2xl shadow-[0_1px_0_0_rgba(255,255,255,0.5)_inset,0_1px_2px_rgba(0,0,0,0.05)] dark:shadow-[0_1px_0_0_rgba(255,255,255,0.05)_inset,0_8px_16px_rgba(0,0,0,0.4)]"
+            >
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-gray-50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700">
+                  <thead className="bg-gray-100/50 dark:bg-white/5 border-b border-gray-200/50 dark:border-white/10">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Message</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Project</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Author</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Timestamp</th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Message</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Project</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Author</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Timestamp</th>
+                      <th className="px-6 py-4 text-right text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                    {filteredCommits.map((commit, index) => (
-                      <motion.tr key={commit.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3, delay: 0.5 + index * 0.03 }} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                        <td className="px-6 py-4">
-                          <div className="font-mono text-sm text-gray-900 dark:text-white truncate max-w-[520px]">
-                            {commit.message}
-                          </div>
-                          <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">#{commit.id}</div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center gap-2 text-sm text-gray-900 dark:text-white">
-                            <FolderKanban className="h-4 w-4 text-blue-500"/>
-                            {getProjectName(commit.projectId)}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center gap-2 text-sm text-gray-900 dark:text-white">
-                            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-medium">
-                              {getUserName(commit.userId).charAt(0).toUpperCase()}
+                  <tbody className="divide-y divide-gray-200/50 dark:divide-white/5">
+                    <AnimatePresence mode="popLayout">
+                      {filteredCommits.map((commit, index) => (
+                        <motion.tr 
+                          key={commit.id} 
+                          initial={{ opacity: 0, y: 10 }} 
+                          animate={{ opacity: 1, y: 0 }} 
+                          exit={{ opacity: 0, scale: 0.95 }}
+                          transition={{ duration: 0.3, delay: index * 0.03, ease: [0.22, 1, 0.36, 1] }} 
+                          whileHover={{ backgroundColor: 'rgba(156, 163, 175, 0.05)' }}
+                          className="transition-colors"
+                        >
+                          <td className="px-6 py-4">
+                            <div className="font-mono text-sm font-medium text-gray-900 dark:text-white truncate max-w-[520px]">
+                              {commit.message}
                             </div>
-                            {getUserName(commit.userId)}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                          {formatDateTime(commit.timestamp)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right">
-                          <button onClick={()=>handleDelete(commit.id, commit.message)} className="p-1.5 hover:bg-red-50 dark:hover:bg-red-950/20 rounded transition-colors">
-                            <Trash2 className="h-4 w-4 text-red-600 dark:text-red-400"/>
-                          </button>
-                        </td>
-                      </motion.tr>
-                    ))}
+                            <div className="inline-flex items-center gap-1.5 mt-1.5 px-2 py-0.5 rounded-md bg-gray-100 dark:bg-white/5 border border-gray-200/50 dark:border-white/10">
+                              <span className="text-[10px] font-semibold text-gray-500 dark:text-gray-400">#{commit.id}</span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-white">
+                              <FolderKanban className="h-4 w-4 text-gray-500 dark:text-gray-400"/>
+                              {getProjectName(commit.projectId)}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-white">
+                              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-gray-600 via-gray-700 to-gray-800 dark:from-gray-400 dark:via-gray-500 dark:to-gray-600 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                                {getUserName(commit.userId).charAt(0).toUpperCase()}
+                              </div>
+                              {getUserName(commit.userId)}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
+                            {formatDateTime(commit.timestamp)}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-right">
+                            <motion.button 
+                              onClick={()=>handleDelete(commit.id, commit.message)} 
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                              className="p-2 hover:bg-gray-100 dark:hover:bg-white/10 rounded-lg transition-all duration-200 group"
+                            >
+                              <Trash2 className="h-4 w-4 text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors"/>
+                            </motion.button>
+                          </td>
+                        </motion.tr>
+                      ))}
+                    </AnimatePresence>
                   </tbody>
                 </table>
                 {filteredCommits.length === 0 && (
-                  <div className="text-center py-12 text-gray-500 dark:text-gray-400">No commits match your filters.</div>
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-center py-16"
+                  >
+                    <GitCommit className="h-12 w-12 text-gray-300 dark:text-gray-700 mx-auto mb-3" />
+                    <p className="text-gray-500 dark:text-gray-400 font-medium">No commits match your filters</p>
+                    <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">Try adjusting your search criteria</p>
+                  </motion.div>
                 )}
               </div>
             </motion.div>

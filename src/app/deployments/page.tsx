@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import DashboardLayout from '@/components/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/Card';
@@ -12,7 +13,7 @@ import { Select } from '@/components/ui/Select';
 import { StatCard } from '@/components/ui/StatCard';
 import { useDeployments, useDeleteDeployment } from '@/hooks/useDeployments';
 import { useProjects } from '@/hooks/useProjects';
-import { Calendar, CheckCircle2, Plus, Search, Trash2, XCircle } from 'lucide-react';
+import { Calendar, CheckCircle2, Plus, Search, Trash2, XCircle, Rocket, TrendingUp } from 'lucide-react';
 import { formatDateTime, formatRelativeTime } from '@/lib/utils';
 import { toast } from 'sonner';
 import { DeploymentStatus, ProjectDto } from '@/types';
@@ -112,27 +113,35 @@ export default function DeploymentsPage() {
     }
   };
 
-  // Loading state
+  // Loading state - Vercel Style
   if (isLoading) {
     return (
       <ProtectedRoute>
         <DashboardLayout>
-          <div className="space-y-6">
-            <div className="flex justify-between items-center">
-              <div className="h-8 w-40 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
-              <div className="h-9 w-36 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
+          <div className="min-h-screen bg-white dark:bg-black">
+            <div className="space-y-8">
+              <div className="flex justify-between items-center">
+                <div className="h-10 w-48 bg-gray-100 dark:bg-neutral-900 rounded-lg animate-pulse border border-gray-200 dark:border-neutral-800" />
+                <div className="h-10 w-40 bg-gray-100 dark:bg-neutral-900 rounded-lg animate-pulse border border-gray-200 dark:border-neutral-800" />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {[...Array(3)].map((_, i) => (
+                  <motion.div 
+                    key={i} 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.1 }}
+                    className="h-32 bg-white dark:bg-neutral-950 rounded-lg animate-pulse border border-gray-200 dark:border-neutral-800" 
+                  />
+                ))}
+              </div>
+              <div className="bg-white dark:bg-neutral-950 rounded-lg border border-gray-200 dark:border-neutral-800 p-6">
+                <div className="h-12 bg-gray-100 dark:bg-neutral-900 rounded-lg mb-4 animate-pulse" />
+                {[...Array(6)].map((_, i) => (
+                  <div key={i} className="h-14 bg-gray-100 dark:bg-neutral-900 rounded-lg mb-3 animate-pulse" />
+                ))}
+              </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className="h-28 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
-              ))}
-            </div>
-            <Card>
-              <div className="h-10 bg-gray-100 dark:bg-gray-800 rounded mb-4 animate-pulse" />
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-12 bg-gray-100 dark:bg-gray-800 rounded mb-2 animate-pulse" />
-              ))}
-            </Card>
           </div>
         </DashboardLayout>
       </ProtectedRoute>
@@ -142,59 +151,137 @@ export default function DeploymentsPage() {
   return (
     <ProtectedRoute>
       <DashboardLayout>
-        <div className="space-y-6">
-          {/* Header */}
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Deployments</h1>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Track releases across projects, monitor status, and spot failures fast.</p>
+        <div className="min-h-screen bg-white dark:bg-black">
+          <div className="space-y-8">
+            {/* Header - Vercel Style */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              className="relative"
+            >
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                <div className="space-y-2">
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, delay: 0.1 }}
+                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800"
+                  >
+                    <Rocket className="h-3.5 w-3.5 text-black dark:text-white" />
+                    <span className="text-xs font-medium text-black dark:text-white">Deployments</span>
+                  </motion.div>
+                  <h1 className="text-3xl font-bold text-black dark:text-white">
+                    Ship with confidence
+                  </h1>
+                  <p className="text-sm text-gray-600 dark:text-neutral-400 flex items-center gap-2">
+                    <TrendingUp className="h-3.5 w-3.5" />
+                    Monitor every deployment across your projects in real-time
+                  </p>
+                </div>
+                <motion.button
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="px-5 py-2.5 bg-black dark:bg-white text-white dark:text-black rounded-lg font-medium hover:bg-gray-900 dark:hover:bg-gray-100 transition-all duration-200 flex items-center gap-2 border border-black dark:border-white text-sm"
+                >
+                  <Plus className="h-4 w-4" />
+                  New Deployment
+                </motion.button>
+              </div>
+            </motion.div>
+
+            {/* KPIs - Vercel Style */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                transition={{ duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                whileHover={{ scale: 1.01, transition: { duration: 0.2 } }}
+                className="group relative overflow-hidden bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-5 hover:border-gray-400 dark:hover:border-neutral-600 transition-all duration-200"
+              >
+                <div className="relative flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wide">Total Deployments</p>
+                    <p className="text-2xl font-bold text-black dark:text-white mt-2">{metrics.total}</p>
+                  </div>
+                  <motion.div 
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 0.3, delay: 0.4 }}
+                    className="p-2.5 bg-gray-100 dark:bg-neutral-900 rounded-lg"
+                  >
+                    <Calendar className="h-5 w-5 text-black dark:text-white"/>
+                  </motion.div>
+                </div>
+              </motion.div>
+
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                transition={{ duration: 0.5, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                whileHover={{ scale: 1.01, transition: { duration: 0.2 } }}
+                className="group relative overflow-hidden bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-5 hover:border-gray-400 dark:hover:border-neutral-600 transition-all duration-200"
+              >
+                <div className="relative flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wide">Success Rate</p>
+                    <p className="text-2xl font-bold text-black dark:text-white mt-2">{metrics.successRate}%</p>
+                  </div>
+                  <motion.div 
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 0.3, delay: 0.45 }}
+                    className="p-2.5 bg-gray-100 dark:bg-neutral-900 rounded-lg"
+                  >
+                    <CheckCircle2 className="h-5 w-5 text-black dark:text-white"/>
+                  </motion.div>
+                </div>
+              </motion.div>
+
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                transition={{ duration: 0.5, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                whileHover={{ scale: 1.01, transition: { duration: 0.2 } }}
+                className="group relative overflow-hidden bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-5 hover:border-gray-400 dark:hover:border-neutral-600 transition-all duration-200"
+              >
+                <div className="relative flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wide">Failures</p>
+                    <p className="text-2xl font-bold text-black dark:text-white mt-2">{metrics.failed}</p>
+                  </div>
+                  <motion.div 
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 0.3, delay: 0.5 }}
+                    className="p-2.5 bg-gray-100 dark:bg-neutral-900 rounded-lg"
+                  >
+                    <XCircle className="h-5 w-5 text-black dark:text-white"/>
+                  </motion.div>
+                </div>
+              </motion.div>
             </div>
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              New Deployment
-            </Button>
-          </div>
 
-          {/* KPIs */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <StatCard
-              name="Total deployments"
-              value={metrics.total}
-              icon={Calendar}
-              color="bg-gray-100 dark:bg-gray-800"
-              gradientFrom=""
-              gradientTo=""
-            />
-            <StatCard
-              name="Success rate"
-              value={metrics.successRate}
-              icon={CheckCircle2}
-              color="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300"
-              gradientFrom=""
-              gradientTo=""
-            />
-            <StatCard
-              name="Failures"
-              value={metrics.failed}
-              icon={XCircle}
-              color="bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300"
-              gradientFrom=""
-              gradientTo=""
-            />
-          </div>
-
-          {/* Controls */}
-          <Card>
-            <CardContent>
-              <div className="flex flex-col lg:flex-row gap-3 lg:items-end lg:justify-between">
+            {/* Controls - Vercel Style */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              className="relative overflow-hidden bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-5"
+            >
+              <div className="flex flex-col lg:flex-row gap-4 lg:items-end lg:justify-between">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 flex-1">
                   <div className="relative">
+                    <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-neutral-500 z-10" />
                     <Input
-                      placeholder="Search by #id or project name"
+                      placeholder="Search deployments..."
                       value={search}
                       onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+                      className="pl-10 bg-white dark:bg-black border-gray-200 dark:border-neutral-800 rounded-lg focus:ring-2 focus:ring-black dark:focus:ring-white"
                     />
-                    <Search className="h-4 w-4 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
                   </div>
                   <Select
                     value={projectFilter}
@@ -207,7 +294,7 @@ export default function DeploymentsPage() {
                     options={statusOptions}
                   />
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                   <Select
                     value={String(pageSize)}
                     onChange={(e) => { setPageSize(Number(e.target.value)); setPage(1); }}
@@ -232,98 +319,163 @@ export default function DeploymentsPage() {
                     a.download = 'deployments.csv';
                     a.click();
                     URL.revokeObjectURL(url);
-                  }}>Export CSV</Button>
+                  }}>Export</Button>
                   <Button variant="outline" onClick={() => { setSearch(''); setProjectFilter('ALL'); setStatusFilter('ALL'); setSortKey('timestamp'); setSortDir('desc'); setPage(1); }}>Reset</Button>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </motion.div>
 
-          {/* Table */}
-          <Card>
-            {isError && (
-              <div className="p-4 mb-2 rounded border border-red-300 dark:border-red-800 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 flex items-center justify-between">
-                <span>Failed to load deployments. Please try again.</span>
-                <Button size="sm" variant="outline" onClick={() => refetch()}>Retry</Button>
-              </div>
-            )}
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="cursor-pointer" onClick={() => changeSort('project')}>Project {sortKey==='project' ? (sortDir==='asc' ? '▲' : '▼') : ''}</TableHead>
-                  <TableHead>ID</TableHead>
-                  <TableHead className="cursor-pointer" onClick={() => changeSort('status')}>Status {sortKey==='status' ? (sortDir==='asc' ? '▲' : '▼') : ''}</TableHead>
-                  <TableHead className="cursor-pointer" onClick={() => changeSort('timestamp')}>Deployed At {sortKey==='timestamp' ? (sortDir==='asc' ? '▲' : '▼') : ''}</TableHead>
-                  <TableHead>Age</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {pageData.map((deployment) => (
-                  <TableRow key={deployment.id}>
-                    <TableCell className="font-medium">{getProjectName(deployment.projectId)}</TableCell>
-                    <TableCell>#{deployment.id}</TableCell>
-                    <TableCell>
-                      <Badge variant="status" status={deployment.status}>
-                        {deployment.status.replace('_', ' ')}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-sm text-gray-600 dark:text-gray-400">
-                      {formatDateTime(deployment.timestamp)}
-                    </TableCell>
-                    <TableCell className="text-sm text-gray-600 dark:text-gray-400">
-                      {formatRelativeTime(deployment.timestamp)}
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleDelete(deployment.id)}
-                        className="text-red-600 hover:text-red-700"
-                        aria-label={`Delete deployment ${deployment.id}`}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-            {filtered.length === 0 && (
-              <div className="text-center py-12 text-gray-600 dark:text-gray-400">
-                No deployments match your filters.
-              </div>
-            )}
-            {/* Pagination */}
-            {filtered.length > 0 && (
-              <div className="flex items-center justify-between px-4 py-3">
-                <div className="text-sm text-gray-600 dark:text-gray-400">
-                  Showing {(page-1)*pageSize + 1}–{Math.min(page*pageSize, filtered.length)} of {filtered.length}
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button variant="outline" size="sm" disabled={page===1} onClick={() => setPage((p)=>Math.max(1,p-1))}>Previous</Button>
-                  <span className="text-sm text-gray-700 dark:text-gray-300">Page {page} of {totalPages}</span>
-                  <Button variant="outline" size="sm" disabled={page===totalPages} onClick={() => setPage((p)=>Math.min(totalPages,p+1))}>Next</Button>
-                </div>
-              </div>
-            )}
-          </Card>
-
-          {/* Last deployment callout */}
-          {metrics.last && (
-            <Card className="border-dashed">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <Badge variant="status" status={metrics.last.status}>{metrics.last.status}</Badge>
-                  <div>
-                    <p className="text-sm text-gray-700 dark:text-gray-300">Last deployment • {formatDateTime(metrics.last.timestamp)}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">{getProjectName(metrics.last.projectId)} • #{metrics.last.id}</p>
+            {/* Table - Vercel Style */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ duration: 0.5, delay: 0.4, ease: [0.22, 1, 0.36, 1] }} 
+              className="relative overflow-hidden bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg"
+            >
+              {isError && (
+                <motion.div 
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="m-4 p-4 rounded-lg border border-gray-200 dark:border-neutral-800 bg-gray-50 dark:bg-neutral-900 text-black dark:text-white flex items-center justify-between"
+                >
+                  <span className="font-medium">Failed to load deployments. Please try again.</span>
+                  <Button size="sm" variant="outline" onClick={() => refetch()}>Retry</Button>
+                </motion.div>
+              )}
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50 dark:bg-neutral-900 border-b border-gray-200 dark:border-neutral-800">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wider cursor-pointer hover:text-black dark:hover:text-white transition-colors" onClick={() => changeSort('project')}>
+                        Project {sortKey==='project' ? (sortDir==='asc' ? '↑' : '↓') : ''}
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wider">ID</th>
+                      <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wider cursor-pointer hover:text-black dark:hover:text-white transition-colors" onClick={() => changeSort('status')}>
+                        Status {sortKey==='status' ? (sortDir==='asc' ? '↑' : '↓') : ''}
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wider cursor-pointer hover:text-black dark:hover:text-white transition-colors" onClick={() => changeSort('timestamp')}>
+                        Deployed At {sortKey==='timestamp' ? (sortDir==='asc' ? '↑' : '↓') : ''}
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wider">Age</th>
+                      <th className="px-6 py-4 text-right text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wider">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 dark:divide-neutral-800">
+                    <AnimatePresence mode="popLayout">
+                      {pageData.map((deployment, index) => (
+                        <motion.tr 
+                          key={deployment.id}
+                          initial={{ opacity: 0, y: 10 }} 
+                          animate={{ opacity: 1, y: 0 }} 
+                          exit={{ opacity: 0, scale: 0.95 }}
+                          transition={{ duration: 0.3, delay: index * 0.03, ease: [0.22, 1, 0.36, 1] }} 
+                          className="hover:bg-gray-50 dark:hover:bg-neutral-900 transition-colors"
+                        >
+                          <td className="px-6 py-4 font-medium text-black dark:text-white">{getProjectName(deployment.projectId)}</td>
+                          <td className="px-6 py-4">
+                            <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-gray-100 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 text-xs font-mono font-medium text-gray-700 dark:text-neutral-300">
+                              #{deployment.id}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${
+                              deployment.status === DeploymentStatus.SUCCESS 
+                                ? 'bg-black dark:bg-white border-black dark:border-white text-white dark:text-black'
+                                : deployment.status === DeploymentStatus.FAILED
+                                ? 'bg-gray-200 dark:bg-neutral-800 border-gray-300 dark:border-neutral-700 text-black dark:text-white'
+                                : deployment.status === DeploymentStatus.IN_PROGRESS
+                                ? 'bg-gray-100 dark:bg-neutral-900 border-gray-200 dark:border-neutral-800 text-black dark:text-white animate-pulse'
+                                : 'bg-white dark:bg-black border-gray-200 dark:border-neutral-800 text-gray-600 dark:text-neutral-400'
+                            }`}>
+                              {deployment.status.replace('_', ' ')}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-600 dark:text-neutral-400">
+                            {formatDateTime(deployment.timestamp)}
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-600 dark:text-neutral-400">
+                            {formatRelativeTime(deployment.timestamp)}
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            <motion.button
+                              onClick={() => handleDelete(deployment.id)}
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                              className="p-2 hover:bg-gray-100 dark:hover:bg-neutral-900 rounded-lg transition-all duration-200 group"
+                              aria-label={`Delete deployment ${deployment.id}`}
+                            >
+                              <Trash2 className="h-4 w-4 text-gray-400 dark:text-neutral-500 group-hover:text-black dark:group-hover:text-white transition-colors"/>
+                            </motion.button>
+                          </td>
+                        </motion.tr>
+                      ))}
+                    </AnimatePresence>
+                  </tbody>
+                </table>
+                {filtered.length === 0 && (
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-center py-16"
+                  >
+                    <Rocket className="h-12 w-12 text-gray-300 dark:text-neutral-700 mx-auto mb-3" />
+                    <p className="text-gray-900 dark:text-white font-medium">No deployments found</p>
+                    <p className="text-sm text-gray-500 dark:text-neutral-500 mt-1">Try adjusting your filters</p>
+                  </motion.div>
+                )}
+              {/* Pagination */}
+              {filtered.length > 0 && (
+                <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 dark:border-neutral-800">
+                  <div className="text-sm font-medium text-gray-600 dark:text-neutral-400">
+                    Showing {(page-1)*pageSize + 1}–{Math.min(page*pageSize, filtered.length)} of {filtered.length}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Button variant="outline" size="sm" disabled={page===1} onClick={() => setPage((p)=>Math.max(1,p-1))}>Previous</Button>
+                    <span className="text-sm font-medium text-black dark:text-white">Page {page} of {totalPages}</span>
+                    <Button variant="outline" size="sm" disabled={page===totalPages} onClick={() => setPage((p)=>Math.min(totalPages,p+1))}>Next</Button>
                   </div>
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">{formatRelativeTime(metrics.last.timestamp)}</div>
+              )}
               </div>
-            </Card>
-          )}
+            </motion.div>
+
+            {/* Last deployment callout - Vercel Style */}
+            {metrics.last && (
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                className="relative overflow-hidden bg-gradient-to-br from-gray-50 to-white dark:from-neutral-950 dark:to-black border border-dashed border-gray-300 dark:border-neutral-700 rounded-lg p-5"
+              >
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium border ${
+                      metrics.last.status === DeploymentStatus.SUCCESS 
+                        ? 'bg-black dark:bg-white border-black dark:border-white text-white dark:text-black'
+                        : metrics.last.status === DeploymentStatus.FAILED
+                        ? 'bg-gray-200 dark:bg-neutral-800 border-gray-300 dark:border-neutral-700 text-black dark:text-white'
+                        : metrics.last.status === DeploymentStatus.IN_PROGRESS
+                        ? 'bg-gray-100 dark:bg-neutral-900 border-gray-200 dark:border-neutral-800 text-black dark:text-white animate-pulse'
+                        : 'bg-white dark:bg-black border-gray-200 dark:border-neutral-800 text-gray-600 dark:text-neutral-400'
+                    }`}>
+                      {metrics.last.status.replace('_', ' ')}
+                    </span>
+                    <div>
+                      <p className="text-sm font-medium text-black dark:text-white">
+                        Latest deployment • {formatDateTime(metrics.last.timestamp)}
+                      </p>
+                      <p className="text-xs text-gray-600 dark:text-neutral-400 mt-0.5">
+                        {getProjectName(metrics.last.projectId)} • #{metrics.last.id}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-sm font-medium text-gray-600 dark:text-neutral-400 bg-gray-100 dark:bg-neutral-900 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-neutral-800">
+                    {formatRelativeTime(metrics.last.timestamp)}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </div>
         </div>
       </DashboardLayout>
     </ProtectedRoute>

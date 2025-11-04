@@ -121,22 +121,24 @@ export default function TeamsPage() {
     return (
       <ProtectedRoute>
         <DashboardLayout>
-          <div className="space-y-6">
-            <div className="flex justify-between items-center">
-              <div className="h-8 w-32 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
-              <div className="h-9 w-32 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
+          <div className="min-h-screen bg-white dark:bg-black">
+            <div className="space-y-8">
+              <div className="flex justify-between items-center">
+                <div className="h-10 w-48 bg-gray-100 dark:bg-neutral-900 rounded-lg animate-pulse border border-gray-200 dark:border-neutral-800" />
+                <div className="h-10 w-40 bg-gray-100 dark:bg-neutral-900 rounded-lg animate-pulse border border-gray-200 dark:border-neutral-800" />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="h-32 bg-white dark:bg-neutral-950 rounded-lg animate-pulse border border-gray-200 dark:border-neutral-800" />
+                ))}
+              </div>
+              <div className="bg-white dark:bg-neutral-950 rounded-lg border border-gray-200 dark:border-neutral-800 p-6">
+                <div className="h-12 bg-gray-100 dark:bg-neutral-900 rounded-lg mb-4 animate-pulse" />
+                {[...Array(6)].map((_, i) => (
+                  <div key={i} className="h-14 bg-gray-100 dark:bg-neutral-900 rounded-lg mb-3 animate-pulse" />
+                ))}
+              </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="h-28 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
-              ))}
-            </div>
-            <Card>
-              <div className="h-10 bg-gray-100 dark:bg-gray-800 rounded mb-4 animate-pulse" />
-              {[...Array(5)].map((_, i) => (
-                <div key={i} className="h-12 bg-gray-100 dark:bg-gray-800 rounded mb-2 animate-pulse" />
-              ))}
-            </Card>
           </div>
         </DashboardLayout>
       </ProtectedRoute>
@@ -146,179 +148,218 @@ export default function TeamsPage() {
   return (
     <ProtectedRoute>
       <DashboardLayout>
-        <div className="space-y-6">
-          {/* Header */}
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Teams</h1>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Organize users into collaborative teams for better project management.</p>
+        <div className="min-h-screen bg-white dark:bg-black">
+          <div className="space-y-8">
+            {/* Header */}
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              <div className="space-y-2">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800">
+                  <Users className="h-3.5 w-3.5 text-black dark:text-white" />
+                  <span className="text-xs font-medium text-black dark:text-white">Team Management</span>
+                </div>
+                <h1 className="text-3xl font-bold text-black dark:text-white">Collaborate together</h1>
+                <p className="text-sm text-gray-600 dark:text-neutral-400 flex items-center gap-2">
+                  <TrendingUp className="h-3.5 w-3.5" />
+                  Organize users into teams for better project collaboration
+                </p>
+              </div>
+              <button className="px-5 py-2.5 bg-black dark:bg-white text-white dark:text-black rounded-lg font-medium hover:bg-gray-900 dark:hover:bg-gray-100 transition-all duration-200 flex items-center gap-2 border border-black dark:border-white text-sm">
+                <Plus className="h-4 w-4" />
+                New Team
+              </button>
             </div>
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              New Team
-            </Button>
-          </div>
 
           {/* KPIs */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <StatCard
-              name="Total teams"
-              value={metrics.total}
-              icon={Users}
-              color="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300"
-              gradientFrom=""
-              gradientTo=""
-            />
-            <StatCard
-              name="Total members"
-              value={metrics.totalMembers}
-              icon={UserCheck}
-              color="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300"
-              gradientFrom=""
-              gradientTo=""
-            />
-            <StatCard
-              name="Avg team size"
-              value={metrics.avgTeamSize}
-              icon={TrendingUp}
-              color="bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300"
-              gradientFrom=""
-              gradientTo=""
-            />
-            <StatCard
-              name="Largest team"
-              value={metrics.largestTeam}
-              icon={UserPlus}
-              color="bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300"
-              gradientFrom=""
-              gradientTo=""
-            />
+            <div className="bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-5 hover:border-gray-400 dark:hover:border-neutral-600 transition-all duration-200">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wide">Total Teams</p>
+                  <p className="text-2xl font-bold text-black dark:text-white mt-2">{metrics.total}</p>
+                </div>
+                <div className="p-2.5 bg-gray-100 dark:bg-neutral-900 rounded-lg">
+                  <Users className="h-5 w-5 text-black dark:text-white"/>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-5 hover:border-gray-400 dark:hover:border-neutral-600 transition-all duration-200">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wide">Total Members</p>
+                  <p className="text-2xl font-bold text-black dark:text-white mt-2">{metrics.totalMembers}</p>
+                </div>
+                <div className="p-2.5 bg-gray-100 dark:bg-neutral-900 rounded-lg">
+                  <UserCheck className="h-5 w-5 text-black dark:text-white"/>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-5 hover:border-gray-400 dark:hover:border-neutral-600 transition-all duration-200">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wide">Avg Team Size</p>
+                  <p className="text-2xl font-bold text-black dark:text-white mt-2">{metrics.avgTeamSize}</p>
+                </div>
+                <div className="p-2.5 bg-gray-100 dark:bg-neutral-900 rounded-lg">
+                  <TrendingUp className="h-5 w-5 text-black dark:text-white"/>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-5 hover:border-gray-400 dark:hover:border-neutral-600 transition-all duration-200">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wide">Largest Team</p>
+                  <p className="text-2xl font-bold text-black dark:text-white mt-2">{metrics.largestTeam}</p>
+                </div>
+                <div className="p-2.5 bg-gray-100 dark:bg-neutral-900 rounded-lg">
+                  <UserPlus className="h-5 w-5 text-black dark:text-white"/>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Controls */}
-          <Card>
-            <CardContent>
-              <div className="flex flex-col lg:flex-row gap-3 lg:items-end lg:justify-between">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1">
-                  <div className="relative">
-                    <Input
-                      placeholder="Search by name or #id"
-                      value={search}
-                      onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-                    />
-                    <Search className="h-4 w-4 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                  </div>
-                  <Select
-                    value={memberFilter}
-                    onChange={(e) => { setMemberFilter(e.target.value); setPage(1); }}
-                    options={memberFilterOptions}
+          <div className="bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-5">
+            <div className="flex flex-col lg:flex-row gap-4 lg:items-end lg:justify-between">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1">
+                <div className="relative">
+                  <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-neutral-500 z-10" />
+                  <Input
+                    placeholder="Search teams..."
+                    value={search}
+                    onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+                    className="pl-10 bg-white dark:bg-black border-gray-200 dark:border-neutral-800 rounded-lg focus:ring-2 focus:ring-black dark:focus:ring-white"
                   />
                 </div>
-                <div className="flex items-center gap-2">
-                  <Select
-                    value={String(pageSize)}
-                    onChange={(e) => { setPageSize(Number(e.target.value)); setPage(1); }}
-                    options={[{value:'10',label:'10 / page'},{value:'20',label:'20 / page'},{value:'50',label:'50 / page'}]}
-                  />
-                  <Button variant="outline" onClick={() => { setSearch(''); setMemberFilter('ALL'); setSortKey('name'); setSortDir('asc'); setPage(1); }}>Reset</Button>
-                </div>
+                <Select
+                  value={memberFilter}
+                  onChange={(e) => { setMemberFilter(e.target.value); setPage(1); }}
+                  options={memberFilterOptions}
+                />
               </div>
-            </CardContent>
-          </Card>
+              <div className="flex items-center gap-2 flex-wrap">
+                <Select
+                  value={String(pageSize)}
+                  onChange={(e) => { setPageSize(Number(e.target.value)); setPage(1); }}
+                  options={[{value:'10',label:'10 / page'},{value:'20',label:'20 / page'},{value:'50',label:'50 / page'}]}
+                />
+                <Button variant="outline" onClick={() => { setSearch(''); setMemberFilter('ALL'); setSortKey('name'); setSortDir('asc'); setPage(1); }}>Reset</Button>
+              </div>
+            </div>
+          </div>
 
           {/* Table */}
-          <Card>
+          <div className="bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg overflow-hidden">
             {isError && (
-              <div className="p-4 mb-2 rounded border border-red-300 dark:border-red-800 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 flex items-center justify-between">
-                <span>Failed to load teams. Please try again.</span>
+              <div className="m-4 p-4 rounded-lg border border-gray-200 dark:border-neutral-800 bg-gray-50 dark:bg-neutral-900 text-black dark:text-white flex items-center justify-between">
+                <span className="font-medium">Failed to load teams. Please try again.</span>
                 <Button size="sm" variant="outline" onClick={() => refetch()}>Retry</Button>
               </div>
             )}
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>ID</TableHead>
-                  <TableHead className="cursor-pointer" onClick={() => changeSort('name')}>Team Name {sortKey==='name' ? (sortDir==='asc' ? '▲' : '▼') : ''}</TableHead>
-                  <TableHead className="cursor-pointer" onClick={() => changeSort('members')}>Members {sortKey==='members' ? (sortDir==='asc' ? '▲' : '▼') : ''}</TableHead>
-                  <TableHead>Team Members</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50 dark:bg-neutral-900 border-b border-gray-200 dark:border-neutral-800">
+                  <tr>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wider">ID</th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wider cursor-pointer hover:text-black dark:hover:text-white transition-colors" onClick={() => changeSort('name')}>
+                      Team Name {sortKey==='name' ? (sortDir==='asc' ? '↑' : '↓') : ''}
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wider cursor-pointer hover:text-black dark:hover:text-white transition-colors" onClick={() => changeSort('members')}>
+                      Members {sortKey==='members' ? (sortDir==='asc' ? '↑' : '↓') : ''}
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wider">Team Members</th>
+                    <th className="px-6 py-4 text-right text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200 dark:divide-neutral-800">
                 {pageData.map((team) => (
-                  <TableRow key={team.id}>
-                    <TableCell>#{team.id}</TableCell>
-                    <TableCell className="font-medium">{team.name}</TableCell>
-                    <TableCell>
-                      <Badge className="text-xs">
+                  <tr key={team.id} className="hover:bg-gray-50 dark:hover:bg-neutral-900 transition-colors">
+                    <td className="px-6 py-4">
+                      <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-gray-100 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 text-xs font-mono font-medium text-gray-700 dark:text-neutral-300">
+                        #{team.id}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 font-medium text-black dark:text-white">{team.name}</td>
+                    <td className="px-6 py-4">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border bg-black dark:bg-white border-black dark:border-white text-white dark:text-black">
                         {team.memberIds.length} {team.memberIds.length === 1 ? 'member' : 'members'}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
                       <div className="flex flex-wrap gap-1 max-w-md">
                         {team.memberIds.length > 0 ? (
                           team.memberIds.slice(0, 5).map((memberId) => (
                             <span
                               key={memberId}
-                              className="inline-flex items-center px-2 py-0.5 rounded text-xs bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300"
+                              className="inline-flex items-center px-2 py-0.5 rounded text-xs bg-gray-100 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 text-gray-700 dark:text-neutral-300"
                             >
                               {getUserName(memberId)}
                             </span>
                           ))
                         ) : (
-                          <span className="text-xs text-gray-500 dark:text-gray-400 italic">No members</span>
+                          <span className="text-xs text-gray-500 dark:text-neutral-500 italic">No members</span>
                         )}
                         {team.memberIds.length > 5 && (
-                          <span className="text-xs text-gray-500 dark:text-gray-400">
+                          <span className="text-xs text-gray-500 dark:text-neutral-500">
                             +{team.memberIds.length - 5} more
                           </span>
                         )}
                       </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-gray-600 hover:text-gray-700"
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <div className="flex items-center gap-1 justify-end">
+                        <button
+                          className="p-2 hover:bg-gray-100 dark:hover:bg-neutral-900 rounded-lg transition-all duration-200 group"
                           aria-label={`Edit team ${team.name}`}
                         >
-                          <Edit2 className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
+                          <Edit2 className="h-4 w-4 text-gray-400 dark:text-neutral-500 group-hover:text-black dark:group-hover:text-white transition-colors" />
+                        </button>
+                        <button
                           onClick={() => handleDelete(team.id, team.name)}
-                          className="text-red-600 hover:text-red-700"
+                          className="p-2 hover:bg-gray-100 dark:hover:bg-neutral-900 rounded-lg transition-all duration-200 group"
                           aria-label={`Delete team ${team.name}`}
                         >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                          <Trash2 className="h-4 w-4 text-gray-400 dark:text-neutral-500 group-hover:text-black dark:group-hover:text-white transition-colors" />
+                        </button>
                       </div>
-                    </TableCell>
-                  </TableRow>
+                    </td>
+                  </tr>
                 ))}
-              </TableBody>
-            </Table>
-            {filtered.length === 0 && (
-              <div className="text-center py-12 text-gray-600 dark:text-gray-400">
-                {search || memberFilter !== 'ALL' ? 'No teams match your filters.' : 'No teams found. Create your first team!'}
-              </div>
-            )}
+                </tbody>
+              </table>
+              {filtered.length === 0 && (
+                <tr>
+                  <td colSpan={5}>
+                    <div className="text-center py-16">
+                      <Users className="h-12 w-12 text-gray-300 dark:text-neutral-700 mx-auto mb-3" />
+                      <p className="text-gray-900 dark:text-white font-medium">
+                        {search || memberFilter !== 'ALL' ? 'No teams found' : 'No teams yet'}
+                      </p>
+                      <p className="text-sm text-gray-500 dark:text-neutral-500 mt-1">
+                        {search || memberFilter !== 'ALL' ? 'Try adjusting your filters' : 'Create your first team!'}
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+              )}
             {/* Pagination */}
             {filtered.length > 0 && (
-              <div className="flex items-center justify-between px-4 py-3">
-                <div className="text-sm text-gray-600 dark:text-gray-400">
+              <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 dark:border-neutral-800">
+                <div className="text-sm font-medium text-gray-600 dark:text-neutral-400">
                   Showing {(page-1)*pageSize + 1}–{Math.min(page*pageSize, filtered.length)} of {filtered.length}
                 </div>
                 <div className="flex items-center gap-2">
                   <Button variant="outline" size="sm" disabled={page===1} onClick={() => setPage((p)=>Math.max(1,p-1))}>Previous</Button>
-                  <span className="text-sm text-gray-700 dark:text-gray-300">Page {page} of {totalPages}</span>
+                  <span className="text-sm font-medium text-black dark:text-white">Page {page} of {totalPages}</span>
                   <Button variant="outline" size="sm" disabled={page===totalPages} onClick={() => setPage((p)=>Math.min(totalPages,p+1))}>Next</Button>
                 </div>
               </div>
             )}
-          </Card>
+            </div>
+          </div>
+          </div>
         </div>
       </DashboardLayout>
     </ProtectedRoute>
