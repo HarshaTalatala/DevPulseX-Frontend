@@ -1,0 +1,10 @@
+node_modules
+.git
+.vscode
+dist
+build
+.DS_Store
+.env
+.env.*
+coverage
+README-VERCEL.md
