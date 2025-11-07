@@ -1,48 +1,82 @@
 'use client';
 
+import { Suspense, lazy } from 'react';
+import dynamic from 'next/dynamic';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import DashboardLayout from '@/components/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { StatCard } from '@/components/ui/StatCard';
-import { AnimatedChart } from '@/components/ui/AnimatedChart';
 import { ProgressRing } from '@/components/ui/ProgressRing';
-import { GradientCard } from '@/components/ui/AnimatedCard';
+import DashboardSkeleton, { SkeletonChart } from '@/components/ui/DashboardSkeleton';
 import { useDashboard, useProjectMetrics, useUserMetrics } from '@/hooks/useDashboard';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, Area, AreaChart } from 'recharts';
 import { FolderKanban, Users, CheckSquare, GitCommit, AlertCircle, Rocket, TrendingUp, Activity, Zap } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useGithubInsights } from '@/hooks/useGithub';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, Area, AreaChart } from 'recharts';
+
+// Lazy load heavy components for better performance
+const AnimatedChart = dynamic(
+  () => import('@/components/ui/AnimatedChart').then((mod) => ({ default: mod.AnimatedChart })),
+  {
+    ssr: false,
+    loading: () => <SkeletonChart />,
+  }
+);
+
+const GradientCard = dynamic(
+  () => import('@/components/ui/AnimatedCard').then((mod) => ({ default: mod.GradientCard })),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-32 bg-gray-100 dark:bg-gray-800 rounded-xl animate-pulse"></div>
+    ),
+  }
+);
 
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
 
 export default function DashboardPage() {
-  const { data: dashboard, isLoading } = useDashboard();
-  const { data: projectMetrics } = useProjectMetrics();
-  const { data: userMetrics } = useUserMetrics();
+  const { data: dashboard, isLoading: dashboardLoading } = useDashboard();
+  const { data: projectMetrics, isLoading: projectsLoading } = useProjectMetrics();
+  const { data: userMetrics, isLoading: usersLoading } = useUserMetrics();
   const { data: gh, isLoading: ghLoading, error: ghError } = useGithubInsights();
 
-  console.log('=== Dashboard Debug ===');
-  console.log('GitHub Data:', gh);
-  console.log('Loading:', ghLoading);
-  console.log('Error:', ghError);
-  if (gh) {
-    console.log('Recent Activity (7 days):', {
-      commits: gh.recentCommits,
-      prs: gh.recentPRs,
-      issues: gh.recentIssues
-    });
-    console.log('Total Stats:', {
-      repos: gh.repoCount,
-      totalPRs: gh.totalPullRequests,
-      totalIssues: gh.totalIssues,
-      stars: gh.totalStars
+  // Show skeleton while any critical data is loading
+  const isInitialLoading = ghLoading && !gh;
+
+  // Log GitHub data for debugging (only in development)
+  if (process.env.NODE_ENV === 'development' && gh) {
+    console.log('GitHub Data:', {
+      user: gh.username,
+      recentActivity: {
+        commits: gh.recentCommits,
+        prs: gh.recentPRs,
+        issues: gh.recentIssues,
+      },
+      totals: {
+        repos: gh.repoCount,
+        prs: gh.totalPullRequests,
+        issues: gh.totalIssues,
+        stars: gh.totalStars,
+      },
     });
   }
 
   return (
     <ProtectedRoute>
       <DashboardLayout>
-        <div className="space-y-6">
+        <AnimatePresence mode="wait">
+          {isInitialLoading ? (
+            <DashboardSkeleton key="skeleton" />
+          ) : (
+            <motion.div
+              key="content"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-6"
+            >
           {/* Header Section */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -304,8 +338,9 @@ export default function DashboardPage() {
               </button>
             </div>
           )}
-
-        </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </DashboardLayout>
     </ProtectedRoute>
   );

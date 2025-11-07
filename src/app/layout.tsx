@@ -15,8 +15,16 @@ export default function RootLayout({
   const [queryClient] = useState(() => new QueryClient({
     defaultOptions: {
       queries: {
-        staleTime: 60 * 1000,
+        // Data is considered fresh for 5 minutes - reduces unnecessary refetches
+        staleTime: 5 * 60 * 1000,
+        // Cache data for 10 minutes even if unused
+        gcTime: 10 * 60 * 1000,
+        // Retry failed requests up to 2 times
+        retry: 2,
+        // Don't refetch on window focus - better for SPA feel
         refetchOnWindowFocus: false,
+        // Don't refetch on reconnect automatically
+        refetchOnReconnect: false,
       },
     },
   }));

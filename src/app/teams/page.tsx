@@ -274,76 +274,77 @@ export default function TeamsPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 dark:divide-neutral-800">
-                {pageData.map((team) => (
-                  <tr key={team.id} className="hover:bg-gray-50 dark:hover:bg-neutral-900 transition-colors">
-                    <td className="px-6 py-4">
-                      <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-gray-100 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 text-xs font-mono font-medium text-gray-700 dark:text-neutral-300">
-                        #{team.id}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 font-medium text-black dark:text-white">{team.name}</td>
-                    <td className="px-6 py-4">
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border bg-black dark:bg-white border-black dark:border-white text-white dark:text-black">
-                        {team.memberIds.length} {team.memberIds.length === 1 ? 'member' : 'members'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex flex-wrap gap-1 max-w-md">
-                        {team.memberIds.length > 0 ? (
-                          team.memberIds.slice(0, 5).map((memberId) => (
-                            <span
-                              key={memberId}
-                              className="inline-flex items-center px-2 py-0.5 rounded text-xs bg-gray-100 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 text-gray-700 dark:text-neutral-300"
-                            >
-                              {getUserName(memberId)}
-                            </span>
-                          ))
-                        ) : (
-                          <span className="text-xs text-gray-500 dark:text-neutral-500 italic">No members</span>
-                        )}
-                        {team.memberIds.length > 5 && (
-                          <span className="text-xs text-gray-500 dark:text-neutral-500">
-                            +{team.memberIds.length - 5} more
-                          </span>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center gap-1 justify-end">
-                        <button
-                          className="p-2 hover:bg-gray-100 dark:hover:bg-neutral-900 rounded-lg transition-all duration-200 group"
-                          aria-label={`Edit team ${team.name}`}
-                        >
-                          <Edit2 className="h-4 w-4 text-gray-400 dark:text-neutral-500 group-hover:text-black dark:group-hover:text-white transition-colors" />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(team.id, team.name)}
-                          className="p-2 hover:bg-gray-100 dark:hover:bg-neutral-900 rounded-lg transition-all duration-200 group"
-                          aria-label={`Delete team ${team.name}`}
-                        >
-                          <Trash2 className="h-4 w-4 text-gray-400 dark:text-neutral-500 group-hover:text-black dark:group-hover:text-white transition-colors" />
-                        </button>
+                {filtered.length === 0 ? (
+                  <tr>
+                    <td colSpan={5}>
+                      <div className="text-center py-16">
+                        <Users className="h-12 w-12 text-gray-300 dark:text-neutral-700 mx-auto mb-3" />
+                        <p className="text-gray-900 dark:text-white font-medium">
+                          {search || memberFilter !== 'ALL' ? 'No teams found' : 'No teams yet'}
+                        </p>
+                        <p className="text-sm text-gray-500 dark:text-neutral-500 mt-1">
+                          {search || memberFilter !== 'ALL' ? 'Try adjusting your filters' : 'Create your first team!'}
+                        </p>
                       </div>
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  pageData.map((team) => (
+                    <tr key={team.id} className="hover:bg-gray-50 dark:hover:bg-neutral-900 transition-colors">
+                      <td className="px-6 py-4">
+                        <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-gray-100 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 text-xs font-mono font-medium text-gray-700 dark:text-neutral-300">
+                          #{team.id}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 font-medium text-black dark:text-white">{team.name}</td>
+                      <td className="px-6 py-4">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border bg-black dark:bg-white border-black dark:border-white text-white dark:text-black">
+                          {team.memberIds.length} {team.memberIds.length === 1 ? 'member' : 'members'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex flex-wrap gap-1 max-w-md">
+                          {team.memberIds.length > 0 ? (
+                            team.memberIds.slice(0, 5).map((memberId) => (
+                              <span
+                                key={memberId}
+                                className="inline-flex items-center px-2 py-0.5 rounded text-xs bg-gray-100 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 text-gray-700 dark:text-neutral-300"
+                              >
+                                {getUserName(memberId)}
+                              </span>
+                            ))
+                          ) : (
+                            <span className="text-xs text-gray-500 dark:text-neutral-500 italic">No members</span>
+                          )}
+                          {team.memberIds.length > 5 && (
+                            <span className="text-xs text-gray-500 dark:text-neutral-500">
+                              +{team.memberIds.length - 5} more
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <div className="flex items-center gap-1 justify-end">
+                          <button
+                            className="p-2 hover:bg-gray-100 dark:hover:bg-neutral-900 rounded-lg transition-all duration-200 group"
+                            aria-label={`Edit team ${team.name}`}
+                          >
+                            <Edit2 className="h-4 w-4 text-gray-400 dark:text-neutral-500 group-hover:text-black dark:group-hover:text-white transition-colors" />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(team.id, team.name)}
+                            className="p-2 hover:bg-gray-100 dark:hover:bg-neutral-900 rounded-lg transition-all duration-200 group"
+                            aria-label={`Delete team ${team.name}`}
+                          >
+                            <Trash2 className="h-4 w-4 text-gray-400 dark:text-neutral-500 group-hover:text-black dark:group-hover:text-white transition-colors" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
                 </tbody>
               </table>
-              {filtered.length === 0 && (
-                <tr>
-                  <td colSpan={5}>
-                    <div className="text-center py-16">
-                      <Users className="h-12 w-12 text-gray-300 dark:text-neutral-700 mx-auto mb-3" />
-                      <p className="text-gray-900 dark:text-white font-medium">
-                        {search || memberFilter !== 'ALL' ? 'No teams found' : 'No teams yet'}
-                      </p>
-                      <p className="text-sm text-gray-500 dark:text-neutral-500 mt-1">
-                        {search || memberFilter !== 'ALL' ? 'Try adjusting your filters' : 'Create your first team!'}
-                      </p>
-                    </div>
-                  </td>
-                </tr>
-              )}
             {/* Pagination */}
             {filtered.length > 0 && (
               <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 dark:border-neutral-800">

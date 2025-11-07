@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import DashboardLayout from '@/components/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/Card';
@@ -15,10 +16,19 @@ import { Plus, Trash2, Edit2, Users as UsersIcon, Shield, Code, Briefcase, Searc
 import { getRoleColor } from '@/lib/utils';
 import { toast } from 'sonner';
 import { Role } from '@/types';
+import { useAuthStore } from '@/stores/auth';
 
 export default function UsersPage() {
+  const router = useRouter();
+  const { user } = useAuthStore();
   const { data: users, isLoading, isError, refetch } = useUsers();
   const deleteMutation = useDeleteUser();
+
+  // Check if user has permission to view this page
+  if (user && user.role !== Role.ADMIN && user.role !== Role.MANAGER) {
+    router.push('/dashboard');
+    return null;
+  }
 
   // UI state
   const [search, setSearch] = useState('');
@@ -290,61 +300,62 @@ export default function UsersPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 dark:divide-neutral-800">
-                {pageData.map((user) => (
-                  <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-neutral-900 transition-colors">
-                    <td className="px-6 py-4">
-                      <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-gray-100 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 text-xs font-mono font-medium text-gray-700 dark:text-neutral-300">
-                        #{user.id}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 font-medium text-black dark:text-white">{user.name}</td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2 text-gray-600 dark:text-neutral-400">
-                        <Mail className="h-3.5 w-3.5" />
-                        <span className="text-sm">{user.email}</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border bg-black dark:bg-white border-black dark:border-white text-white dark:text-black">
-                        {user.role}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center gap-1 justify-end">
-                        <button
-                          className="p-2 hover:bg-gray-100 dark:hover:bg-neutral-900 rounded-lg transition-all duration-200 group"
-                          aria-label={`Edit user ${user.name}`}
-                        >
-                          <Edit2 className="h-4 w-4 text-gray-400 dark:text-neutral-500 group-hover:text-black dark:group-hover:text-white transition-colors" />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(user.id, user.name)}
-                          className="p-2 hover:bg-gray-100 dark:hover:bg-neutral-900 rounded-lg transition-all duration-200 group"
-                          aria-label={`Delete user ${user.name}`}
-                        >
-                          <Trash2 className="h-4 w-4 text-gray-400 dark:text-neutral-500 group-hover:text-black dark:group-hover:text-white transition-colors" />
-                        </button>
+                {filtered.length === 0 ? (
+                  <tr>
+                    <td colSpan={5}>
+                      <div className="text-center py-16">
+                        <UsersIcon className="h-12 w-12 text-gray-300 dark:text-neutral-700 mx-auto mb-3" />
+                        <p className="text-gray-900 dark:text-white font-medium">
+                          {search || roleFilter !== 'ALL' ? 'No users found' : 'No users yet'}
+                        </p>
+                        <p className="text-sm text-gray-500 dark:text-neutral-500 mt-1">
+                          {search || roleFilter !== 'ALL' ? 'Try adjusting your filters' : 'Create your first user!'}
+                        </p>
                       </div>
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  pageData.map((user) => (
+                    <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-neutral-900 transition-colors">
+                      <td className="px-6 py-4">
+                        <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-gray-100 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 text-xs font-mono font-medium text-gray-700 dark:text-neutral-300">
+                          #{user.id}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 font-medium text-black dark:text-white">{user.name}</td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-2 text-gray-600 dark:text-neutral-400">
+                          <Mail className="h-3.5 w-3.5" />
+                          <span className="text-sm">{user.email}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border bg-black dark:bg-white border-black dark:border-white text-white dark:text-black">
+                          {user.role}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <div className="flex items-center gap-1 justify-end">
+                          <button
+                            className="p-2 hover:bg-gray-100 dark:hover:bg-neutral-900 rounded-lg transition-all duration-200 group"
+                            aria-label={`Edit user ${user.name}`}
+                          >
+                            <Edit2 className="h-4 w-4 text-gray-400 dark:text-neutral-500 group-hover:text-black dark:group-hover:text-white transition-colors" />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(user.id, user.name)}
+                            className="p-2 hover:bg-gray-100 dark:hover:bg-neutral-900 rounded-lg transition-all duration-200 group"
+                            aria-label={`Delete user ${user.name}`}
+                          >
+                            <Trash2 className="h-4 w-4 text-gray-400 dark:text-neutral-500 group-hover:text-black dark:group-hover:text-white transition-colors" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
                 </tbody>
               </table>
-              {filtered.length === 0 && (
-                <tr>
-                  <td colSpan={5}>
-                    <div className="text-center py-16">
-                      <UsersIcon className="h-12 w-12 text-gray-300 dark:text-neutral-700 mx-auto mb-3" />
-                      <p className="text-gray-900 dark:text-white font-medium">
-                        {search || roleFilter !== 'ALL' ? 'No users found' : 'No users yet'}
-                      </p>
-                      <p className="text-sm text-gray-500 dark:text-neutral-500 mt-1">
-                        {search || roleFilter !== 'ALL' ? 'Try adjusting your filters' : 'Create your first user!'}
-                      </p>
-                    </div>
-                  </td>
-                </tr>
-              )}
             {/* Pagination */}
             {filtered.length > 0 && (
               <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 dark:border-neutral-800">

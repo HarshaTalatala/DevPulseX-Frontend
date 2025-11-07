@@ -27,6 +27,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/Button';
 import { Brand } from '@/components/ui/Brand';
 import CommandPalette, { CommandItem } from '@/components/CommandPalette';
+import { Role } from '@/types';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -36,7 +37,7 @@ const navigation = [
   { name: 'Commits', href: '/commits', icon: GitCommit },
   { name: 'Deployments', href: '/deployments', icon: Rocket },
   { name: 'Teams', href: '/teams', icon: Users },
-  { name: 'Users', href: '/users', icon: User },
+  { name: 'Users', href: '/users', icon: User, roles: [Role.ADMIN, Role.MANAGER] },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -146,7 +147,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <nav>
           <div className="w-full px-4 sm:px-6 lg:px-8 overflow-x-auto">
             <ul className="flex items-center gap-0 h-12">
-              {navigation.map((item) => {
+              {navigation
+                .filter((item) => !item.roles || (user?.role && item.roles.includes(user.role)))
+                .map((item) => {
                 const isActive = pathname === item.href;
                 return (
                   <li key={item.name}>
@@ -174,7 +177,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         {menuOpen && (
           <div className="md:hidden border-t border-gray-200 dark:border-neutral-800">
             <div className="px-4 py-2 space-y-1 bg-white dark:bg-black">
-              {navigation.map((item) => {
+              {navigation
+                .filter((item) => !item.roles || (user?.role && item.roles.includes(user.role)))
+                .map((item) => {
                 const isActive = pathname === item.href;
                 return (
                   <Link
@@ -222,7 +227,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <CommandPalette
         open={paletteOpen}
         setOpen={setPaletteOpen}
-        items={navigation.map<CommandItem>((n) => ({
+        items={navigation
+          .filter((item) => !item.roles || (user?.role && item.roles.includes(user.role)))
+          .map<CommandItem>((n) => ({
           id: n.href,
           title: n.name,
           href: n.href,
