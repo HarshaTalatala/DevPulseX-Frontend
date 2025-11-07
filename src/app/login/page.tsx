@@ -17,7 +17,6 @@ import { useAuthStore } from '@/stores/auth';
 export default function LoginPage() {
   const router = useRouter();
   const [isRegistering, setIsRegistering] = useState(false);
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const loginMutation = useLogin();
   const registerMutation = useRegister();
   const { setAuth } = useAuthStore();
@@ -59,66 +58,10 @@ export default function LoginPage() {
   };
 
   const handleGoogleOAuth = () => {
-    setIsGoogleLoading(true);
     const redirectUri = encodeURIComponent(process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI || 'http://localhost:3000/auth/callback');
     const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${googleClientId}&redirect_uri=${redirectUri}&response_type=code&scope=${encodeURIComponent('openid email profile')}&access_type=offline&prompt=consent&state=google`;
-    
-    // Open popup window
-    const width = 500;
-    const height = 600;
-    const left = window.screenX + (window.outerWidth - width) / 2;
-    const top = window.screenY + (window.outerHeight - height) / 2;
-    
-    const popup = window.open(
-      url,
-      'Google OAuth',
-      `width=${width},height=${height},left=${left},top=${top},toolbar=no,menubar=no,scrollbars=yes,resizable=yes`
-    );
-
-    // Listen for messages from the popup
-    const handleMessage = async (event: MessageEvent) => {
-      // Verify origin for security
-      if (event.origin !== window.location.origin) return;
-      
-      if (event.data.type === 'GOOGLE_AUTH_SUCCESS' && event.data.code) {
-        try {
-          const response = await authApi.googleLogin(event.data.code);
-          setAuth(response.user, response.token);
-          toast.success('Successfully logged in with Google!');
-          popup?.close();
-          router.push('/dashboard');
-        } catch (error) {
-          toast.error('Google authentication failed. Please try again.');
-        } finally {
-          setIsGoogleLoading(false);
-          window.removeEventListener('message', handleMessage);
-        }
-      } else if (event.data.type === 'GOOGLE_AUTH_ERROR') {
-        toast.error('Google authentication was cancelled or failed.');
-        setIsGoogleLoading(false);
-        popup?.close();
-        window.removeEventListener('message', handleMessage);
-      }
-    };
-
-    window.addEventListener('message', handleMessage);
-
-    // Check if popup was blocked
-    if (!popup || popup.closed) {
-      toast.error('Popup blocked. Please allow popups for this site.');
-      setIsGoogleLoading(false);
-      window.removeEventListener('message', handleMessage);
-      return;
-    }
-
-    // Monitor if popup is closed manually
-    const popupChecker = setInterval(() => {
-      if (popup.closed) {
-        clearInterval(popupChecker);
-        setIsGoogleLoading(false);
-        window.removeEventListener('message', handleMessage);
-      }
-    }, 500);
+    // Direct redirect instead of popup - simpler and more reliable
+    window.location.href = url;
   };
 
   return (
@@ -166,8 +109,6 @@ export default function LoginPage() {
                   variant="outline"
                   className="w-full h-11 text-sm font-medium"
                   onClick={handleGoogleOAuth}
-                  isLoading={isGoogleLoading}
-                  disabled={isGoogleLoading}
                 >
                   <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
