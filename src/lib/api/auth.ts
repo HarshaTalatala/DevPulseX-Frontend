@@ -16,4 +16,9 @@ export const authApi = {
     const response = await apiClient.post<AuthResponse>('/auth/github', { code });
     return response.data;
   },
+
+  googleLogin: async (code: string): Promise<AuthResponse> => {
+    const response = await apiClient.post<AuthResponse>('/auth/google', { code });
+    return response.data;
+  },
 };
