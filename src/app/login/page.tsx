@@ -60,7 +60,7 @@ export default function LoginPage() {
 
   const handleGoogleOAuth = () => {
     setIsGoogleLoading(true);
-    const redirectUri = encodeURIComponent('http://localhost:3000/auth/callback');
+    const redirectUri = encodeURIComponent(process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI || 'http://localhost:3000/auth/callback');
     const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${googleClientId}&redirect_uri=${redirectUri}&response_type=code&scope=${encodeURIComponent('openid email profile')}&access_type=offline&prompt=consent&state=google`;
     
     // Open popup window
@@ -152,7 +152,7 @@ export default function LoginPage() {
                   variant="outline"
                   className="w-full h-11 text-sm font-medium"
                   onClick={() => {
-                    const redirectUri = encodeURIComponent('http://localhost:3000/auth/callback');
+                    const redirectUri = encodeURIComponent(process.env.NEXT_PUBLIC_GITHUB_REDIRECT_URI || 'http://localhost:3000/auth/callback');
                     const scope = encodeURIComponent('read:user,repo,user:email');
                     const url = `https://github.com/login/oauth/authorize?client_id=${githubClientId}&redirect_uri=${redirectUri}&scope=${scope}`;
                     window.location.href = url;
