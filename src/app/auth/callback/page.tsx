@@ -112,7 +112,7 @@ function CallbackInner() {
       <div className="relative min-h-screen flex items-center justify-center px-4">
         <div className="text-center">
           {/* Card with transparency */}
-          <div className="bg-white/80 dark:bg-black/80 backdrop-blur-xl border border-gray-200 dark:border-gray-800 rounded-2xl shadow-lg shadow-gray-900/5 dark:shadow-none p-8 min-w-[320px]">
+          <div className="bg-white/80 dark:bg-black/80 backdrop-blur-xl rounded-2xl shadow-lg shadow-gray-900/5 dark:shadow-none p-8 min-w-[320px]">
             {/* Spinner */}
             <div className="flex justify-center mb-6">
               <div className="relative w-16 h-16">
@@ -142,7 +142,7 @@ export default function GitHubCallbackPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-gray-50/30 dark:to-white/[0.02]"></div>
         <div className="relative min-h-screen flex items-center justify-center px-4">
           <div className="text-center">
-            <div className="bg-white/80 dark:bg-black/80 backdrop-blur-xl border border-gray-200 dark:border-gray-800 rounded-2xl shadow-lg shadow-gray-900/5 dark:shadow-none p-8 min-w-[320px]">
+            <div className="bg-white/80 dark:bg-black/80 backdrop-blur-xl rounded-2xl shadow-lg shadow-gray-900/5 dark:shadow-none p-8 min-w-[320px]">
               <div className="flex justify-center mb-6">
                 <div className="relative w-16 h-16">
                   <div className="absolute inset-0 rounded-full border-2 border-gray-200 dark:border-gray-800"></div>
