@@ -61,12 +61,53 @@ export default function ProjectsPage() {
     return (
       <ProtectedRoute>
         <DashboardLayout>
-          <div className="flex items-center justify-center h-64">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-              className="rounded-full h-12 w-12 border-4 border-t-white dark:border-t-white border-r-transparent border-b-transparent border-l-transparent"
-            />
+          <div className="space-y-4 sm:space-y-6">
+            {/* Header Skeleton */}
+            <div className="animate-pulse">
+              <div className="h-8 sm:h-10 bg-neutral-200 dark:bg-neutral-800 rounded w-32 sm:w-40 mb-2"></div>
+              <div className="h-4 bg-neutral-200 dark:bg-neutral-800 rounded w-48 sm:w-64"></div>
+            </div>
+
+            {/* Stats Skeleton */}
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="rounded-xl border border-white/10 bg-white/5 p-4 sm:p-5">
+                  <div className="animate-pulse flex items-center justify-between">
+                    <div className="flex-1">
+                      <div className="h-3 sm:h-4 bg-neutral-300 dark:bg-neutral-700 rounded w-20 sm:w-24 mb-2"></div>
+                      <div className="h-6 sm:h-8 bg-neutral-300 dark:bg-neutral-700 rounded w-12 sm:w-16"></div>
+                    </div>
+                    <div className="h-10 w-10 sm:h-12 sm:w-12 bg-neutral-300 dark:bg-neutral-700 rounded-lg"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Search Skeleton */}
+            <div className="animate-pulse flex flex-col sm:flex-row gap-4 items-center justify-between">
+              <div className="h-10 bg-neutral-200 dark:bg-neutral-800 rounded-lg w-full sm:w-96"></div>
+              <div className="h-10 w-24 bg-neutral-200 dark:bg-neutral-800 rounded-lg"></div>
+            </div>
+
+            {/* Cards Skeleton */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="rounded-xl border border-white/10 bg-white/5 p-4 sm:p-6">
+                  <div className="animate-pulse space-y-3 sm:space-y-4">
+                    <div className="flex items-start justify-between">
+                      <div className="h-5 sm:h-6 bg-neutral-300 dark:bg-neutral-700 rounded w-32 sm:w-40"></div>
+                      <div className="h-8 w-8 bg-neutral-300 dark:bg-neutral-700 rounded"></div>
+                    </div>
+                    <div className="h-3 sm:h-4 bg-neutral-200 dark:bg-neutral-800 rounded w-full"></div>
+                    <div className="h-3 sm:h-4 bg-neutral-200 dark:bg-neutral-800 rounded w-3/4"></div>
+                    <div className="flex gap-2">
+                      <div className="h-6 w-16 bg-neutral-300 dark:bg-neutral-700 rounded"></div>
+                      <div className="h-6 w-16 bg-neutral-300 dark:bg-neutral-700 rounded"></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </DashboardLayout>
       </ProtectedRoute>
@@ -87,36 +128,36 @@ export default function ProjectsPage() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+            className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4"
           >
-            <div>
-              <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 mb-2">Projects</h1>
-              <p className="text-gray-700 dark:text-gray-400 flex items-center gap-2">
-                <FolderKanban className="h-4 w-4" />
-                Manage and monitor all your projects
+            <div className="min-w-0 flex-1">
+              <h1 className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 mb-1 sm:mb-2">Projects</h1>
+              <p className="text-sm sm:text-base text-gray-700 dark:text-gray-400 flex items-center gap-2">
+                <FolderKanban className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
+                <span className="truncate">Manage and monitor all your projects</span>
               </p>
             </div>
-            <Button className="w-full sm:w-auto bg-white text-black hover:bg-gray-100 dark:bg-white dark:text-black dark:hover:bg-gray-100">
+            <Button className="w-full sm:w-auto bg-white text-black hover:bg-gray-100 dark:bg-white dark:text-black dark:hover:bg-gray-100 text-sm">
               <Plus className="h-4 w-4 mr-2" />
               New Project
             </Button>
           </motion.div>
 
           {/* Stats Overview (monochrome + minimal) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.05 }}
-              className="rounded-xl border border-white/10 bg-white/5 p-5"
+              className="rounded-xl border border-white/10 bg-white/5 p-4 sm:p-5"
             >
               <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-400">Repositories</p>
-                  <p className="text-2xl font-semibold text-white mt-1">{repos.length}</p>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs sm:text-sm font-medium text-gray-400 truncate">Repositories</p>
+                  <p className="text-xl sm:text-2xl font-semibold text-white mt-1">{repos.length}</p>
                 </div>
-                <div className="p-3 rounded-lg border border-white/10 bg-white/5 text-gray-300">
-                  <FolderKanban className="h-6 w-6" />
+                <div className="p-2 sm:p-3 rounded-lg border border-white/10 bg-white/5 text-gray-300 flex-shrink-0">
+                  <FolderKanban className="h-5 w-5 sm:h-6 sm:w-6" />
                 </div>
               </div>
             </motion.div>
@@ -125,15 +166,15 @@ export default function ProjectsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.1 }}
-              className="rounded-xl border border-white/10 bg-white/5 p-5"
+              className="rounded-xl border border-white/10 bg-white/5 p-4 sm:p-5"
             >
               <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-400">Total Stars</p>
-                  <p className="text-2xl font-semibold text-white mt-1">{totalStars}</p>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs sm:text-sm font-medium text-gray-400 truncate">Total Stars</p>
+                  <p className="text-xl sm:text-2xl font-semibold text-white mt-1">{totalStars}</p>
                 </div>
-                <div className="p-3 rounded-lg border border-white/10 bg-white/5 text-gray-300">
-                  <Star className="h-6 w-6" />
+                <div className="p-2 sm:p-3 rounded-lg border border-white/10 bg-white/5 text-gray-300 flex-shrink-0">
+                  <Star className="h-5 w-5 sm:h-6 sm:w-6" />
                 </div>
               </div>
             </motion.div>
@@ -142,15 +183,15 @@ export default function ProjectsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.15 }}
-              className="rounded-xl border border-white/10 bg-white/5 p-5"
+              className="rounded-xl border border-white/10 bg-white/5 p-4 sm:p-5 col-span-2 sm:col-span-1"
             >
               <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-400">Open Issues</p>
-                  <p className="text-2xl font-semibold text-white mt-1">{totalOpenIssues}</p>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs sm:text-sm font-medium text-gray-400 truncate">Open Issues</p>
+                  <p className="text-xl sm:text-2xl font-semibold text-white mt-1">{totalOpenIssues}</p>
                 </div>
-                <div className="p-3 rounded-lg border border-white/10 bg-white/5 text-gray-300">
-                  <AlertCircle className="h-6 w-6" />
+                <div className="p-2 sm:p-3 rounded-lg border border-white/10 bg-white/5 text-gray-300 flex-shrink-0">
+                  <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6" />
                 </div>
               </div>
             </motion.div>
@@ -161,7 +202,7 @@ export default function ProjectsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.5 }}
-            className="flex flex-col sm:flex-row gap-4 items-center justify-between"
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center justify-between"
           >
             <div className="relative w-full sm:w-96">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -170,10 +211,10 @@ export default function ProjectsPage() {
                 placeholder="Search projects..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 rounded-lg bg-white/5 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-500 border border-gray-200/50 dark:border-white/10 focus:ring-2 focus:ring-white/30 focus:border-transparent outline-none"
+                className="w-full pl-10 pr-4 py-2 text-sm rounded-lg bg-white/5 dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-500 border border-gray-200/50 dark:border-white/10 focus:ring-2 focus:ring-white/30 focus:border-transparent outline-none"
               />
             </div>
-            <div className="flex gap-2 bg-white/5 rounded-lg p-1 border border-white/10">
+            <div className="flex gap-2 bg-white/5 rounded-lg p-1 border border-white/10 self-start sm:self-auto">
               <button
                 onClick={() => setViewMode('grid')}
                 className={`p-2 rounded-md transition-colors ${
@@ -181,6 +222,7 @@ export default function ProjectsPage() {
                     ? 'bg-white text-black shadow-sm'
                     : 'text-gray-300 hover:text-white'
                 }`}
+                aria-label="Grid view"
               >
                 <Grid3x3 className="h-4 w-4" />
               </button>
@@ -191,6 +233,7 @@ export default function ProjectsPage() {
                     ? 'bg-white text-black shadow-sm'
                     : 'text-gray-300 hover:text-white'
                 }`}
+                aria-label="List view"
               >
                 <List className="h-4 w-4" />
               </button>
@@ -200,7 +243,7 @@ export default function ProjectsPage() {
           {/* GitHub Repositories Display */}
           {filteredGithubRepos && filteredGithubRepos.length > 0 ? (
             viewMode === 'grid' ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {filteredGithubRepos.map((repo: any, index: number) => (
                   <ProjectCard key={repo.id} repo={repo} index={index} />
                 ))}
@@ -213,29 +256,26 @@ export default function ProjectsPage() {
                 className="bg-neutral-950/50 border border-white/10 rounded-lg shadow-sm overflow-hidden"
               >
                 <div className="overflow-x-auto">
-                  <table className="w-full">
+                  <table className="w-full min-w-[640px]">
                     <thead className="bg-white/5 border-b border-white/10">
                       <tr>
-                        <th className="px-3 py-2 sm:px-6 sm:py-3 text-left text-[11px] sm:text-xs font-medium text-gray-400 uppercase tracking-wider">
+                        <th className="px-3 py-2 sm:px-4 md:px-6 sm:py-3 text-left text-[10px] sm:text-[11px] font-medium text-gray-400 uppercase tracking-wider">
                           Project
                         </th>
-                        <th className="px-3 py-2 sm:px-6 sm:py-3 text-left text-[11px] sm:text-xs font-medium text-gray-400 uppercase tracking-wider">
+                        <th className="px-3 py-2 sm:px-4 md:px-6 sm:py-3 text-left text-[10px] sm:text-[11px] font-medium text-gray-400 uppercase tracking-wider">
                           Team
                         </th>
-                        <th className="px-3 py-2 sm:px-6 sm:py-3 text-center text-[11px] sm:text-xs font-medium text-gray-400 uppercase tracking-wider">
-                          Tasks
+                        <th className="px-3 py-2 sm:px-4 md:px-6 sm:py-3 text-center text-[10px] sm:text-[11px] font-medium text-gray-400 uppercase tracking-wider">
+                          Stars
                         </th>
-                        <th className="px-3 py-2 sm:px-6 sm:py-3 text-center text-[11px] sm:text-xs font-medium text-gray-400 uppercase tracking-wider">
-                          Commits
+                        <th className="px-3 py-2 sm:px-4 md:px-6 sm:py-3 text-center text-[10px] sm:text-[11px] font-medium text-gray-400 uppercase tracking-wider">
+                          Forks
                         </th>
-                        <th className="px-3 py-2 sm:px-6 sm:py-3 text-center text-[11px] sm:text-xs font-medium text-gray-400 uppercase tracking-wider">
+                        <th className="px-3 py-2 sm:px-4 md:px-6 sm:py-3 text-center text-[10px] sm:text-[11px] font-medium text-gray-400 uppercase tracking-wider">
                           Issues
                         </th>
-                        <th className="px-3 py-2 sm:px-6 sm:py-3 text-center text-[11px] sm:text-xs font-medium text-gray-400 uppercase tracking-wider">
-                          Progress
-                        </th>
-                        <th className="px-3 py-2 sm:px-6 sm:py-3 text-right text-[11px] sm:text-xs font-medium text-gray-400 uppercase tracking-wider">
-                          Actions
+                        <th className="px-3 py-2 sm:px-4 md:px-6 sm:py-3 text-center text-[10px] sm:text-[11px] font-medium text-gray-400 uppercase tracking-wider">
+                          Updated
                         </th>
                       </tr>
                     </thead>
@@ -249,51 +289,56 @@ export default function ProjectsPage() {
                             transition={{ duration: 0.3, delay: 0.6 + index * 0.03 }}
                             className="hover:bg-white/5 transition-colors"
                           >
-                            <td className="px-3 py-3 sm:px-6 sm:py-4 whitespace-normal sm:whitespace-nowrap">
-                              <div className="flex items-center gap-2">
-                                <div className="text-sm font-medium text-white">
+                            <td className="px-3 py-3 sm:px-4 md:px-6 sm:py-4">
+                              <div className="flex items-center gap-2 min-w-0">
+                                <div className="text-xs sm:text-sm font-medium text-white truncate max-w-[120px] sm:max-w-none">
                                   {repo.name}
                                 </div>
                                 <a
                                   href={repo.html_url}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="text-gray-400 hover:text-white"
+                                  className="text-gray-400 hover:text-white flex-shrink-0"
+                                  aria-label={`View ${repo.name} on GitHub`}
                                 >
                                   <ExternalLink className="h-3 w-3" />
                                 </a>
                               </div>
                             </td>
-                            <td className="px-3 py-3 sm:px-6 sm:py-4 whitespace-normal sm:whitespace-nowrap">
+                            <td className="px-3 py-3 sm:px-4 md:px-6 sm:py-4">
                               {repo.language ? (
-                                <Badge className="text-xs bg-white/10 text-gray-300 border-white/15">
+                                <Badge className="text-[10px] sm:text-xs bg-white/10 text-gray-300 border-white/15 whitespace-nowrap">
                                   {repo.language}
                                 </Badge>
                               ) : (
-                                <span className="text-sm text-gray-500">-</span>
+                                <span className="text-xs sm:text-sm text-gray-500">-</span>
                               )}
                             </td>
-                            <td className="px-3 py-3 sm:px-6 sm:py-4 whitespace-normal sm:whitespace-nowrap text-center">
-                              <span className="text-sm font-medium text-gray-300 flex items-center justify-center gap-1">
-                                <Star className="h-3 w-3 text-gray-400" />
-                                {repo.stargazers_count || 0}
+                            <td className="px-3 py-3 sm:px-4 md:px-6 sm:py-4 text-center">
+                              <span className="text-xs sm:text-sm font-medium text-gray-300 flex items-center justify-center gap-1">
+                                <Star className="h-3 w-3 text-gray-400 flex-shrink-0" />
+                                <span className="tabular-nums">{repo.stargazers_count || 0}</span>
                               </span>
                             </td>
-                            <td className="px-3 py-3 sm:px-6 sm:py-4 whitespace-normal sm:whitespace-nowrap text-center">
-                              <span className="text-sm font-medium text-gray-300 flex items-center justify-center gap-1">
-                                <GitFork className="h-3 w-3 text-gray-400" />
-                                {repo.forks_count || 0}
+                            <td className="px-3 py-3 sm:px-4 md:px-6 sm:py-4 text-center">
+                              <span className="text-xs sm:text-sm font-medium text-gray-300 flex items-center justify-center gap-1">
+                                <GitFork className="h-3 w-3 text-gray-400 flex-shrink-0" />
+                                <span className="tabular-nums">{repo.forks_count || 0}</span>
                               </span>
                             </td>
-                            <td className="px-3 py-3 sm:px-6 sm:py-4 whitespace-normal sm:whitespace-nowrap text-center">
-                              <span className="text-sm font-medium text-gray-300 flex items-center justify-center gap-1">
-                                <AlertCircle className="h-3 w-3 text-gray-400" />
-                                {repo.open_issues_count || 0}
+                            <td className="px-3 py-3 sm:px-4 md:px-6 sm:py-4 text-center">
+                              <span className="text-xs sm:text-sm font-medium text-gray-300 flex items-center justify-center gap-1">
+                                <AlertCircle className="h-3 w-3 text-gray-400 flex-shrink-0" />
+                                <span className="tabular-nums">{repo.open_issues_count || 0}</span>
                               </span>
                             </td>
-                            <td className="px-3 py-3 sm:px-6 sm:py-4 whitespace-normal sm:whitespace-nowrap">
-                              <div className="text-xs text-gray-400">
-                                {new Date(repo.updated_at).toLocaleDateString()}
+                            <td className="px-3 py-3 sm:px-4 md:px-6 sm:py-4">
+                              <div className="text-[10px] sm:text-xs text-gray-400 text-center tabular-nums">
+                                {new Date(repo.updated_at).toLocaleDateString('en-US', { 
+                                  month: 'short', 
+                                  day: 'numeric',
+                                  year: window.innerWidth >= 640 ? 'numeric' : undefined 
+                                })}
                               </div>
                             </td>
                           </motion.tr>
@@ -309,19 +354,19 @@ export default function ProjectsPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.6 }}
-              className="bg-neutral-950/50 border border-white/10 rounded-lg p-12 text-center"
+              className="bg-neutral-950/50 border border-white/10 rounded-lg p-8 sm:p-12 text-center"
             >
-              <FolderKanban className="h-16 w-16 text-gray-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-white mb-2">
+              <FolderKanban className="h-12 w-12 sm:h-16 sm:w-16 text-gray-600 mx-auto mb-3 sm:mb-4" />
+              <h3 className="text-base sm:text-lg font-semibold text-white mb-2">
                 {searchQuery ? 'No projects found' : 'No projects yet'}
               </h3>
-              <p className="text-gray-400 mb-6">
+              <p className="text-sm sm:text-base text-gray-400 mb-4 sm:mb-6">
                 {searchQuery
                   ? 'Try adjusting your search query'
                   : 'Get started by creating your first project'}
               </p>
               {!searchQuery && (
-                <Button className="bg-white text-black hover:bg-gray-100">
+                <Button className="bg-white text-black hover:bg-gray-100 text-sm">
                   <Plus className="h-4 w-4 mr-2" />
                   Create Project
                 </Button>

@@ -119,27 +119,91 @@ export default function DeploymentsPage() {
       <ProtectedRoute>
         <DashboardLayout>
           <div className="min-h-screen bg-white dark:bg-black">
-            <div className="space-y-8">
-              <div className="flex justify-between items-center">
-                <div className="h-10 w-48 bg-gray-100 dark:bg-neutral-900 rounded-lg animate-pulse border border-gray-200 dark:border-neutral-800" />
-                <div className="h-10 w-40 bg-gray-100 dark:bg-neutral-900 rounded-lg animate-pulse border border-gray-200 dark:border-neutral-800" />
+            <div className="space-y-6 sm:space-y-8">
+              {/* Header Skeleton */}
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div className="space-y-3 w-full md:w-auto">
+                  <div className="h-7 w-32 bg-gray-100 dark:bg-neutral-900 rounded-full animate-pulse border border-gray-200 dark:border-neutral-800" />
+                  <div className="h-8 sm:h-10 w-48 sm:w-64 bg-gray-100 dark:bg-neutral-900 rounded-lg animate-pulse border border-gray-200 dark:border-neutral-800" />
+                  <div className="h-4 w-56 sm:w-72 bg-gray-100 dark:bg-neutral-900 rounded-lg animate-pulse border border-gray-200 dark:border-neutral-800" />
+                </div>
+                <div className="h-10 w-full sm:w-40 bg-gray-100 dark:bg-neutral-900 rounded-lg animate-pulse border border-gray-200 dark:border-neutral-800" />
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+              {/* Stats Skeleton */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                 {[...Array(3)].map((_, i) => (
                   <motion.div 
                     key={i} 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.1 }}
-                    className="h-32 bg-white dark:bg-neutral-950 rounded-lg animate-pulse border border-gray-200 dark:border-neutral-800" 
-                  />
+                    className="bg-white dark:bg-neutral-950 rounded-lg border border-gray-200 dark:border-neutral-800 p-4 sm:p-5"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-3 flex-1 min-w-0">
+                        <div className="h-3 w-24 sm:w-32 bg-gray-100 dark:bg-neutral-900 rounded animate-pulse" />
+                        <div className="h-6 sm:h-8 w-16 sm:w-20 bg-gray-100 dark:bg-neutral-900 rounded animate-pulse" />
+                      </div>
+                      <div className="h-9 w-9 sm:h-10 sm:w-10 bg-gray-100 dark:bg-neutral-900 rounded-lg animate-pulse flex-shrink-0 ml-3" />
+                    </div>
+                  </motion.div>
                 ))}
               </div>
-              <div className="bg-white dark:bg-neutral-950 rounded-lg border border-gray-200 dark:border-neutral-800 p-6">
-                <div className="h-12 bg-gray-100 dark:bg-neutral-900 rounded-lg mb-4 animate-pulse" />
-                {[...Array(6)].map((_, i) => (
-                  <div key={i} className="h-14 bg-gray-100 dark:bg-neutral-900 rounded-lg mb-3 animate-pulse" />
-                ))}
+
+              {/* Filters Skeleton */}
+              <div className="bg-white dark:bg-neutral-950 rounded-lg border border-gray-200 dark:border-neutral-800 p-4 sm:p-5">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                  <div className="h-10 bg-gray-100 dark:bg-neutral-900 rounded-lg animate-pulse" />
+                  <div className="h-10 bg-gray-100 dark:bg-neutral-900 rounded-lg animate-pulse" />
+                  <div className="h-10 bg-gray-100 dark:bg-neutral-900 rounded-lg animate-pulse" />
+                </div>
+                <div className="flex gap-2">
+                  <div className="h-10 w-24 bg-gray-100 dark:bg-neutral-900 rounded-lg animate-pulse" />
+                  <div className="h-10 w-20 bg-gray-100 dark:bg-neutral-900 rounded-lg animate-pulse" />
+                  <div className="h-10 w-20 bg-gray-100 dark:bg-neutral-900 rounded-lg animate-pulse" />
+                </div>
+              </div>
+
+              {/* Table Skeleton */}
+              <div className="bg-white dark:bg-neutral-950 rounded-lg border border-gray-200 dark:border-neutral-800 overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full min-w-[800px]">
+                    <thead className="bg-gray-50 dark:bg-neutral-900 border-b border-gray-200 dark:border-neutral-800">
+                      <tr>
+                        {['Project', 'ID', 'Status', 'Deployed At', 'Age', 'Actions'].map((header, i) => (
+                          <th key={i} className="px-3 sm:px-6 py-3 sm:py-4 text-left">
+                            <div className="h-3 w-16 sm:w-20 bg-gray-200 dark:bg-neutral-800 rounded animate-pulse" />
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200 dark:divide-neutral-800">
+                      {[...Array(5)].map((_, i) => (
+                        <tr key={i}>
+                          <td className="px-3 sm:px-6 py-3 sm:py-4">
+                            <div className="h-4 w-24 sm:w-32 bg-gray-100 dark:bg-neutral-900 rounded animate-pulse" />
+                          </td>
+                          <td className="px-3 sm:px-6 py-3 sm:py-4">
+                            <div className="h-6 w-12 sm:w-16 bg-gray-100 dark:bg-neutral-900 rounded animate-pulse" />
+                          </td>
+                          <td className="px-3 sm:px-6 py-3 sm:py-4">
+                            <div className="h-6 w-16 sm:w-20 bg-gray-100 dark:bg-neutral-900 rounded-full animate-pulse" />
+                          </td>
+                          <td className="px-3 sm:px-6 py-3 sm:py-4">
+                            <div className="h-4 w-28 sm:w-36 bg-gray-100 dark:bg-neutral-900 rounded animate-pulse" />
+                          </td>
+                          <td className="px-3 sm:px-6 py-3 sm:py-4">
+                            <div className="h-4 w-16 sm:w-20 bg-gray-100 dark:bg-neutral-900 rounded animate-pulse" />
+                          </td>
+                          <td className="px-3 sm:px-6 py-3 sm:py-4">
+                            <div className="h-8 w-8 bg-gray-100 dark:bg-neutral-900 rounded-lg animate-pulse ml-auto" />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
@@ -152,7 +216,7 @@ export default function DeploymentsPage() {
     <ProtectedRoute>
       <DashboardLayout>
         <div className="min-h-screen bg-white dark:bg-black">
-          <div className="space-y-8">
+          <div className="space-y-6 sm:space-y-8">
             {/* Header - Vercel Style */}
             <motion.div
               initial={{ opacity: 0, y: -20 }}
@@ -160,7 +224,7 @@ export default function DeploymentsPage() {
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
               className="relative"
             >
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 sm:gap-6">
                 <div className="space-y-2">
                   <motion.div
                     initial={{ opacity: 0, x: -20 }}
@@ -171,10 +235,10 @@ export default function DeploymentsPage() {
                     <Rocket className="h-3.5 w-3.5 text-black dark:text-white" />
                     <span className="text-xs font-medium text-black dark:text-white">Deployments</span>
                   </motion.div>
-                  <h1 className="text-3xl font-bold text-black dark:text-white">
+                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-black dark:text-white">
                     Ship with confidence
                   </h1>
-                  <p className="text-sm text-gray-600 dark:text-neutral-400 flex items-center gap-2">
+                  <p className="text-xs sm:text-sm text-gray-600 dark:text-neutral-400 flex items-center gap-2">
                     <TrendingUp className="h-3.5 w-3.5" />
                     Monitor every deployment across your projects in real-time
                   </p>
@@ -185,35 +249,35 @@ export default function DeploymentsPage() {
                   transition={{ duration: 0.6, delay: 0.2 }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="px-5 py-2.5 bg-black dark:bg-white text-white dark:text-black rounded-lg font-medium hover:bg-gray-900 dark:hover:bg-gray-100 transition-all duration-200 flex items-center gap-2 border border-black dark:border-white text-sm"
+                  className="w-full sm:w-auto px-5 py-2.5 bg-black dark:bg-white text-white dark:text-black rounded-lg font-medium hover:bg-gray-900 dark:hover:bg-gray-100 transition-all duration-200 flex items-center justify-center gap-2 border border-black dark:border-white text-sm"
                 >
                   <Plus className="h-4 w-4" />
-                  New Deployment
+                  <span>New Deployment</span>
                 </motion.button>
               </div>
             </motion.div>
 
             {/* KPIs - Vercel Style */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
               <motion.div 
                 initial={{ opacity: 0, y: 20 }} 
                 animate={{ opacity: 1, y: 0 }} 
                 transition={{ duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
                 whileHover={{ scale: 1.01, transition: { duration: 0.2 } }}
-                className="group relative overflow-hidden bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-5 hover:border-gray-400 dark:hover:border-neutral-600 transition-all duration-200"
+                className="group relative overflow-hidden bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-4 sm:p-5 hover:border-gray-400 dark:hover:border-neutral-600 transition-all duration-200"
               >
                 <div className="relative flex items-center justify-between">
-                  <div>
+                  <div className="flex-1 min-w-0">
                     <p className="text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wide">Total Deployments</p>
-                    <p className="text-2xl font-bold text-black dark:text-white mt-2">{metrics.total}</p>
+                    <p className="text-2xl sm:text-3xl font-bold text-black dark:text-white mt-2">{metrics.total}</p>
                   </div>
                   <motion.div 
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ duration: 0.3, delay: 0.4 }}
-                    className="p-2.5 bg-gray-100 dark:bg-neutral-900 rounded-lg"
+                    className="p-2 sm:p-2.5 bg-gray-100 dark:bg-neutral-900 rounded-lg flex-shrink-0 ml-3"
                   >
-                    <Calendar className="h-5 w-5 text-black dark:text-white"/>
+                    <Calendar className="h-5 w-5 sm:h-6 sm:w-6 text-black dark:text-white"/>
                   </motion.div>
                 </div>
               </motion.div>
@@ -223,20 +287,20 @@ export default function DeploymentsPage() {
                 animate={{ opacity: 1, y: 0 }} 
                 transition={{ duration: 0.5, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
                 whileHover={{ scale: 1.01, transition: { duration: 0.2 } }}
-                className="group relative overflow-hidden bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-5 hover:border-gray-400 dark:hover:border-neutral-600 transition-all duration-200"
+                className="group relative overflow-hidden bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-4 sm:p-5 hover:border-gray-400 dark:hover:border-neutral-600 transition-all duration-200"
               >
                 <div className="relative flex items-center justify-between">
-                  <div>
+                  <div className="flex-1 min-w-0">
                     <p className="text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wide">Success Rate</p>
-                    <p className="text-2xl font-bold text-black dark:text-white mt-2">{metrics.successRate}%</p>
+                    <p className="text-2xl sm:text-3xl font-bold text-black dark:text-white mt-2">{metrics.successRate}%</p>
                   </div>
                   <motion.div 
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ duration: 0.3, delay: 0.45 }}
-                    className="p-2.5 bg-gray-100 dark:bg-neutral-900 rounded-lg"
+                    className="p-2 sm:p-2.5 bg-gray-100 dark:bg-neutral-900 rounded-lg flex-shrink-0 ml-3"
                   >
-                    <CheckCircle2 className="h-5 w-5 text-black dark:text-white"/>
+                    <CheckCircle2 className="h-5 w-5 sm:h-6 sm:w-6 text-black dark:text-white"/>
                   </motion.div>
                 </div>
               </motion.div>
@@ -246,20 +310,20 @@ export default function DeploymentsPage() {
                 animate={{ opacity: 1, y: 0 }} 
                 transition={{ duration: 0.5, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
                 whileHover={{ scale: 1.01, transition: { duration: 0.2 } }}
-                className="group relative overflow-hidden bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-5 hover:border-gray-400 dark:hover:border-neutral-600 transition-all duration-200"
+                className="group relative overflow-hidden bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-4 sm:p-5 hover:border-gray-400 dark:hover:border-neutral-600 transition-all duration-200"
               >
                 <div className="relative flex items-center justify-between">
-                  <div>
+                  <div className="flex-1 min-w-0">
                     <p className="text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wide">Failures</p>
-                    <p className="text-2xl font-bold text-black dark:text-white mt-2">{metrics.failed}</p>
+                    <p className="text-2xl sm:text-3xl font-bold text-black dark:text-white mt-2">{metrics.failed}</p>
                   </div>
                   <motion.div 
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ duration: 0.3, delay: 0.5 }}
-                    className="p-2.5 bg-gray-100 dark:bg-neutral-900 rounded-lg"
+                    className="p-2 sm:p-2.5 bg-gray-100 dark:bg-neutral-900 rounded-lg flex-shrink-0 ml-3"
                   >
-                    <XCircle className="h-5 w-5 text-black dark:text-white"/>
+                    <XCircle className="h-5 w-5 sm:h-6 sm:w-6 text-black dark:text-white"/>
                   </motion.div>
                 </div>
               </motion.div>
@@ -270,17 +334,17 @@ export default function DeploymentsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="relative overflow-hidden bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-5"
+              className="relative overflow-hidden bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-4 sm:p-5"
             >
-              <div className="flex flex-col lg:flex-row gap-4 lg:items-end lg:justify-between">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 flex-1">
+              <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 lg:items-end lg:justify-between">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 flex-1">
                   <div className="relative">
-                    <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-neutral-500 z-10" />
+                    <Search className="h-3.5 w-3.5 sm:h-4 sm:w-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-neutral-500 z-10" />
                     <Input
                       placeholder="Search deployments..."
                       value={search}
                       onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-                      className="pl-10 bg-white dark:bg-black border-gray-200 dark:border-neutral-800 rounded-lg focus:ring-2 focus:ring-black dark:focus:ring-white"
+                      className="pl-9 sm:pl-10 py-2 sm:py-2.5 text-xs sm:text-sm bg-white dark:bg-black border-gray-200 dark:border-neutral-800 rounded-lg focus:ring-2 focus:ring-black dark:focus:ring-white"
                     />
                   </div>
                   <Select
@@ -300,27 +364,39 @@ export default function DeploymentsPage() {
                     onChange={(e) => { setPageSize(Number(e.target.value)); setPage(1); }}
                     options={[{value:'10',label:'10 / page'},{value:'20',label:'20 / page'},{value:'50',label:'50 / page'}]}
                   />
-                  <Button variant="outline" onClick={() => {
-                    // export current filtered data to CSV
-                    const rows = [
-                      ['ID','Project','Status','Timestamp'],
-                      ...filtered.map(d => [
-                        `#${d.id}`,
-                        getProjectName(d.projectId),
-                        d.status,
-                        new Date(d.timestamp).toISOString(),
-                      ])
-                    ];
-                    const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g,'\"')}"`).join(',')).join('\n');
-                    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'deployments.csv';
-                    a.click();
-                    URL.revokeObjectURL(url);
-                  }}>Export</Button>
-                  <Button variant="outline" onClick={() => { setSearch(''); setProjectFilter('ALL'); setStatusFilter('ALL'); setSortKey('timestamp'); setSortDir('desc'); setPage(1); }}>Reset</Button>
+                  <Button 
+                    variant="outline" 
+                    className="text-xs sm:text-sm px-3 sm:px-4"
+                    onClick={() => {
+                      // export current filtered data to CSV
+                      const rows = [
+                        ['ID','Project','Status','Timestamp'],
+                        ...filtered.map(d => [
+                          `#${d.id}`,
+                          getProjectName(d.projectId),
+                          d.status,
+                          new Date(d.timestamp).toISOString(),
+                        ])
+                      ];
+                      const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g,'\"')}"`).join(',')).join('\n');
+                      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement('a');
+                      a.href = url;
+                      a.download = 'deployments.csv';
+                      a.click();
+                      URL.revokeObjectURL(url);
+                    }}
+                  >
+                    Export
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="text-xs sm:text-sm px-3 sm:px-4"
+                    onClick={() => { setSearch(''); setProjectFilter('ALL'); setStatusFilter('ALL'); setSortKey('timestamp'); setSortDir('desc'); setPage(1); }}
+                  >
+                    Reset
+                  </Button>
                 </div>
               </div>
             </motion.div>
@@ -338,26 +414,26 @@ export default function DeploymentsPage() {
                   animate={{ opacity: 1, y: 0 }}
                   className="m-4 p-4 rounded-lg border border-gray-200 dark:border-neutral-800 bg-gray-50 dark:bg-neutral-900 text-black dark:text-white flex items-center justify-between"
                 >
-                  <span className="font-medium">Failed to load deployments. Please try again.</span>
+                  <span className="font-medium text-xs sm:text-sm">Failed to load deployments. Please try again.</span>
                   <Button size="sm" variant="outline" onClick={() => refetch()}>Retry</Button>
                 </motion.div>
               )}
               <div className="overflow-x-auto">
-                <table className="w-full">
+                <table className="w-full min-w-[800px]">
                   <thead className="bg-gray-50 dark:bg-neutral-900 border-b border-gray-200 dark:border-neutral-800">
                     <tr>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wider cursor-pointer hover:text-black dark:hover:text-white transition-colors" onClick={() => changeSort('project')}>
+                      <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wider cursor-pointer hover:text-black dark:hover:text-white transition-colors" onClick={() => changeSort('project')}>
                         Project {sortKey==='project' ? (sortDir==='asc' ? '↑' : '↓') : ''}
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wider">ID</th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wider cursor-pointer hover:text-black dark:hover:text-white transition-colors" onClick={() => changeSort('status')}>
+                      <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wider">ID</th>
+                      <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wider cursor-pointer hover:text-black dark:hover:text-white transition-colors" onClick={() => changeSort('status')}>
                         Status {sortKey==='status' ? (sortDir==='asc' ? '↑' : '↓') : ''}
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wider cursor-pointer hover:text-black dark:hover:text-white transition-colors" onClick={() => changeSort('timestamp')}>
+                      <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wider cursor-pointer hover:text-black dark:hover:text-white transition-colors" onClick={() => changeSort('timestamp')}>
                         Deployed At {sortKey==='timestamp' ? (sortDir==='asc' ? '↑' : '↓') : ''}
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wider">Age</th>
-                      <th className="px-6 py-4 text-right text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wider">Actions</th>
+                      <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wider">Age</th>
+                      <th className="px-3 sm:px-6 py-3 sm:py-4 text-right text-xs font-medium text-gray-600 dark:text-neutral-400 uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 dark:divide-neutral-800">
@@ -371,14 +447,14 @@ export default function DeploymentsPage() {
                           transition={{ duration: 0.3, delay: index * 0.03, ease: [0.22, 1, 0.36, 1] }} 
                           className="hover:bg-gray-50 dark:hover:bg-neutral-900 transition-colors"
                         >
-                          <td className="px-6 py-4 font-medium text-black dark:text-white">{getProjectName(deployment.projectId)}</td>
-                          <td className="px-6 py-4">
-                            <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-gray-100 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 text-xs font-mono font-medium text-gray-700 dark:text-neutral-300">
+                          <td className="px-3 sm:px-6 py-3 sm:py-4 font-medium text-xs sm:text-sm text-black dark:text-white truncate max-w-[120px] sm:max-w-none">{getProjectName(deployment.projectId)}</td>
+                          <td className="px-3 sm:px-6 py-3 sm:py-4">
+                            <span className="inline-flex items-center px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-gray-100 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 text-[10px] sm:text-xs font-mono font-medium text-gray-700 dark:text-neutral-300">
                               #{deployment.id}
                             </span>
                           </td>
-                          <td className="px-6 py-4">
-                            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${
+                          <td className="px-3 sm:px-6 py-3 sm:py-4">
+                            <span className={`inline-flex items-center px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium border ${
                               deployment.status === DeploymentStatus.SUCCESS 
                                 ? 'bg-black dark:bg-white border-black dark:border-white text-white dark:text-black'
                                 : deployment.status === DeploymentStatus.FAILED
@@ -387,24 +463,25 @@ export default function DeploymentsPage() {
                                 ? 'bg-gray-100 dark:bg-neutral-900 border-gray-200 dark:border-neutral-800 text-black dark:text-white animate-pulse'
                                 : 'bg-white dark:bg-black border-gray-200 dark:border-neutral-800 text-gray-600 dark:text-neutral-400'
                             }`}>
-                              {deployment.status.replace('_', ' ')}
+                              <span className="hidden sm:inline">{deployment.status.replace('_', ' ')}</span>
+                              <span className="sm:hidden">{deployment.status === DeploymentStatus.IN_PROGRESS ? 'Progress' : deployment.status}</span>
                             </span>
                           </td>
-                          <td className="px-6 py-4 text-sm text-gray-600 dark:text-neutral-400">
+                          <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-600 dark:text-neutral-400">
                             {formatDateTime(deployment.timestamp)}
                           </td>
-                          <td className="px-6 py-4 text-sm text-gray-600 dark:text-neutral-400">
+                          <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-600 dark:text-neutral-400">
                             {formatRelativeTime(deployment.timestamp)}
                           </td>
-                          <td className="px-6 py-4 text-right">
+                          <td className="px-3 sm:px-6 py-3 sm:py-4 text-right">
                             <motion.button
                               onClick={() => handleDelete(deployment.id)}
                               whileHover={{ scale: 1.1 }}
                               whileTap={{ scale: 0.9 }}
-                              className="p-2 hover:bg-gray-100 dark:hover:bg-neutral-900 rounded-lg transition-all duration-200 group"
+                              className="p-1.5 sm:p-2 hover:bg-gray-100 dark:hover:bg-neutral-900 rounded-lg transition-all duration-200 group"
                               aria-label={`Delete deployment ${deployment.id}`}
                             >
-                              <Trash2 className="h-4 w-4 text-gray-400 dark:text-neutral-500 group-hover:text-black dark:group-hover:text-white transition-colors"/>
+                              <Trash2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-gray-400 dark:text-neutral-500 group-hover:text-black dark:group-hover:text-white transition-colors"/>
                             </motion.button>
                           </td>
                         </motion.tr>
@@ -416,23 +493,23 @@ export default function DeploymentsPage() {
                   <motion.div 
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="text-center py-16"
+                    className="text-center py-12 sm:py-16"
                   >
-                    <Rocket className="h-12 w-12 text-gray-300 dark:text-neutral-700 mx-auto mb-3" />
-                    <p className="text-gray-900 dark:text-white font-medium">No deployments found</p>
-                    <p className="text-sm text-gray-500 dark:text-neutral-500 mt-1">Try adjusting your filters</p>
+                    <Rocket className="h-10 w-10 sm:h-12 sm:w-12 text-gray-300 dark:text-neutral-700 mx-auto mb-3" />
+                    <p className="text-sm sm:text-base text-gray-900 dark:text-white font-medium">No deployments found</p>
+                    <p className="text-xs sm:text-sm text-gray-500 dark:text-neutral-500 mt-1">Try adjusting your filters</p>
                   </motion.div>
                 )}
               {/* Pagination */}
               {filtered.length > 0 && (
-                <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 dark:border-neutral-800">
-                  <div className="text-sm font-medium text-gray-600 dark:text-neutral-400">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 sm:px-6 py-3 sm:py-4 border-t border-gray-200 dark:border-neutral-800">
+                  <div className="text-xs sm:text-sm font-medium text-gray-600 dark:text-neutral-400">
                     Showing {(page-1)*pageSize + 1}–{Math.min(page*pageSize, filtered.length)} of {filtered.length}
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" disabled={page===1} onClick={() => setPage((p)=>Math.max(1,p-1))}>Previous</Button>
-                    <span className="text-sm font-medium text-black dark:text-white">Page {page} of {totalPages}</span>
-                    <Button variant="outline" size="sm" disabled={page===totalPages} onClick={() => setPage((p)=>Math.min(totalPages,p+1))}>Next</Button>
+                    <Button variant="outline" size="sm" className="text-xs" disabled={page===1} onClick={() => setPage((p)=>Math.max(1,p-1))}>Previous</Button>
+                    <span className="text-xs sm:text-sm font-medium text-black dark:text-white px-2">Page {page} of {totalPages}</span>
+                    <Button variant="outline" size="sm" className="text-xs" disabled={page===totalPages} onClick={() => setPage((p)=>Math.min(totalPages,p+1))}>Next</Button>
                   </div>
                 </div>
               )}
@@ -445,11 +522,11 @@ export default function DeploymentsPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                className="relative overflow-hidden bg-gradient-to-br from-gray-50 to-white dark:from-neutral-950 dark:to-black border border-dashed border-gray-300 dark:border-neutral-700 rounded-lg p-5"
+                className="relative overflow-hidden bg-gradient-to-br from-gray-50 to-white dark:from-neutral-950 dark:to-black border border-dashed border-gray-300 dark:border-neutral-700 rounded-lg p-4 sm:p-5"
               >
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                  <div className="flex items-center gap-3">
-                    <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium border ${
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+                  <div className="flex items-start sm:items-center gap-2 sm:gap-3 flex-1">
+                    <span className={`inline-flex items-center px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-medium border ${
                       metrics.last.status === DeploymentStatus.SUCCESS 
                         ? 'bg-black dark:bg-white border-black dark:border-white text-white dark:text-black'
                         : metrics.last.status === DeploymentStatus.FAILED
@@ -458,18 +535,19 @@ export default function DeploymentsPage() {
                         ? 'bg-gray-100 dark:bg-neutral-900 border-gray-200 dark:border-neutral-800 text-black dark:text-white animate-pulse'
                         : 'bg-white dark:bg-black border-gray-200 dark:border-neutral-800 text-gray-600 dark:text-neutral-400'
                     }`}>
-                      {metrics.last.status.replace('_', ' ')}
+                      <span className="hidden sm:inline">{metrics.last.status.replace('_', ' ')}</span>
+                      <span className="sm:hidden">{metrics.last.status === DeploymentStatus.IN_PROGRESS ? 'Progress' : metrics.last.status}</span>
                     </span>
-                    <div>
-                      <p className="text-sm font-medium text-black dark:text-white">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs sm:text-sm font-medium text-black dark:text-white truncate">
                         Latest deployment • {formatDateTime(metrics.last.timestamp)}
                       </p>
-                      <p className="text-xs text-gray-600 dark:text-neutral-400 mt-0.5">
+                      <p className="text-[10px] sm:text-xs text-gray-600 dark:text-neutral-400 mt-0.5 truncate">
                         {getProjectName(metrics.last.projectId)} • #{metrics.last.id}
                       </p>
                     </div>
                   </div>
-                  <div className="text-sm font-medium text-gray-600 dark:text-neutral-400 bg-gray-100 dark:bg-neutral-900 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-neutral-800">
+                  <div className="text-xs sm:text-sm font-medium text-gray-600 dark:text-neutral-400 bg-gray-100 dark:bg-neutral-900 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg border border-gray-200 dark:border-neutral-800 self-start sm:self-auto">
                     {formatRelativeTime(metrics.last.timestamp)}
                   </div>
                 </div>

@@ -137,7 +137,7 @@ export default function DashboardPage() {
             >
               {/* GitHub Header Card */}
               <Card>
-                <CardContent>
+                <CardContent className="p-4 sm:p-6">
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex items-center gap-3 sm:gap-4">
                       {gh.avatarUrl && (
@@ -150,28 +150,28 @@ export default function DashboardPage() {
                           <img 
                             src={gh.avatarUrl} 
                             alt={gh.username}
-                            className="h-12 w-12 sm:h-16 sm:w-16 rounded-full border-2 border-blue-500 hover:border-blue-600"
+                            className="h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 rounded-full border-2 border-blue-500 hover:border-blue-600"
                           />
                         </a>
                       )}
-                      <div>
-                        <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">
+                      <div className="min-w-0 flex-1">
+                        <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 dark:text-white truncate">
                           {gh.username}
                         </h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-2 mt-0.5">
-                          <GitCommit className="h-3.5 w-3.5 text-gray-400 dark:text-gray-500" />
-                          GitHub Developer Analytics
+                        <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 flex items-center gap-2 mt-0.5">
+                          <GitCommit className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-gray-400 dark:text-gray-500 flex-shrink-0" />
+                          <span className="truncate">GitHub Developer Analytics</span>
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-4 sm:gap-6">
-                      <div className="flex items-center gap-4 sm:gap-5 text-sm">
+                    <div className="flex items-center gap-3 sm:gap-4 md:gap-6 flex-wrap sm:flex-nowrap">
+                      <div className="flex items-center gap-3 sm:gap-4 md:gap-5 text-sm">
                         <div className="text-center">
-                          <div className="text-lg font-bold text-gray-900 dark:text-white">{gh.followers}</div>
+                          <div className="text-base sm:text-lg font-bold text-gray-900 dark:text-white">{gh.followers}</div>
                           <div className="text-xs text-gray-500 dark:text-gray-400">Followers</div>
                         </div>
                         <div className="text-center">
-                          <div className="text-lg font-bold text-gray-900 dark:text-white">{gh.following}</div>
+                          <div className="text-base sm:text-lg font-bold text-gray-900 dark:text-white">{gh.following}</div>
                           <div className="text-xs text-gray-500 dark:text-gray-400">Following</div>
                         </div>
                       </div>
@@ -180,10 +180,11 @@ export default function DashboardPage() {
                           href={gh.profileUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="px-3 py-2 sm:px-4 sm:py-2 bg-gray-900 hover:bg-black dark:bg-white dark:hover:bg-gray-100 text-white dark:text-black text-sm font-medium rounded-lg transition-colors inline-flex items-center gap-2"
+                          className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-900 hover:bg-black dark:bg-white dark:hover:bg-gray-100 text-white dark:text-black text-xs sm:text-sm font-medium rounded-lg transition-colors inline-flex items-center gap-1.5 sm:gap-2 whitespace-nowrap"
                         >
-                          View Profile
-                          <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <span className="hidden xs:inline">View Profile</span>
+                          <span className="xs:hidden">Profile</span>
+                          <svg className="h-3 w-3 sm:h-3.5 sm:w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                           </svg>
                         </a>
@@ -194,7 +195,7 @@ export default function DashboardPage() {
               </Card>
 
               {/* Stats Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 <StatCard
                   name="Repositories"
                   value={gh.repoCount}
@@ -230,44 +231,44 @@ export default function DashboardPage() {
               </div>
 
               {/* Issues and Activity Details */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
                 <Card>
-                  <CardHeader>
+                  <CardHeader className="pb-3">
                     <CardTitle className="text-sm font-semibold text-gray-900 dark:text-white">
                       Issues Breakdown
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="pt-0">
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600 dark:text-gray-400">Total</span>
-                        <span className="text-xl font-bold text-gray-900 dark:text-white">{gh.totalIssues}</span>
+                        <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Total</span>
+                        <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">{gh.totalIssues}</span>
                       </div>
                       <div className="flex items-center justify-between py-2 border-t border-gray-100 dark:border-white/5">
-                        <span className="text-sm text-gray-600 dark:text-gray-400">Open</span>
-                        <span className="text-lg font-semibold text-orange-600 dark:text-orange-400">{gh.openIssues}</span>
+                        <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Open</span>
+                        <span className="text-base sm:text-lg font-semibold text-orange-600 dark:text-orange-400">{gh.openIssues}</span>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600 dark:text-gray-400">Closed</span>
-                        <span className="text-lg font-semibold text-green-600 dark:text-green-400">{gh.closedIssues}</span>
+                        <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Closed</span>
+                        <span className="text-base sm:text-lg font-semibold text-green-600 dark:text-green-400">{gh.closedIssues}</span>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
                 <Card>
-                  <CardHeader>
+                  <CardHeader className="pb-3">
                     <CardTitle className="text-sm font-semibold text-gray-900 dark:text-white">
                       Recent Activity (7 Days)
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="pt-0">
                     {gh.recentCommits === 0 && gh.recentPRs === 0 && gh.recentIssues === 0 ? (
-                      <div className="text-center py-4">
-                        <div className="inline-flex p-2.5 rounded-lg bg-gray-100 dark:bg-white/5 mb-2">
-                          <Activity className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+                      <div className="text-center py-3 sm:py-4">
+                        <div className="inline-flex p-2 sm:p-2.5 rounded-lg bg-gray-100 dark:bg-white/5 mb-2">
+                          <Activity className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500 dark:text-gray-400" />
                         </div>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                           No activity in the last 7 days
                         </p>
                         <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
@@ -277,38 +278,38 @@ export default function DashboardPage() {
                     ) : (
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
-                          <span className="text-sm text-gray-600 dark:text-gray-400">Commits</span>
-                          <span className="text-lg font-semibold text-gray-900 dark:text-white">{gh.recentCommits}</span>
+                          <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Commits</span>
+                          <span className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">{gh.recentCommits}</span>
                         </div>
                         <div className="flex items-center justify-between py-2 border-t border-gray-100 dark:border-white/5">
-                          <span className="text-sm text-gray-600 dark:text-gray-400">Pull Requests</span>
-                          <span className="text-lg font-semibold text-gray-900 dark:text-white">{gh.recentPRs}</span>
+                          <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Pull Requests</span>
+                          <span className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">{gh.recentPRs}</span>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-sm text-gray-600 dark:text-gray-400">Issues</span>
-                          <span className="text-lg font-semibold text-gray-900 dark:text-white">{gh.recentIssues}</span>
+                          <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Issues</span>
+                          <span className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">{gh.recentIssues}</span>
                         </div>
                       </div>
                     )}
                   </CardContent>
                 </Card>
 
-                <Card>
-                  <CardHeader>
+                <Card className="sm:col-span-2 md:col-span-1">
+                  <CardHeader className="pb-3">
                     <CardTitle className="text-sm font-semibold text-gray-900 dark:text-white">
                       Additional Info
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="pt-0">
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600 dark:text-gray-400">Public Gists</span>
-                        <span className="text-lg font-semibold text-gray-900 dark:text-white">{gh.publicGists}</span>
+                        <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Public Gists</span>
+                        <span className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">{gh.publicGists}</span>
                       </div>
                       {gh.mostActiveRepo && (
                         <div className="pt-3 border-t border-gray-100 dark:border-white/5">
                           <span className="text-xs text-gray-500 dark:text-gray-400">Most Active Repo</span>
-                          <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1 truncate">
+                          <p className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white mt-1 truncate">
                             {gh.mostActiveRepo}
                           </p>
                         </div>

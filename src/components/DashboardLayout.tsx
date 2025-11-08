@@ -69,19 +69,23 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Primary top bar (Vercel-like) */}
       <header className="sticky top-0 z-50 w-full bg-white/80 dark:bg-black/50 backdrop-blur-xl supports-[backdrop-filter]:bg-white/70 supports-[backdrop-filter]:dark:bg-black/40 border-b border-gray-200/50 dark:border-white/10">
         <div className="w-full px-4 sm:px-6 lg:px-8 h-16 flex items-center gap-3">
-          {/* Mobile menu button */}
+          {/* Mobile menu button - GitHub style */}
           <button
-            className="md:hidden inline-flex h-9 w-9 items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900"
+            className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors border border-gray-200 dark:border-gray-700"
             onClick={() => setMenuOpen((v) => !v)}
             aria-label="Toggle navigation"
             aria-expanded={menuOpen}
             aria-controls="mobile-nav-panel"
           >
-            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {menuOpen ? <X className="h-5 w-5" /> : (
+              <svg height="20" width="20" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M1 2.75A.75.75 0 0 1 1.75 2h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 2.75Zm0 5A.75.75 0 0 1 1.75 7h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 7.75ZM1.75 12h12.5a.75.75 0 0 1 0 1.5H1.75a.75.75 0 0 1 0-1.5Z"></path>
+              </svg>
+            )}
           </button>
 
           {/* Brand */}
-          <Brand size="md" accent="indigo" interactive />
+          <Brand size="lg" accent="indigo" interactive />
 
           {/* Center search (palette trigger) */}
           <div className="hidden md:flex flex-1 justify-center">
@@ -181,26 +185,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           onClose={() => setMenuOpen(false)}
           title="Navigation"
           user={user ? { name: user.name, role: user.role } : undefined}
-          items={[
-            ...navigation
+          onLogout={handleLogout}
+          items={
+            navigation
               .filter((item) => !item.roles || (user?.role && item.roles.includes(user.role)))
               .map((item) => ({
                 label: item.name,
                 href: item.href,
                 icon: item.icon,
                 active: pathname === item.href,
-              })),
-            {
-              label: theme === 'dark' ? 'Light Mode' : 'Dark Mode',
-              onClick: () => setTheme(theme === 'dark' ? 'light' : 'dark'),
-              icon: theme === 'dark' ? Sun : Moon,
-            },
-            {
-              label: 'Logout',
-              onClick: handleLogout,
-              icon: LogOut,
-            },
-          ]}
+              }))
+          }
         />
       </header>
 
