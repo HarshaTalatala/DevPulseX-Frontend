@@ -216,25 +216,25 @@ export default function ProjectsPage() {
                   <table className="w-full">
                     <thead className="bg-white/5 border-b border-white/10">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                        <th className="px-3 py-2 sm:px-6 sm:py-3 text-left text-[11px] sm:text-xs font-medium text-gray-400 uppercase tracking-wider">
                           Project
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                        <th className="px-3 py-2 sm:px-6 sm:py-3 text-left text-[11px] sm:text-xs font-medium text-gray-400 uppercase tracking-wider">
                           Team
                         </th>
-                        <th className="px-6 py-3 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">
+                        <th className="px-3 py-2 sm:px-6 sm:py-3 text-center text-[11px] sm:text-xs font-medium text-gray-400 uppercase tracking-wider">
                           Tasks
                         </th>
-                        <th className="px-6 py-3 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">
+                        <th className="px-3 py-2 sm:px-6 sm:py-3 text-center text-[11px] sm:text-xs font-medium text-gray-400 uppercase tracking-wider">
                           Commits
                         </th>
-                        <th className="px-6 py-3 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">
+                        <th className="px-3 py-2 sm:px-6 sm:py-3 text-center text-[11px] sm:text-xs font-medium text-gray-400 uppercase tracking-wider">
                           Issues
                         </th>
-                        <th className="px-6 py-3 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">
+                        <th className="px-3 py-2 sm:px-6 sm:py-3 text-center text-[11px] sm:text-xs font-medium text-gray-400 uppercase tracking-wider">
                           Progress
                         </th>
-                        <th className="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">
+                        <th className="px-3 py-2 sm:px-6 sm:py-3 text-right text-[11px] sm:text-xs font-medium text-gray-400 uppercase tracking-wider">
                           Actions
                         </th>
                       </tr>
@@ -249,7 +249,7 @@ export default function ProjectsPage() {
                             transition={{ duration: 0.3, delay: 0.6 + index * 0.03 }}
                             className="hover:bg-white/5 transition-colors"
                           >
-                            <td className="px-6 py-4 whitespace-nowrap">
+                            <td className="px-3 py-3 sm:px-6 sm:py-4 whitespace-normal sm:whitespace-nowrap">
                               <div className="flex items-center gap-2">
                                 <div className="text-sm font-medium text-white">
                                   {repo.name}
@@ -264,7 +264,7 @@ export default function ProjectsPage() {
                                 </a>
                               </div>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
+                            <td className="px-3 py-3 sm:px-6 sm:py-4 whitespace-normal sm:whitespace-nowrap">
                               {repo.language ? (
                                 <Badge className="text-xs bg-white/10 text-gray-300 border-white/15">
                                   {repo.language}
@@ -273,25 +273,25 @@ export default function ProjectsPage() {
                                 <span className="text-sm text-gray-500">-</span>
                               )}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-center">
+                            <td className="px-3 py-3 sm:px-6 sm:py-4 whitespace-normal sm:whitespace-nowrap text-center">
                               <span className="text-sm font-medium text-gray-300 flex items-center justify-center gap-1">
                                 <Star className="h-3 w-3 text-gray-400" />
                                 {repo.stargazers_count || 0}
                               </span>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-center">
+                            <td className="px-3 py-3 sm:px-6 sm:py-4 whitespace-normal sm:whitespace-nowrap text-center">
                               <span className="text-sm font-medium text-gray-300 flex items-center justify-center gap-1">
                                 <GitFork className="h-3 w-3 text-gray-400" />
                                 {repo.forks_count || 0}
                               </span>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-center">
+                            <td className="px-3 py-3 sm:px-6 sm:py-4 whitespace-normal sm:whitespace-nowrap text-center">
                               <span className="text-sm font-medium text-gray-300 flex items-center justify-center gap-1">
                                 <AlertCircle className="h-3 w-3 text-gray-400" />
                                 {repo.open_issues_count || 0}
                               </span>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
+                            <td className="px-3 py-3 sm:px-6 sm:py-4 whitespace-normal sm:whitespace-nowrap">
                               <div className="text-xs text-gray-400">
                                 {new Date(repo.updated_at).toLocaleDateString()}
                               </div>

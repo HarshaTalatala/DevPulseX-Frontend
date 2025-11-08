@@ -23,7 +23,7 @@ export const Card: React.FC<CardProps> = ({ children, hover = false, className, 
 
 export const CardHeader: React.FC<HTMLAttributes<HTMLDivElement>> = ({ children, className, ...props }) => {
   return (
-    <div className={cn('px-6 py-5 border-b border-gray-100 dark:border-white/5', className)} {...props}>
+    <div className={cn('px-4 py-4 sm:px-6 sm:py-5 border-b border-gray-100 dark:border-white/5', className)} {...props}>
       {children}
     </div>
   );
@@ -47,7 +47,7 @@ export const CardDescription: React.FC<HTMLAttributes<HTMLParagraphElement>> = (
 
 export const CardContent: React.FC<HTMLAttributes<HTMLDivElement>> = ({ children, className, ...props }) => {
   return (
-    <div className={cn('px-6 py-5', className)} {...props}>
+    <div className={cn('px-4 py-4 sm:px-6 sm:py-5', className)} {...props}>
       {children}
     </div>
   );

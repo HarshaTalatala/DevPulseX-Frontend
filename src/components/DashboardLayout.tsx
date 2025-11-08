@@ -27,6 +27,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/Button';
 import { Brand } from '@/components/ui/Brand';
 import CommandPalette, { CommandItem } from '@/components/CommandPalette';
+import MobileNav from '@/components/MobileNav';
 import { Role } from '@/types';
 
 const navigation = [
@@ -73,6 +74,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             className="md:hidden inline-flex h-9 w-9 items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900"
             onClick={() => setMenuOpen((v) => !v)}
             aria-label="Toggle navigation"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-nav-panel"
           >
             {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -173,54 +176,32 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
         </nav>
 
-        {/* Mobile dropdown nav */}
-        {menuOpen && (
-          <div className="md:hidden border-t border-gray-200 dark:border-neutral-800">
-            <div className="px-4 py-2 space-y-1 bg-white dark:bg-black">
-              {navigation
-                .filter((item) => !item.roles || (user?.role && item.roles.includes(user.role)))
-                .map((item) => {
-                const isActive = pathname === item.href;
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className={cn(
-                      'flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium',
-                      isActive
-                        ? 'bg-gray-100 dark:bg-neutral-900 text-gray-900 dark:text-white'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-neutral-900'
-                    )}
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    <item.icon className="h-4 w-4" />
-                    {item.name}
-                  </Link>
-                );
-              })}
-              <div className="flex items-center justify-between pt-2 mt-2 border-t border-gray-200 dark:border-neutral-800">
-                <div>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">{user?.name}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">{user?.role}</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                    className="h-8 w-8 inline-flex items-center justify-center rounded-md hover:bg-gray-100 dark:hover:bg-neutral-800"
-                  >
-                    {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                  </button>
-                  <button
-                    onClick={handleLogout}
-                    className="h-8 w-8 inline-flex items-center justify-center rounded-md hover:bg-red-50 dark:hover:bg-red-500/10 text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-500 transition-colors"
-                  >
-                    <LogOut className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Mobile slide-over nav */}
+        <MobileNav
+          open={menuOpen}
+          onClose={() => setMenuOpen(false)}
+          title="Navigation"
+          items={[
+            ...navigation
+              .filter((item) => !item.roles || (user?.role && item.roles.includes(user.role)))
+              .map((item) => ({
+                label: item.name,
+                href: item.href,
+                icon: item.icon,
+                active: pathname === item.href,
+              })),
+            {
+              label: theme === 'dark' ? 'Light Mode' : 'Dark Mode',
+              onClick: () => setTheme(theme === 'dark' ? 'light' : 'dark'),
+              icon: theme === 'dark' ? Sun : Moon,
+            },
+            {
+              label: 'Logout',
+              onClick: handleLogout,
+              icon: LogOut,
+            },
+          ]}
+        />
       </header>
 
       {/* Command Palette */}

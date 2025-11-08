@@ -44,7 +44,7 @@ export const TableHead: React.FC<TableProps> = ({ children, className, ...props 
   return (
     <th
       className={cn(
-        'px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider',
+        'text-left uppercase tracking-wider text-[11px] sm:text-xs px-3 py-2 sm:px-6 sm:py-3 text-gray-500 dark:text-gray-400',
         className
       )}
       {...props}
@@ -56,7 +56,7 @@ export const TableHead: React.FC<TableProps> = ({ children, className, ...props 
 
 export const TableCell: React.FC<TableProps> = ({ children, className, ...props }) => {
   return (
-    <td className={cn('px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100', className)} {...props}>
+    <td className={cn('px-3 py-3 sm:px-6 sm:py-4 whitespace-normal sm:whitespace-nowrap text-xs sm:text-sm text-gray-900 dark:text-gray-100', className)} {...props}>
       {children}
     </td>
   );

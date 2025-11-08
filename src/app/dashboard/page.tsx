@@ -82,10 +82,10 @@ export default function DashboardPage() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="flex items-center justify-between"
+            className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
           >
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-1">
                 Developer Dashboard
               </h1>
               <p className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-2">
@@ -95,7 +95,7 @@ export default function DashboardPage() {
             </div>
             <motion.div
               whileHover={{ scale: 1.02 }}
-              className="bg-gray-900 dark:bg-white text-white dark:text-black px-5 py-2.5 rounded-lg shadow-sm cursor-pointer"
+              className="bg-gray-900 dark:bg-white text-white dark:text-black px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg shadow-sm cursor-pointer self-start sm:self-auto"
             >
               <div className="flex items-center gap-2">
                 <span className="relative flex h-2 w-2">
@@ -138,8 +138,8 @@ export default function DashboardPage() {
               {/* GitHub Header Card */}
               <Card>
                 <CardContent>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex items-center gap-3 sm:gap-4">
                       {gh.avatarUrl && (
                         <a 
                           href={gh.profileUrl} 
@@ -150,12 +150,12 @@ export default function DashboardPage() {
                           <img 
                             src={gh.avatarUrl} 
                             alt={gh.username}
-                            className="h-16 w-16 rounded-full border-2 border-blue-500 hover:border-blue-600"
+                            className="h-12 w-12 sm:h-16 sm:w-16 rounded-full border-2 border-blue-500 hover:border-blue-600"
                           />
                         </a>
                       )}
                       <div>
-                        <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                        <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">
                           {gh.username}
                         </h3>
                         <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-2 mt-0.5">
@@ -164,8 +164,8 @@ export default function DashboardPage() {
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-6">
-                      <div className="flex items-center gap-5 text-sm">
+                    <div className="flex items-center gap-4 sm:gap-6">
+                      <div className="flex items-center gap-4 sm:gap-5 text-sm">
                         <div className="text-center">
                           <div className="text-lg font-bold text-gray-900 dark:text-white">{gh.followers}</div>
                           <div className="text-xs text-gray-500 dark:text-gray-400">Followers</div>
@@ -180,7 +180,7 @@ export default function DashboardPage() {
                           href={gh.profileUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="px-4 py-2 bg-gray-900 hover:bg-black dark:bg-white dark:hover:bg-gray-100 text-white dark:text-black text-sm font-medium rounded-lg transition-colors inline-flex items-center gap-2"
+                          className="px-3 py-2 sm:px-4 sm:py-2 bg-gray-900 hover:bg-black dark:bg-white dark:hover:bg-gray-100 text-white dark:text-black text-sm font-medium rounded-lg transition-colors inline-flex items-center gap-2"
                         >
                           View Profile
                           <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

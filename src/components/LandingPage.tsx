@@ -88,7 +88,7 @@ export default function LandingPage() {
       </motion.nav>
 
       {/* Hero Section */}
-  <section className="relative pt-32 sm:pt-36 md:pt-40 pb-24 sm:pb-28 md:pb-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
+  <section className="relative min-h-screen sm:min-h-0 flex items-center pt-32 sm:pt-36 md:pt-40 pb-24 sm:pb-28 md:pb-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
         {/* Ambient background gradient */}
         <div className="absolute inset-0 -z-10">
           <div className="absolute top-0 left-1/4 w-[36rem] h-[36rem] sm:w-[48rem] sm:h-[48rem] lg:w-[60rem] lg:h-[60rem] bg-gray-500/5 dark:bg-gray-500/5 rounded-full blur-3xl animate-pulse" />
@@ -97,7 +97,7 @@ export default function LandingPage() {
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
         </div>
 
-        <div className="max-w-6xl mx-auto text-center">
+        <div className="max-w-6xl mx-auto text-center w-full">
           <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -110,12 +110,31 @@ export default function LandingPage() {
               </span>
             </div>
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-tight break-words">
-              <span className="bg-gradient-to-b from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 bg-clip-text text-transparent">
-                Measure. Improve.
+              {/* Desktop: side-by-side layout */}
+              <span className="hidden sm:inline">
+                <span className="bg-gradient-to-b from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 bg-clip-text text-transparent">
+                  Measure. Improve.
+                </span>
+                <br />
+                <span className="bg-gradient-to-b from-gray-600 to-gray-900 dark:from-gray-400 dark:to-white bg-clip-text text-transparent">
+                  Empower Developers.
+                </span>
               </span>
-              <br />
-              <span className="bg-gradient-to-b from-gray-600 to-gray-900 dark:from-gray-400 dark:to-white bg-clip-text text-transparent">
-                Empower Developers.
+              
+              {/* Mobile: zigzag alternating layout */}
+              <span className="sm:hidden flex flex-col items-start gap-0.5 text-left max-w-xs mx-auto text-6xl">
+                <span className="self-start bg-gradient-to-b from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 bg-clip-text text-transparent">
+                  Measure
+                </span>
+                <span className="self-start pl-12 bg-gradient-to-b from-gray-600 to-gray-900 dark:from-gray-400 dark:to-white bg-clip-text text-transparent">
+                  Improve.
+                </span>
+                <span className="self-start bg-gradient-to-b from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 bg-clip-text text-transparent">
+                  Empower
+                </span>
+                <span className="self-start pl-12 bg-gradient-to-b from-gray-600 to-gray-900 dark:from-gray-400 dark:to-white bg-clip-text text-transparent">
+                  Developers.
+                </span>
               </span>
             </h1>
           </motion.div>
@@ -124,7 +143,7 @@ export default function LandingPage() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 mb-4 max-w-3xl mx-auto font-medium"
+            className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-3 sm:mb-4 max-w-2xl sm:max-w-3xl mx-auto font-medium px-4"
           >
             Track commits, issues, deployments & productivity — effortlessly.
           </motion.p>
@@ -133,7 +152,7 @@ export default function LandingPage() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="text-base sm:text-lg text-gray-500 dark:text-gray-500 mb-10 sm:mb-12 max-w-2xl mx-auto leading-relaxed"
+            className="text-sm sm:text-base md:text-lg text-gray-500 dark:text-gray-500 mb-8 sm:mb-10 md:mb-12 max-w-lg sm:max-w-2xl mx-auto leading-relaxed px-4"
           >
             The all-in-one developer productivity dashboard that brings clarity to your team's performance with real-time insights and actionable metrics.
           </motion.p>
@@ -142,15 +161,15 @@ export default function LandingPage() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.6 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-12 sm:mb-16 w-full max-w-xl mx-auto"
+            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full max-w-xl mx-auto"
           >
             <Button
               variant="primary"
               size="md"
               onClick={handleGetStarted}
-              className="group relative overflow-hidden shadow-lg hover:shadow-2xl w-full sm:w-auto transition-all duration-300 hover:scale-[1.02]"
+              className="group relative overflow-hidden min-w-[180px] sm:min-w-[156px] text-base py-3 transition-all duration-300 shadow-md hover:shadow-lg"
             >
-              <span className="relative z-10 flex items-center gap-2 font-semibold">
+              <span className="relative z-10 flex items-center justify-center gap-2 font-semibold">
                 Get Started
                 <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
               </span>
@@ -159,12 +178,20 @@ export default function LandingPage() {
               variant="outline"
               size="md"
               onClick={scrollToFeatures}
-              className="w-full sm:w-auto border-2 hover:bg-gray-50 dark:hover:bg-gray-900 transition-all duration-300"
+              className="group relative overflow-hidden min-w-[140px] sm:min-w-[156px] border-2 transition-all duration-300 hover:bg-gray-50 dark:hover:bg-gray-900"
             >
-              <span className="font-semibold">Learn More</span>
+              <span className="flex items-center gap-2 font-semibold">
+                Learn More
+                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+              </span>
             </Button>
           </motion.div>
+        </div>
+      </section>
 
+      {/* Stats preview section - separate for mobile scroll */}
+      <section className="py-12 sm:py-0 px-4 sm:px-6 lg:px-8 sm:-mt-16 pb-16 sm:pb-24">
+        <div className="max-w-6xl mx-auto">
           {/* Stats preview */}
           <motion.div
             initial={{ y: 40, opacity: 0 }}
@@ -282,6 +309,7 @@ export default function LandingPage() {
               whileInView={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
+              className="text-center lg:text-left"
             >
               <div className="inline-block mb-6">
                 <span className="text-xs font-semibold tracking-wider uppercase text-gray-600 dark:text-gray-400 border border-gray-300 dark:border-gray-700 px-4 py-2 rounded-full">
@@ -291,10 +319,10 @@ export default function LandingPage() {
               <h2 className="text-3xl sm:text-4xl font-bold mb-6 tracking-tight">
                 Built for modern development teams
               </h2>
-              <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 mb-10 leading-relaxed">
+              <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 mb-10 leading-relaxed max-w-2xl mx-auto lg:mx-0">
                 DevPulseX adapts to your workflow, whether you're a solo developer or managing multiple teams across different projects.
               </p>
-              <div className="space-y-5">
+              <div className="space-y-5 max-w-xl mx-auto lg:mx-0">
                 {[
                   { icon: Activity, text: 'Real-time activity monitoring' },
                   { icon: TrendingUp, text: 'Predictive analytics and trends' },
@@ -306,7 +334,7 @@ export default function LandingPage() {
                     whileInView={{ x: 0, opacity: 1 }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                     viewport={{ once: true }}
-                    className="flex items-center gap-4 text-gray-700 dark:text-gray-300 group"
+                    className="flex items-center gap-4 text-gray-700 dark:text-gray-300 group justify-center lg:justify-start"
                   >
                     <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 flex items-center justify-center group-hover:scale-110 transition-transform">
                       <item.icon className="w-5 h-5" />
@@ -368,7 +396,7 @@ export default function LandingPage() {
                         key={idx}
                         initial={{ scale: 0.9, opacity: 0, y: 10 }}
                         whileInView={{ scale: 1, opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.8 + idx * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                        transition={{ duration: 0.3, delay: 0.2 + idx * 0.05, ease: [0.22, 1, 0.36, 1] }}
                         viewport={{ once: true }}
                         whileHover={{ y: -2, scale: 1.02 }}
                           className="relative group/stat p-3 sm:p-4 rounded-xl bg-white/60 dark:bg-black/60 backdrop-blur-md border border-gray-200/60 dark:border-gray-800/60 hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-300 cursor-pointer overflow-hidden"
@@ -402,7 +430,7 @@ export default function LandingPage() {
                   <motion.div
                     initial={{ scaleY: 0, opacity: 0 }}
                     whileInView={{ scaleY: 1, opacity: 1 }}
-                    transition={{ duration: 0.7, delay: 1.2, ease: [0.22, 1, 0.36, 1] }}
+                    transition={{ duration: 0.4, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
                     viewport={{ once: true }}
                       className="relative rounded-xl bg-white/60 dark:bg-black/60 backdrop-blur-md border border-gray-200/60 dark:border-gray-800/60 p-3 sm:p-4 overflow-hidden group/chart"
                   >
@@ -439,7 +467,7 @@ export default function LandingPage() {
                             <motion.div
                               initial={{ height: 0, opacity: 0 }}
                               whileInView={{ height: `${bar.height}%`, opacity: 1 }}
-                              transition={{ duration: 0.6, delay: 1.4 + idx * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                              transition={{ duration: 0.4, delay: 0.5 + idx * 0.04, ease: [0.22, 1, 0.36, 1] }}
                               viewport={{ once: true }}
                               whileHover={{ scale: 1.05 }}
                               className="relative w-full rounded-t-md bg-gradient-to-t from-gray-700 via-gray-800 to-gray-900 dark:from-gray-300 dark:via-gray-200 dark:to-gray-100 hover:from-gray-800 hover:via-gray-900 hover:to-black dark:hover:from-gray-400 dark:hover:via-gray-300 dark:hover:to-gray-200 transition-all duration-300 cursor-pointer group/bar shadow-sm"
