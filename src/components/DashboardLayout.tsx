@@ -146,8 +146,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
         </div>
 
-        {/* Secondary nav row */}
-        <nav>
+        {/* Secondary nav row - Hidden on mobile, visible on md+ screens */}
+        <nav className="hidden md:block">
           <div className="w-full px-4 sm:px-6 lg:px-8 overflow-x-auto">
             <ul className="flex items-center gap-0 h-12">
               {navigation
@@ -164,7 +164,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                           ? 'text-gray-900 dark:text-white border-gray-900 dark:border-white'
                           : 'text-gray-600 dark:text-gray-400 border-transparent hover:text-gray-900 dark:hover:text-gray-200'
                       )}
-                      onClick={() => setMenuOpen(false)}
                     >
                       <item.icon className="h-4 w-4" />
                       <span className="whitespace-nowrap">{item.name}</span>
@@ -181,6 +180,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           open={menuOpen}
           onClose={() => setMenuOpen(false)}
           title="Navigation"
+          user={user ? { name: user.name, role: user.role } : undefined}
           items={[
             ...navigation
               .filter((item) => !item.roles || (user?.role && item.roles.includes(user.role)))

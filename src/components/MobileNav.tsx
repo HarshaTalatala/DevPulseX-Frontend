@@ -19,10 +19,14 @@ interface MobileNavProps {
   onClose: () => void;
   items: MobileNavItem[];
   title?: string;
+  user?: {
+    name?: string;
+    role?: string;
+  };
 }
 
 // Accessible mobile slide-over navigation with overlay and focus management
-export default function MobileNav({ open, onClose, items, title = 'Menu' }: MobileNavProps) {
+export default function MobileNav({ open, onClose, items, title = 'Menu', user }: MobileNavProps) {
   const panelRef = React.useRef<HTMLDivElement>(null);
 
   // Close on escape
@@ -59,7 +63,7 @@ export default function MobileNav({ open, onClose, items, title = 'Menu' }: Mobi
         <div className="md:hidden" aria-live="polite">
           {/* Overlay */}
           <motion.div
-            className="fixed inset-0 z-50 bg-black/50"
+            className="fixed inset-0 z-[60] bg-black/50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -72,7 +76,7 @@ export default function MobileNav({ open, onClose, items, title = 'Menu' }: Mobi
             aria-modal="true"
             aria-label={title}
             ref={panelRef}
-            className="fixed inset-y-0 left-0 z-50 w-80 max-w-[85%] bg-white dark:bg-black border-r border-gray-200 dark:border-neutral-800 shadow-xl flex flex-col"
+            className="fixed inset-y-0 left-0 z-[70] w-80 max-w-[85%] bg-white dark:bg-black border-r border-gray-200 dark:border-neutral-800 shadow-xl flex flex-col"
             initial={{ x: -320 }}
             animate={{ x: 0 }}
             exit={{ x: -320 }}
@@ -89,6 +93,25 @@ export default function MobileNav({ open, onClose, items, title = 'Menu' }: Mobi
                 <X className="h-4 w-4" />
               </button>
             </div>
+
+            {/* User Profile Section */}
+            {user && (
+              <div className="px-4 py-4 border-b border-gray-200 dark:border-neutral-800">
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-full bg-gray-200 dark:bg-neutral-800 flex items-center justify-center text-sm font-semibold text-gray-700 dark:text-gray-300">
+                    {(user.name || 'U').slice(0, 2).toUpperCase()}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                      {user.name ?? 'User'}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                      {user.role ?? 'Member'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
 
             <nav className="flex-1 overflow-y-auto py-2">
               <ul className="px-2 space-y-1">
