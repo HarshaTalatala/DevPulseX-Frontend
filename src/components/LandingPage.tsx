@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import {
@@ -13,12 +13,31 @@ import {
   Activity,
   TrendingUp,
   Shield,
+  Moon,
+  Sun,
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Brand } from '@/components/ui/Brand';
 
 export default function LandingPage() {
   const router = useRouter();
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  // Initialize theme from localStorage or system preference
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    const initialTheme = savedTheme || systemTheme;
+    setTheme(initialTheme);
+    document.documentElement.classList.toggle('dark', initialTheme === 'dark');
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    document.documentElement.classList.toggle('dark', newTheme === 'dark');
+  };
 
   const scrollToFeatures = () => {
     document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
@@ -41,6 +60,17 @@ export default function LandingPage() {
           <div className="flex justify-between items-center h-16">
             <Brand size="md" accent="none" href="/" />
             <div className="flex items-center gap-4">
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors duration-200"
+                aria-label="Toggle theme"
+              >
+                {theme === 'light' ? (
+                  <Moon className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                ) : (
+                  <Sun className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                )}
+              </button>
               <Button
                 variant="ghost"
                 size="sm"
@@ -79,7 +109,7 @@ export default function LandingPage() {
                 Developer Analytics Platform
               </span>
             </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6 leading-tight break-words">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-tight break-words">
               <span className="bg-gradient-to-b from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 bg-clip-text text-transparent">
                 Measure. Improve.
               </span>
@@ -297,9 +327,9 @@ export default function LandingPage() {
               {/* Subtle outer glow */}
               <div className="absolute -inset-2 bg-gradient-to-r from-gray-300/20 to-gray-400/20 dark:from-gray-700/20 dark:to-gray-600/20 rounded-3xl blur-xl opacity-40 group-hover:opacity-60 transition-opacity duration-500" />
               
-              <div className="relative rounded-3xl bg-transparent border border-gray-200 dark:border-gray-800 overflow-hidden shadow-2xl hover:shadow-3xl transition-shadow duration-500">
-                {/* Sophisticated gradient background */}
-                <div className="absolute inset-0 bg-transparent" />
+              <div className="relative rounded-3xl bg-transparent border border-gray-200 dark:border-gray-800 overflow-hidden shadow-2xl hover:shadow-3xl transition-shadow duration-500 backdrop-blur-xl">
+                {/* Sophisticated gradient background with transparency */}
+                  <div className="absolute inset-0 bg-white/80 dark:bg-black/80 backdrop-blur-xl" />
                 
                 {/* Refined radial gradient accents */}
                 <div className="absolute -top-24 -right-24 w-96 h-96 bg-gradient-radial from-gray-200/10 via-gray-100/5 to-transparent dark:from-gray-800/10 dark:via-gray-900/5 blur-3xl opacity-40" />
@@ -317,7 +347,7 @@ export default function LandingPage() {
                         Real-time performance metrics
                       </p>
                     </div>
-                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-transparent border border-gray-200/60 dark:border-gray-800/60 shadow-sm">
+                      <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-50 dark:bg-gray-800 border border-gray-200/60 dark:border-gray-800/60 shadow-sm">
                       <div className="relative">
                         <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                         <div className="absolute inset-0 w-2 h-2 rounded-full bg-green-500/40 animate-ping" />
@@ -341,7 +371,7 @@ export default function LandingPage() {
                         transition={{ duration: 0.5, delay: 0.8 + idx * 0.1, ease: [0.22, 1, 0.36, 1] }}
                         viewport={{ once: true }}
                         whileHover={{ y: -2, scale: 1.02 }}
-                        className="relative group/stat p-3 sm:p-4 rounded-xl bg-transparent backdrop-blur-sm border border-gray-200/60 dark:border-gray-800/60 hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-300 cursor-pointer overflow-hidden"
+                          className="relative group/stat p-3 sm:p-4 rounded-xl bg-white/60 dark:bg-black/60 backdrop-blur-md border border-gray-200/60 dark:border-gray-800/60 hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-300 cursor-pointer overflow-hidden"
                       >
                         {/* Hover gradient effect */}
                         <div className="absolute inset-0 bg-gradient-to-br from-gray-200/0 via-gray-100/0 to-gray-200/0 dark:from-gray-800/0 dark:via-gray-700/0 dark:to-gray-800/0 group-hover/stat:from-gray-200/10 group-hover/stat:via-gray-100/5 group-hover/stat:to-gray-200/10 dark:group-hover/stat:from-gray-800/10 dark:group-hover/stat:via-gray-700/5 dark:group-hover/stat:to-gray-800/10 transition-all duration-500" />
@@ -374,7 +404,7 @@ export default function LandingPage() {
                     whileInView={{ scaleY: 1, opacity: 1 }}
                     transition={{ duration: 0.7, delay: 1.2, ease: [0.22, 1, 0.36, 1] }}
                     viewport={{ once: true }}
-                    className="relative rounded-xl bg-transparent backdrop-blur-sm border border-gray-200/60 dark:border-gray-800/60 p-3 sm:p-4 overflow-hidden group/chart"
+                      className="relative rounded-xl bg-white/60 dark:bg-black/60 backdrop-blur-md border border-gray-200/60 dark:border-gray-800/60 p-3 sm:p-4 overflow-hidden group/chart"
                   >
                     <div className="flex items-center justify-between mb-3">
                       <div>
