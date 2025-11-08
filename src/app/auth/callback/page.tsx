@@ -104,14 +104,31 @@ function CallbackInner() {
   }, [params, router, setAuth]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
-      <div className="text-center">
-        <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
-        <div className="text-gray-600 dark:text-gray-300 text-lg font-medium">
-          Completing sign-in…
-        </div>
-        <div className="text-gray-500 dark:text-gray-400 text-sm mt-2">
-          Please wait while we authenticate you
+    <div className="min-h-screen relative overflow-hidden bg-white dark:bg-black">
+      {/* Subtle gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-gray-50/30 dark:to-white/[0.02]"></div>
+
+      {/* Content */}
+      <div className="relative min-h-screen flex items-center justify-center px-4">
+        <div className="text-center">
+          {/* Card with transparency */}
+          <div className="bg-white/80 dark:bg-black/80 backdrop-blur-xl border border-gray-200 dark:border-gray-800 rounded-2xl shadow-lg shadow-gray-900/5 dark:shadow-none p-8 min-w-[320px]">
+            {/* Spinner */}
+            <div className="flex justify-center mb-6">
+              <div className="relative w-16 h-16">
+                <div className="absolute inset-0 rounded-full border-2 border-gray-200 dark:border-gray-800"></div>
+                <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-gray-900 dark:border-t-white animate-spin"></div>
+              </div>
+            </div>
+
+            {/* Text */}
+            <h2 className="text-gray-900 dark:text-white text-lg font-semibold mb-2">
+              Completing sign-in…
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 text-sm">
+              Please wait while we authenticate you
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -121,8 +138,26 @@ function CallbackInner() {
 export default function GitHubCallbackPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-gray-600 dark:text-gray-300">Preparing…</div>
+      <div className="min-h-screen relative overflow-hidden bg-white dark:bg-black">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-gray-50/30 dark:to-white/[0.02]"></div>
+        <div className="relative min-h-screen flex items-center justify-center px-4">
+          <div className="text-center">
+            <div className="bg-white/80 dark:bg-black/80 backdrop-blur-xl border border-gray-200 dark:border-gray-800 rounded-2xl shadow-lg shadow-gray-900/5 dark:shadow-none p-8 min-w-[320px]">
+              <div className="flex justify-center mb-6">
+                <div className="relative w-16 h-16">
+                  <div className="absolute inset-0 rounded-full border-2 border-gray-200 dark:border-gray-800"></div>
+                  <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-gray-900 dark:border-t-white animate-spin"></div>
+                </div>
+              </div>
+              <h2 className="text-gray-900 dark:text-white text-lg font-semibold mb-2">
+                Preparing…
+              </h2>
+              <p className="text-gray-600 dark:text-gray-400 text-sm">
+                Setting up your authentication
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     }>
       <CallbackInner />
