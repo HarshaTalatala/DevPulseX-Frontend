@@ -15,8 +15,10 @@ function CallbackInner() {
     const code = params.get('code');
     const state = params.get('state');
     const error = params.get('error');
+    const token = params.get('token'); // Trello token
     const isPopup = window.opener && window.opener !== window;
     const isGoogle = state === 'google';
+    const isTrello = state === 'trello';
 
     // Add timeout protection (30 seconds)
     const timeoutId = setTimeout(() => {
@@ -38,8 +40,37 @@ function CallbackInner() {
         window.close();
       } else {
         toast.error(`Authentication failed: ${error}`);
-        router.replace('/login');
+        router.replace(isTrello ? '/dashboard' : '/login');
       }
+      return;
+    }
+
+    // Handle Trello OAuth callback (returns token directly)
+    if (isTrello && token) {
+      (async () => {
+        try {
+          console.log('[Auth Callback] Processing Trello OAuth with token');
+          const resp = await authApi.linkTrelloAccount(token);
+          
+          clearTimeout(timeoutId);
+          console.log('[Auth Callback] Trello account linked:', resp);
+          setAuth(resp.user, resp.token);
+          toast.success('Trello account linked successfully!');
+          
+          console.log('[Auth Callback] Redirecting to dashboard...');
+          router.replace('/dashboard');
+        } catch (e: any) {
+          clearTimeout(timeoutId);
+          console.error('[Auth Callback] Trello linking error:', e);
+          
+          const errorMsg = e.response?.data?.message || e.message || 'Failed to link Trello account';
+          toast.error(`Trello linking failed: ${errorMsg}`);
+          
+          setTimeout(() => {
+            router.replace('/dashboard');
+          }, 2000);
+        }
+      })();
       return;
     }
 

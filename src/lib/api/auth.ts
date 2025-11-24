@@ -21,4 +21,9 @@ export const authApi = {
     const response = await apiClient.post<AuthResponse>('/auth/google', { code });
     return response.data;
   },
+
+  linkTrelloAccount: async (token: string): Promise<AuthResponse> => {
+    const response = await apiClient.post<AuthResponse>('/auth/trello/link', { token });
+    return response.data;
+  },
 };
