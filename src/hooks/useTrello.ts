@@ -43,7 +43,7 @@ export const useLinkTrelloAccount = () => {
     onSuccess: (data) => {
       // Update auth store with new token and user data
       if (data.token && data.user) {
-        setAuth(data.token, data.user);
+        setAuth(data.user, data.token);
         localStorage.setItem('token', data.token);
       }
       // Invalidate user queries to refetch with new Trello data

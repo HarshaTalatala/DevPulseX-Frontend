@@ -46,7 +46,7 @@ export default function DashboardPage() {
   const { data: userMetrics, isLoading: usersLoading } = useUserMetrics();
   const { data: gh, isLoading: ghLoading, error: ghError } = useGithubInsights();
   const { data: projects } = useProjects();
-  const [activeTab, setActiveTab] = useState<'overview' | 'trello'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'trello' | 'accounts'>('overview');
   const [selectedProjectId, setSelectedProjectId] = useState<number | undefined>(undefined);
 
   const firstProjectId = useMemo(() => {
