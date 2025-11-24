@@ -1,4 +1,5 @@
 import apiClient from './client';
+import { AuthResponse } from '@/types';
 
 const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
@@ -28,4 +29,8 @@ export const trelloApi = {
   getCards: async (listId: string) => getWithRetry(`/trello/lists/${encodeURIComponent(listId)}/cards`),
   getProjectTrelloData: async (projectId: number) =>
     getWithRetry(`/dashboard/trello/${projectId}`) as Promise<{ lists: Array<{ listId: string; listName: string; cards: any[] }> }>,
+  linkAccount: async (token: string): Promise<AuthResponse> => {
+    const response = await apiClient.post<AuthResponse>('/auth/trello/link', { token });
+    return response.data;
+  },
 };

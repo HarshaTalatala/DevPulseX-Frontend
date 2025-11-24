@@ -5,16 +5,22 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { projectsApi } from '@/lib/api/projects';
 import { useProject } from '@/hooks/useProjects';
 import { useTrelloBoards } from '@/hooks/useTrello';
+import { useAuthStore } from '@/stores/auth';
 
 interface Props {
   projectId: number;
-  trelloUserId?: string; // Trello member id/username; if not provided, show input field
+  trelloUserId?: string; // Trello member id/username; if not provided, use logged-in user's Trello ID
 }
 
 export default function TrelloBoardSelector({ projectId, trelloUserId: initialUserId }: Props) {
   const queryClient = useQueryClient();
+  const { user } = useAuthStore();
   const { data: project } = useProject(projectId);
-  const [trelloUserId, setTrelloUserId] = useState<string | undefined>(initialUserId);
+  
+  // Use logged-in user's Trello ID if available, otherwise allow manual entry
+  const [trelloUserId, setTrelloUserId] = useState<string | undefined>(
+    initialUserId || user?.trelloId || undefined
+  );
   const { data: boards, isLoading, refetch, isFetching } = useTrelloBoards(trelloUserId);
 
   const [selectedBoardId, setSelectedBoardId] = useState<string | undefined>();
@@ -24,6 +30,13 @@ export default function TrelloBoardSelector({ projectId, trelloUserId: initialUs
       setSelectedBoardId(project.trelloBoardId);
     }
   }, [project?.trelloBoardId]);
+  
+  // Auto-load boards if user has linked Trello account
+  useEffect(() => {
+    if (user?.trelloId && !trelloUserId) {
+      setTrelloUserId(user.trelloId);
+    }
+  }, [user?.trelloId, trelloUserId]);
 
   const updateProjectMutation = useMutation({
     mutationFn: async (boardId: string | null) => {
@@ -50,6 +63,7 @@ export default function TrelloBoardSelector({ projectId, trelloUserId: initialUs
   return (
     <div className="w-full p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/10 rounded-lg">
       <div className="flex flex-col gap-3">
+        {!user?.trelloId && (
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Trello User ID</label>
           <div className="flex gap-2">
@@ -69,6 +83,7 @@ export default function TrelloBoardSelector({ projectId, trelloUserId: initialUs
             </button>
           </div>
         </div>
+        )}
 
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Trello Board</label>

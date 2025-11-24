@@ -33,6 +33,21 @@ export interface UserDto {
   name: string;
   email: string;
   role: Role;
+  
+  // GitHub OAuth fields
+  githubId?: number;
+  githubUsername?: string;
+  githubAvatarUrl?: string;
+  
+  // Google OAuth fields
+  googleId?: string;
+  googleEmail?: string;
+  googleName?: string;
+  googlePictureUrl?: string;
+  
+  // Trello OAuth fields
+  trelloId?: string;
+  trelloUsername?: string;
 }
 
 export interface CreateUserRequest {

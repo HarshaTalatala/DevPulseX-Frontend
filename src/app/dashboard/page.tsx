@@ -15,6 +15,8 @@ import { useGithubInsights } from '@/hooks/useGithub';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, Area, AreaChart } from 'recharts';
 import TrelloBoardViewer from '@/components/TrelloBoardViewer';
 import TrelloBoardSelector from '@/components/TrelloBoardSelector';
+import TrelloAccountLink from '@/components/TrelloAccountLink';
+import OAuthAccountsStatus from '@/components/OAuthAccountsStatus';
 import { useProjects } from '@/hooks/useProjects';
 
 // Lazy load heavy components for better performance
@@ -127,6 +129,12 @@ export default function DashboardPage() {
               className={`px-3 py-1.5 rounded-md text-sm ${activeTab === 'overview' ? 'bg-gray-900 text-white dark:bg-white dark:text-black' : 'bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-gray-300'}`}
             >
               Overview
+            </button>
+            <button
+              onClick={() => setActiveTab('accounts')}
+              className={`px-3 py-1.5 rounded-md text-sm ${activeTab === 'accounts' ? 'bg-gray-900 text-white dark:bg-white dark:text-black' : 'bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-gray-300'}`}
+            >
+              Accounts
             </button>
             <button
               onClick={() => setActiveTab('trello')}
@@ -371,6 +379,17 @@ export default function DashboardPage() {
             </div>
           )}
           </>
+          )}
+
+          {activeTab === 'accounts' && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="space-y-4"
+            >
+              <OAuthAccountsStatus />
+            </motion.div>
           )}
 
           {activeTab === 'trello' && (

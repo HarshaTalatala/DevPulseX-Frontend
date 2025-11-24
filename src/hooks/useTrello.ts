@@ -1,5 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { trelloApi } from '@/lib/api/trello';
+import { useAuthStore } from '@/stores/auth';
 
 export const useTrelloBoards = (userId?: string) => {
   return useQuery({
@@ -30,5 +31,23 @@ export const useProjectTrello = (projectId?: number) => {
     queryKey: ['trello', 'project', projectId],
     queryFn: () => trelloApi.getProjectTrelloData(projectId!),
     enabled: !!projectId,
+  });
+};
+
+export const useLinkTrelloAccount = () => {
+  const queryClient = useQueryClient();
+  const { setAuth } = useAuthStore();
+
+  return useMutation({
+    mutationFn: (token: string) => trelloApi.linkAccount(token),
+    onSuccess: (data) => {
+      // Update auth store with new token and user data
+      if (data.token && data.user) {
+        setAuth(data.token, data.user);
+        localStorage.setItem('token', data.token);
+      }
+      // Invalidate user queries to refetch with new Trello data
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+    },
   });
 };
