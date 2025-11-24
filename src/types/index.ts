@@ -78,6 +78,7 @@ export interface ProjectDto {
   id: number;
   name: string;
   teamId: number;
+  trelloBoardId?: string | null;
 }
 
 // Task Types

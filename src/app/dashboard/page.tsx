@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import DashboardLayout from '@/components/DashboardLayout';
@@ -13,6 +13,9 @@ import { FolderKanban, Users, CheckSquare, GitCommit, AlertCircle, Rocket, Trend
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGithubInsights } from '@/hooks/useGithub';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, Area, AreaChart } from 'recharts';
+import TrelloBoardViewer from '@/components/TrelloBoardViewer';
+import TrelloBoardSelector from '@/components/TrelloBoardSelector';
+import { useProjects } from '@/hooks/useProjects';
 
 // Lazy load heavy components for better performance
 const AnimatedChart = dynamic(
@@ -40,6 +43,16 @@ export default function DashboardPage() {
   const { data: projectMetrics, isLoading: projectsLoading } = useProjectMetrics();
   const { data: userMetrics, isLoading: usersLoading } = useUserMetrics();
   const { data: gh, isLoading: ghLoading, error: ghError } = useGithubInsights();
+  const { data: projects } = useProjects();
+  const [activeTab, setActiveTab] = useState<'overview' | 'trello'>('overview');
+  const [selectedProjectId, setSelectedProjectId] = useState<number | undefined>(undefined);
+
+  const firstProjectId = useMemo(() => {
+    if (!projects || projects.length === 0) return undefined;
+    return projects[0].id;
+  }, [projects]);
+
+  const effectiveProjectId = selectedProjectId || firstProjectId;
 
   // Show skeleton while any critical data is loading
   const isInitialLoading = ghLoading && !gh;
@@ -107,6 +120,24 @@ export default function DashboardPage() {
             </motion.div>
           </motion.div>
 
+          {/* Tab Switcher */}
+          <div className="flex items-center gap-2 mb-2">
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`px-3 py-1.5 rounded-md text-sm ${activeTab === 'overview' ? 'bg-gray-900 text-white dark:bg-white dark:text-black' : 'bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-gray-300'}`}
+            >
+              Overview
+            </button>
+            <button
+              onClick={() => setActiveTab('trello')}
+              className={`px-3 py-1.5 rounded-md text-sm ${activeTab === 'trello' ? 'bg-gray-900 text-white dark:bg-white dark:text-black' : 'bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-gray-300'}`}
+            >
+              Trello
+            </button>
+          </div>
+
+          {activeTab === 'overview' && (
+          <>
           {/* GitHub Analytics Section */}
           {ghLoading ? (
             <div className="flex items-center justify-center h-64">
@@ -337,6 +368,41 @@ export default function DashboardPage() {
                 <GitCommit className="h-4 w-4" />
                 Connect GitHub Account
               </button>
+            </div>
+          )}
+          </>
+          )}
+
+          {activeTab === 'trello' && (
+            <div className="space-y-4">
+              <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <div className="flex items-center gap-2">
+                  <label className="text-sm text-gray-700 dark:text-gray-300">Project</label>
+                  <select
+                    className="px-3 py-1.5 rounded-md bg-gray-100 dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-white/10"
+                    value={effectiveProjectId || ''}
+                    onChange={(e) => setSelectedProjectId(Number(e.target.value))}
+                  >
+                    {projects?.map((p) => (
+                      <option key={p.id} value={p.id}>{p.name}</option>
+                    ))}
+                  </select>
+                </div>
+                {effectiveProjectId && (
+                  <div className="w-full md:w-[520px]">
+                    <TrelloBoardSelector projectId={effectiveProjectId} />
+                  </div>
+                )}
+              </div>
+
+              {effectiveProjectId ? (
+                <TrelloBoardViewer projectId={effectiveProjectId} />
+              ) : (
+                <div className="p-8 text-center bg-gray-50 dark:bg-white/[0.02] rounded-xl border border-dashed border-gray-300 dark:border-white/10">
+                  <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2">Select a project</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Choose a project to view Trello board data.</p>
+                </div>
+              )}
             </div>
           )}
             </motion.div>
