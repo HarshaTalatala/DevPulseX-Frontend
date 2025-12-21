@@ -15,10 +15,12 @@ function CallbackInner() {
     const code = params.get('code');
     const state = params.get('state');
     const error = params.get('error');
-    const token = params.get('token'); // Trello token
+    const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+    const token = hashParams.get('token'); // Trello token lives in the URL fragment
     const isPopup = window.opener && window.opener !== window;
     const isGoogle = state === 'google';
-    const isTrello = state === 'trello';
+    const isTrello = !!state && !isGoogle && !!token;
+    const expectedState = typeof window !== 'undefined' ? sessionStorage.getItem('trello_oauth_state') : null;
 
     // Add timeout protection (30 seconds)
     const timeoutId = setTimeout(() => {
@@ -45,17 +47,25 @@ function CallbackInner() {
       return;
     }
 
-    // Handle Trello OAuth callback (returns token directly)
+    // Handle Trello OAuth callback (returns token directly via fragment)
     if (isTrello && token) {
       (async () => {
         try {
+          if (!expectedState || expectedState !== state) {
+            throw new Error('State validation failed');
+          }
+
           console.log('[Auth Callback] Processing Trello OAuth with token');
-          const resp = await authApi.linkTrelloAccount(token);
+          const resp = await authApi.linkTrelloAccount(token, state);
           
           clearTimeout(timeoutId);
           console.log('[Auth Callback] Trello account linked:', resp);
           setAuth(resp.user, resp.token);
           toast.success('Trello account linked successfully!');
+
+          // Clean up state artifacts
+          sessionStorage.removeItem('trello_oauth_state');
+          document.cookie = 'trello_state=; Max-Age=0; Path=/; SameSite=Lax';
           
           console.log('[Auth Callback] Redirecting to dashboard...');
           router.replace('/dashboard');

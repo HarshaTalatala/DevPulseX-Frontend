@@ -2,11 +2,10 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { trelloApi } from '@/lib/api/trello';
 import { useAuthStore } from '@/stores/auth';
 
-export const useTrelloBoards = (userId?: string) => {
+export const useTrelloBoards = () => {
   return useQuery({
-    queryKey: ['trello', 'boards', userId],
-    queryFn: () => trelloApi.getBoards(userId!),
-    enabled: !!userId,
+    queryKey: ['trello', 'boards'],
+    queryFn: () => trelloApi.getBoards(),
   });
 };
 

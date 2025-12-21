@@ -42,17 +42,36 @@ npm start
 
 ## Environment Variables
 
-Create a `.env.local` file in the root directory:
+Copy the example file and fill in your values:
+
+```bash
+cp .env.local.example .env.local
+```
+
+Minimum required vars for local dev:
 
 ```env
+# Backend API (base URL must include /api)
 NEXT_PUBLIC_API_URL=http://localhost:8080/api
+
+# Trello OAuth
+NEXT_PUBLIC_TRELLO_API_KEY=<your_trello_app_key>
+NEXT_PUBLIC_TRELLO_REDIRECT_URI=http://localhost:3000/auth/callback
 ```
+
+Notes:
+- Get your Trello App Key from https://trello.com/app-key (copy “Key”).
+- Ensure `NEXT_PUBLIC_TRELLO_API_KEY` is set; otherwise linking will show an error and Trello will report “App not found”.
+- The redirect URI should match what your app expects: `/auth/callback` is handled here and posts the token to the backend.
 
 ## Deploy on Vercel
 
 1. Push your code to GitHub
 2. Import project to Vercel
-3. Add environment variable: `NEXT_PUBLIC_API_URL` with your backend URL
+3. Add environment variables:
+	- `NEXT_PUBLIC_API_URL` with your backend URL
+	- `NEXT_PUBLIC_TRELLO_API_KEY` with your Trello app key
+	- `NEXT_PUBLIC_TRELLO_REDIRECT_URI` with your deployed callback (e.g., https://your-frontend/auth/callback)
 4. Deploy!
 
 ## Project Structure

@@ -9,19 +9,14 @@ import { useAuthStore } from '@/stores/auth';
 
 interface Props {
   projectId: number;
-  trelloUserId?: string; // Trello member id/username; if not provided, use logged-in user's Trello ID
 }
 
-export default function TrelloBoardSelector({ projectId, trelloUserId: initialUserId }: Props) {
+export default function TrelloBoardSelector({ projectId }: Props) {
   const queryClient = useQueryClient();
   const { user } = useAuthStore();
   const { data: project } = useProject(projectId);
-  
-  // Use logged-in user's Trello ID if available, otherwise allow manual entry
-  const [trelloUserId, setTrelloUserId] = useState<string | undefined>(
-    initialUserId || user?.trelloId || undefined
-  );
-  const { data: boards, isLoading, refetch, isFetching } = useTrelloBoards(trelloUserId);
+
+  const { data: boards, isLoading, refetch, isFetching } = useTrelloBoards();
 
   const [selectedBoardId, setSelectedBoardId] = useState<string | undefined>();
 
@@ -31,13 +26,6 @@ export default function TrelloBoardSelector({ projectId, trelloUserId: initialUs
     }
   }, [project?.trelloBoardId]);
   
-  // Auto-load boards if user has linked Trello account
-  useEffect(() => {
-    if (user?.trelloId && !trelloUserId) {
-      setTrelloUserId(user.trelloId);
-    }
-  }, [user?.trelloId, trelloUserId]);
-
   const updateProjectMutation = useMutation({
     mutationFn: async (boardId: string | null) => {
       if (!project) return;
@@ -63,27 +51,19 @@ export default function TrelloBoardSelector({ projectId, trelloUserId: initialUs
   return (
     <div className="w-full p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/10 rounded-lg">
       <div className="flex flex-col gap-3">
-        {!user?.trelloId && (
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Trello User ID</label>
-          <div className="flex gap-2">
-            <input
-              type="text"
-              placeholder="e.g. your Trello member ID"
-              value={trelloUserId || ''}
-              onChange={(e) => setTrelloUserId(e.target.value)}
-              className="flex-1 px-3 py-2 rounded-md bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-white/10 text-sm text-gray-900 dark:text-gray-100"
-            />
-            <button
-              onClick={() => refetch()}
-              disabled={!trelloUserId || isLoading || isFetching}
-              className="px-3 py-2 rounded-md bg-gray-900 text-white dark:bg-white dark:text-black text-sm disabled:opacity-50"
-            >
-              {isFetching ? 'Loading…' : 'Load Boards'}
-            </button>
+        <div className="flex justify-between items-center">
+          <div>
+            <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200">Trello Boards</h4>
+            <p className="text-xs text-gray-600 dark:text-gray-400">Uses your linked Trello account</p>
           </div>
+          <button
+            onClick={() => refetch()}
+            disabled={isLoading || isFetching}
+            className="px-3 py-2 rounded-md bg-gray-900 text-white dark:bg-white dark:text-black text-sm disabled:opacity-50"
+          >
+            {isFetching ? 'Loading…' : 'Reload'}
+          </button>
         </div>
-        )}
 
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Trello Board</label>

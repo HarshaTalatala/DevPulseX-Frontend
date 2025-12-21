@@ -24,7 +24,7 @@ async function getWithRetry<T = any>(url: string, maxRetries = 3, baseDelay = 80
 }
 
 export const trelloApi = {
-  getBoards: async (userId: string) => getWithRetry(`/trello/boards/${encodeURIComponent(userId)}`),
+  getBoards: async () => getWithRetry(`/trello/boards`),
   getLists: async (boardId: string) => getWithRetry(`/trello/boards/${encodeURIComponent(boardId)}/lists`),
   getCards: async (listId: string) => getWithRetry(`/trello/lists/${encodeURIComponent(listId)}/cards`),
   getProjectTrelloData: async (projectId: number) =>
