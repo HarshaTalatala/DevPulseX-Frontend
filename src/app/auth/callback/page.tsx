@@ -65,7 +65,8 @@ function CallbackInner() {
 
           // Clean up state artifacts
           sessionStorage.removeItem('trello_oauth_state');
-          document.cookie = 'trello_state=; Max-Age=0; Path=/; SameSite=Lax';
+          const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+          document.cookie = `trello_state=; Max-Age=0; Path=/; SameSite=None${secure}`;
           
           console.log('[Auth Callback] Redirecting to dashboard...');
           router.replace('/dashboard');

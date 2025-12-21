@@ -14,7 +14,9 @@ const createState = () => {
 
 const writeStateCookie = (state: string) => {
   // Double-submit cookie for CSRF/state validation (short-lived)
-  document.cookie = `trello_state=${state}; Max-Age=600; Path=/; SameSite=Lax`;
+  // SameSite=None required for cross-origin; Secure required with SameSite=None
+  const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+  document.cookie = `trello_state=${state}; Max-Age=600; Path=/; SameSite=None${secure}`;
 };
 
 export const useTrelloAuth = () => {
