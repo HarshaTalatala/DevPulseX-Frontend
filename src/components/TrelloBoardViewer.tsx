@@ -30,6 +30,17 @@ export default function TrelloBoardViewer({ projectId }: Props) {
 
   const lists = useMemo(() => data?.lists || [], [data]);
 
+  if (!lists || lists.length === 0) {
+    return (
+      <div className="p-8 text-center bg-gray-50 dark:bg-white/[0.02] rounded-xl border border-dashed border-gray-300 dark:border-white/10">
+        <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2">No Trello data to display</h3>
+        <p className="text-sm text-gray-600 dark:text-gray-400">
+          Link your Trello account and select a board for this project to see lists and cards.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="overflow-x-auto">
       <div className="min-w-[700px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
