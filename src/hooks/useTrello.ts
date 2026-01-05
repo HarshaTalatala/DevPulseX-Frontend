@@ -3,9 +3,13 @@ import { trelloApi } from '@/lib/api/trello';
 import { useAuthStore } from '@/stores/auth';
 
 export const useTrelloBoards = () => {
+  const { user } = useAuthStore();
+  const isTrelloLinked = !!(user?.trelloId && user?.trelloUsername);
+  
   return useQuery({
     queryKey: ['trello', 'boards'],
     queryFn: () => trelloApi.getBoards(),
+    enabled: isTrelloLinked,
   });
 };
 
@@ -26,10 +30,13 @@ export const useTrelloCards = (listId?: string) => {
 };
 
 export const useProjectTrello = (projectId?: number) => {
+  const { user } = useAuthStore();
+  const isTrelloLinked = !!(user?.trelloId && user?.trelloUsername);
+  
   return useQuery({
     queryKey: ['trello', 'project', projectId],
     queryFn: () => trelloApi.getProjectTrelloData(projectId!),
-    enabled: !!projectId,
+    enabled: !!projectId && isTrelloLinked,
   });
 };
 

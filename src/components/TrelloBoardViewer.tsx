@@ -2,13 +2,27 @@
 
 import { useMemo } from 'react';
 import { useProjectTrello } from '@/hooks/useTrello';
+import { useAuthStore } from '@/stores/auth';
 
 interface Props {
   projectId: number;
 }
 
 export default function TrelloBoardViewer({ projectId }: Props) {
+  const { user } = useAuthStore();
+  const isTrelloLinked = !!(user?.trelloId && user?.trelloUsername);
   const { data, isLoading, error } = useProjectTrello(projectId);
+
+  if (!isTrelloLinked) {
+    return (
+      <div className="p-8 text-center bg-amber-50 dark:bg-amber-900/20 rounded-xl border border-amber-200 dark:border-amber-700">
+        <h3 className="text-base font-semibold text-amber-900 dark:text-amber-100 mb-2">Trello Account Not Linked</h3>
+        <p className="text-sm text-amber-700 dark:text-amber-300">
+          Link your Trello account in the <strong>Accounts</strong> tab to view board data here.
+        </p>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -21,9 +35,14 @@ export default function TrelloBoardViewer({ projectId }: Props) {
   }
 
   if (error) {
+    const errorMessage = (error as any)?.response?.data?.message || (error as any)?.message || 'Unknown error';
     return (
-      <div className="p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 text-sm text-red-800 dark:text-red-300">
-        Failed to load Trello data. {(error as any)?.message}
+      <div className="p-6 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700">
+        <h3 className="text-sm font-semibold text-red-800 dark:text-red-300 mb-2">Failed to Load Trello Data</h3>
+        <p className="text-sm text-red-700 dark:text-red-400">{errorMessage}</p>
+        <p className="text-xs text-red-600 dark:text-red-500 mt-2">
+          Make sure you have linked a Trello board to this project in the selector above.
+        </p>
       </div>
     );
   }

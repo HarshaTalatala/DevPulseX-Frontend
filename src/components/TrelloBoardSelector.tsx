@@ -15,6 +15,7 @@ export default function TrelloBoardSelector({ projectId }: Props) {
   const queryClient = useQueryClient();
   const { user } = useAuthStore();
   const { data: project } = useProject(projectId);
+  const isTrelloLinked = !!(user?.trelloId && user?.trelloUsername);
 
   const { data: boards, isLoading, refetch, isFetching } = useTrelloBoards();
 
@@ -47,6 +48,19 @@ export default function TrelloBoardSelector({ projectId }: Props) {
     if (!boards || !Array.isArray(boards)) return [] as Array<{ id: string; name: string }>;
     return boards.map((b: any) => ({ id: b.id, name: b.name }));
   }, [boards]);
+
+  if (!isTrelloLinked) {
+    return (
+      <div className="w-full p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg">
+        <div className="flex flex-col gap-2">
+          <h4 className="text-sm font-medium text-amber-900 dark:text-amber-100">Trello Account Not Linked</h4>
+          <p className="text-xs text-amber-700 dark:text-amber-300">
+            Please link your Trello account in the Accounts tab to select boards.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-white/10 rounded-lg">
