@@ -8,7 +8,17 @@ export const useTrelloBoards = () => {
   
   return useQuery({
     queryKey: ['trello', 'boards'],
-    queryFn: () => trelloApi.getBoards(),
+    queryFn: async () => {
+      console.log('[useTrelloBoards] Fetching boards...');
+      try {
+        const data = await trelloApi.getBoards();
+        console.log('[useTrelloBoards] Successfully fetched boards:', data);
+        return data;
+      } catch (error) {
+        console.error('[useTrelloBoards] Error fetching boards:', error);
+        throw error;
+      }
+    },
     enabled: isTrelloLinked,
   });
 };

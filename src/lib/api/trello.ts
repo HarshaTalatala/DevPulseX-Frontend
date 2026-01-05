@@ -5,19 +5,25 @@ const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
 async function getWithRetry<T = any>(url: string, maxRetries = 3, baseDelay = 800): Promise<T> {
   let attempt = 0;
+  let lastError: any;
   while (true) {
     try {
       const res = await apiClient.get(url);
       return res.data as T;
     } catch (e: any) {
+      lastError = e;
       const status = e?.response?.status;
+      console.error(`[Trello API] GET ${url} failed (attempt ${attempt + 1}):`, e?.response?.data || e?.message);
+      
       if (status === 429 && attempt < maxRetries) {
         attempt++;
         const wait = baseDelay * attempt;
-        // In a full app, you could show a modal/toast here.
+        console.warn(`[Trello API] Rate limited (429). Retrying in ${wait}ms...`);
         await delay(wait);
         continue;
       }
+      
+      // For all other errors, throw immediately
       throw e;
     }
   }
