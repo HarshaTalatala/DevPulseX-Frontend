@@ -26,6 +26,11 @@ export default function TrelloBoardSelector({ projectId }: Props) {
       setSelectedBoardId(project.trelloBoardId);
     }
   }, [project?.trelloBoardId]);
+
+  // Auto-refetch when component mounts or when Trello is linked
+  useEffect(() => {
+    refetch();
+  }, [refetch, isTrelloLinked]);
   
   const updateProjectMutation = useMutation({
     mutationFn: async (boardId: string | null) => {
@@ -82,7 +87,12 @@ export default function TrelloBoardSelector({ projectId }: Props) {
         {error && (
           <div className="p-3 rounded-md bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 text-xs text-red-700 dark:text-red-300">
             <div className="font-medium mb-1">Failed to load boards:</div>
-            <div>{(error as any)?.response?.data?.message || (error as any)?.message || 'Unknown error'}</div>
+            <div className="text-xs">{(error as any)?.response?.data?.message || (error as any)?.message || 'Unknown error'}</div>
+            {process.env.NODE_ENV === 'development' && (
+              <div className="mt-2 p-2 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300 font-mono text-[10px] overflow-auto max-h-40">
+                {JSON.stringify(error, null, 2)}
+              </div>
+            )}
           </div>
         )}
 

@@ -7,9 +7,9 @@ export const useTrelloBoards = () => {
   const isTrelloLinked = !!(user?.trelloId && user?.trelloUsername);
   
   return useQuery({
-    queryKey: ['trello', 'boards'],
+    queryKey: ['trello', 'boards', user?.id],
     queryFn: async () => {
-      console.log('[useTrelloBoards] Fetching boards...');
+      console.log('[useTrelloBoards] Fetching boards for user:', user?.id);
       try {
         const data = await trelloApi.getBoards();
         console.log('[useTrelloBoards] Successfully fetched boards:', data);
@@ -20,6 +20,7 @@ export const useTrelloBoards = () => {
       }
     },
     enabled: isTrelloLinked,
+    refetchOnMount: 'stale',
   });
 };
 
@@ -44,9 +45,10 @@ export const useProjectTrello = (projectId?: number) => {
   const isTrelloLinked = !!(user?.trelloId && user?.trelloUsername);
   
   return useQuery({
-    queryKey: ['trello', 'project', projectId],
+    queryKey: ['trello', 'project', projectId, user?.id],
     queryFn: () => trelloApi.getProjectTrelloData(projectId!),
     enabled: !!projectId && isTrelloLinked,
+    refetchOnMount: 'stale',
   });
 };
 

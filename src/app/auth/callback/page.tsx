@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 import { authApi } from '@/lib/api/auth';
 import { useAuthStore } from '@/stores/auth';
 import { toast } from 'sonner';
@@ -10,6 +11,7 @@ function CallbackInner() {
   const router = useRouter();
   const params = useSearchParams();
   const { setAuth } = useAuthStore();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const code = params.get('code');
@@ -61,6 +63,10 @@ function CallbackInner() {
           clearTimeout(timeoutId);
           console.log('[Auth Callback] Trello account linked:', resp);
           setAuth(resp.user, resp.token);
+          
+          // Invalidate all Trello-related queries to force refetch with new token
+          await queryClient.invalidateQueries({ queryKey: ['trello'] });
+          
           toast.success('Trello account linked successfully!');
 
           // Clean up state artifacts
