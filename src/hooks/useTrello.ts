@@ -20,7 +20,6 @@ export const useTrelloBoards = () => {
       }
     },
     enabled: isTrelloLinked,
-    refetchOnMount: 'stale',
   });
 };
 
@@ -48,7 +47,6 @@ export const useProjectTrello = (projectId?: number) => {
     queryKey: ['trello', 'project', projectId, user?.id],
     queryFn: () => trelloApi.getProjectTrelloData(projectId!),
     enabled: !!projectId && isTrelloLinked,
-    refetchOnMount: 'stale',
   });
 };
 
