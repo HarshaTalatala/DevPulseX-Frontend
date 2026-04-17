@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { issuesApi } from '@/lib/api/issues';
 import { IssueDto, IssueStatus } from '@/types';
 import { demoIssues } from '@/lib/demoData';
-import { isDemoMode } from '@/lib/demoMode';
+import { enforceDemoReadOnly, isDemoMode } from '@/lib/demoMode';
 
 export const useIssues = () => {
   return useQuery({
@@ -23,7 +23,10 @@ export const useCreateIssue = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: Omit<IssueDto, 'id'>) => issuesApi.create(data),
+    mutationFn: (data: Omit<IssueDto, 'id'>) => {
+      enforceDemoReadOnly();
+      return issuesApi.create(data);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['issues'] });
     },
@@ -34,8 +37,10 @@ export const useUpdateIssue = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: number; data: Omit<IssueDto, 'id'> }) =>
-      issuesApi.update(id, data),
+    mutationFn: ({ id, data }: { id: number; data: Omit<IssueDto, 'id'> }) => {
+      enforceDemoReadOnly();
+      return issuesApi.update(id, data);
+    },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['issues'] });
       queryClient.invalidateQueries({ queryKey: ['issues', variables.id] });
@@ -47,8 +52,10 @@ export const useTransitionIssueStatus = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, status }: { id: number; status: IssueStatus }) =>
-      issuesApi.transitionStatus(id, status),
+    mutationFn: ({ id, status }: { id: number; status: IssueStatus }) => {
+      enforceDemoReadOnly();
+      return issuesApi.transitionStatus(id, status);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['issues'] });
     },
@@ -59,7 +66,10 @@ export const useDeleteIssue = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: number) => issuesApi.delete(id),
+    mutationFn: (id: number) => {
+      enforceDemoReadOnly();
+      return issuesApi.delete(id);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['issues'] });
     },

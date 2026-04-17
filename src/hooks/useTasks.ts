@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { tasksApi } from '@/lib/api/tasks';
 import { TaskDto, TaskStatus } from '@/types';
 import { demoTasks } from '@/lib/demoData';
-import { isDemoMode } from '@/lib/demoMode';
+import { enforceDemoReadOnly, isDemoMode } from '@/lib/demoMode';
 
 export const useTasks = () => {
   return useQuery({
@@ -23,7 +23,10 @@ export const useCreateTask = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: Omit<TaskDto, 'id'>) => tasksApi.create(data),
+    mutationFn: (data: Omit<TaskDto, 'id'>) => {
+      enforceDemoReadOnly();
+      return tasksApi.create(data);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
     },
@@ -34,8 +37,10 @@ export const useUpdateTask = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: number; data: Omit<TaskDto, 'id'> }) =>
-      tasksApi.update(id, data),
+    mutationFn: ({ id, data }: { id: number; data: Omit<TaskDto, 'id'> }) => {
+      enforceDemoReadOnly();
+      return tasksApi.update(id, data);
+    },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
       queryClient.invalidateQueries({ queryKey: ['tasks', variables.id] });
@@ -47,8 +52,10 @@ export const useAssignTask = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, userId }: { id: number; userId: number }) =>
-      tasksApi.assign(id, userId),
+    mutationFn: ({ id, userId }: { id: number; userId: number }) => {
+      enforceDemoReadOnly();
+      return tasksApi.assign(id, userId);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
     },
@@ -59,8 +66,10 @@ export const useTransitionTaskStatus = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, status }: { id: number; status: TaskStatus }) =>
-      tasksApi.transitionStatus(id, status),
+    mutationFn: ({ id, status }: { id: number; status: TaskStatus }) => {
+      enforceDemoReadOnly();
+      return tasksApi.transitionStatus(id, status);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
     },
@@ -71,7 +80,10 @@ export const useDeleteTask = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: number) => tasksApi.delete(id),
+    mutationFn: (id: number) => {
+      enforceDemoReadOnly();
+      return tasksApi.delete(id);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
     },

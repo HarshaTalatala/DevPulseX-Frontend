@@ -13,6 +13,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { IssueDto, IssueStatus } from '@/types';
 import IssueModal, { IssueFormValues } from '@/components/IssueModal';
 import { DndContext, DragEndEvent, useDraggable, useDroppable } from '@dnd-kit/core';
+import { isDemoMode } from '@/lib/demoMode';
 
 type ViewMode = 'kanban' | 'list';
 
@@ -44,8 +45,13 @@ export default function IssuesPage() {
   const [statusFilter, setStatusFilter] = useState<IssueStatus | 'ALL'>('ALL');
   const [modalOpen, setModalOpen] = useState(false);
   const [editingIssue, setEditingIssue] = useState<IssueDto | null>(null);
+  const demoMode = isDemoMode();
 
   const handleDelete = async (id: number, description: string) => {
+    if (demoMode) {
+      toast.error('Demo mode is read-only');
+      return;
+    }
     if (confirm(`Delete issue #${id}?\n\n${description.substring(0, 80)}${description.length > 80 ? '…' : ''}`)) {
       try {
         await deleteMutation.mutateAsync(id);
@@ -57,6 +63,10 @@ export default function IssuesPage() {
   };
 
   const handleStatusChange = async (id: number, status: IssueStatus) => {
+    if (demoMode) {
+      toast.error('Demo mode is read-only');
+      return;
+    }
     try {
       await transitionMutation.mutateAsync({ id, status });
       toast.success('Issue status updated');
@@ -66,6 +76,10 @@ export default function IssuesPage() {
   };
 
   const handleCreateOrUpdate = async (values: IssueFormValues) => {
+    if (demoMode) {
+      toast.error('Demo mode is read-only');
+      return;
+    }
     try {
       if (editingIssue) {
         await updateMutation.mutateAsync({ id: editingIssue.id, data: values });
@@ -247,7 +261,12 @@ export default function IssuesPage() {
               >
                 <Button
                   className="w-full sm:w-auto bg-gradient-to-r from-gray-900 to-gray-800 dark:from-white dark:to-gray-100 text-white dark:text-black hover:shadow-lg hover:shadow-gray-900/20 dark:hover:shadow-white/20 transition-all duration-300 border-0"
+                  disabled={demoMode}
                   onClick={() => {
+                    if (demoMode) {
+                      toast.error('Demo mode is read-only');
+                      return;
+                    }
                     setEditingIssue(null);
                     setModalOpen(true);
                   }}
@@ -379,6 +398,10 @@ export default function IssuesPage() {
             viewMode === 'kanban' ? (
               <DndContext
                 onDragEnd={(event: DragEndEvent) => {
+                  if (demoMode) {
+                    toast.error('Demo mode is read-only');
+                    return;
+                  }
                   const { active, over } = event;
                   if (!over) return;
                   const issueId = Number(active.id);

@@ -19,6 +19,8 @@ import TrelloAccountLink from '@/components/TrelloAccountLink';
 import OAuthAccountsStatus from '@/components/OAuthAccountsStatus';
 import { useProjects } from '@/hooks/useProjects';
 import { ProjectDto } from '@/types';
+import { authApi } from '@/lib/api/auth';
+import { generateOAuthState, persistOAuthState } from '@/lib/oauthState';
 
 // Lazy load heavy components for better performance
 const AnimatedChart = dynamic(
@@ -66,39 +68,29 @@ export default function DashboardPage() {
   const projectSelectValue = selectedProjectId === 'none' ? '' : (selectedProjectId ?? firstProjectId ?? '');
   const isLive = Boolean(gh) && !ghError;
 
-  const connectGitHub = () => {
+  const connectGitHub = async () => {
     const clientId = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
     if (!clientId) {
       window.location.href = '/login';
       return;
     }
 
-    const redirectUri = encodeURIComponent(process.env.NEXT_PUBLIC_GITHUB_REDIRECT_URI || `${window.location.origin}/auth/callback`);
-    const scope = encodeURIComponent('read:user,repo,user:email');
-    const url = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`;
-    window.location.href = url;
+    try {
+      const state = generateOAuthState('github');
+      persistOAuthState('github', state);
+      await authApi.prepareOAuthState('github', state);
+
+      const redirectUri = encodeURIComponent(process.env.NEXT_PUBLIC_GITHUB_REDIRECT_URI || `${window.location.origin}/auth/callback`);
+      const scope = encodeURIComponent('read:user,repo,user:email');
+      const url = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&state=${encodeURIComponent(state)}`;
+      window.location.href = url;
+    } catch {
+      window.location.href = '/login';
+    }
   };
 
   // Show skeleton while any critical data is loading
   const isInitialLoading = ghLoading && !gh;
-
-  // Log GitHub data for debugging (only in development)
-  if (process.env.NODE_ENV === 'development' && gh) {
-    console.log('GitHub Data:', {
-      user: gh.username,
-      recentActivity: {
-        commits: gh.recentCommits,
-        prs: gh.recentPRs,
-        issues: gh.recentIssues,
-      },
-      totals: {
-        repos: gh.repoCount,
-        prs: gh.totalPullRequests,
-        issues: gh.totalIssues,
-        stars: gh.totalStars,
-      },
-    });
-  }
 
   return (
     <ProtectedRoute>

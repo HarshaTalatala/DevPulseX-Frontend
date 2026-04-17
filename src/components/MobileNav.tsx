@@ -38,14 +38,6 @@ export default function MobileNav({ open, onClose, items, title = 'Menu', user, 
     return () => setMounted(false);
   }, []);
 
-  // Debug: Log items when sidebar opens
-  React.useEffect(() => {
-    if (open) {
-      console.log('MobileNav opened with items:', items);
-      console.log('Items length:', items.length);
-    }
-  }, [open, items]);
-
   // Close on escape
   React.useEffect(() => {
     if (!open) return;

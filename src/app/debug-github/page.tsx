@@ -1,14 +1,27 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import DashboardLayout from '@/components/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { useGithubInsights } from '@/hooks/useGithub';
 
 export default function DebugGithubPage() {
+  const router = useRouter();
   const { data: gh, isLoading, error } = useGithubInsights();
   const [rawJson, setRawJson] = useState<string>('');
+  const isProd = process.env.NODE_ENV === 'production';
+
+  useEffect(() => {
+    if (isProd) {
+      router.replace('/dashboard');
+    }
+  }, [isProd, router]);
+
+  if (isProd) {
+    return null;
+  }
 
   useEffect(() => {
     if (gh) {

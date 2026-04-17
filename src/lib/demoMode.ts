@@ -13,3 +13,9 @@ export const setDemoMode = (enabled: boolean): void => {
   }
   window.localStorage.removeItem(DEMO_MODE_KEY);
 };
+
+export const enforceDemoReadOnly = (): void => {
+  if (isDemoMode()) {
+    throw new Error('Demo mode is read-only');
+  }
+};

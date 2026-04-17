@@ -15,6 +15,7 @@ import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import TaskModal, { TaskFormValues } from '@/components/TaskModal';
 import { DndContext, DragEndEvent, useDraggable, useDroppable } from '@dnd-kit/core';
+import { isDemoMode } from '@/lib/demoMode';
 
 type ViewMode = 'kanban' | 'list';
 
@@ -49,8 +50,13 @@ export default function TasksPage() {
   const [statusFilter, setStatusFilter] = useState<TaskStatus | 'ALL'>('ALL');
   const [modalOpen, setModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<TaskDto | null>(null);
+  const demoMode = isDemoMode();
 
   const handleDelete = async (id: number, title: string) => {
+    if (demoMode) {
+      toast.error('Demo mode is read-only');
+      return;
+    }
     if (confirm(`Are you sure you want to delete "${title}"?`)) {
       try {
         await deleteMutation.mutateAsync(id);
@@ -62,6 +68,10 @@ export default function TasksPage() {
   };
 
   const handleStatusChange = async (id: number, status: TaskStatus) => {
+    if (demoMode) {
+      toast.error('Demo mode is read-only');
+      return;
+    }
     try {
       await transitionMutation.mutateAsync({ id, status });
       toast.success('Task status updated');
@@ -71,6 +81,10 @@ export default function TasksPage() {
   };
 
   const handleAssignChange = async (task: TaskDto, value: string) => {
+    if (demoMode) {
+      toast.error('Demo mode is read-only');
+      return;
+    }
     try {
       if (!value) {
         // Clear assignee via update
@@ -87,6 +101,10 @@ export default function TasksPage() {
   };
 
   const handleCreateOrUpdate = async (values: TaskFormValues) => {
+    if (demoMode) {
+      toast.error('Demo mode is read-only');
+      return;
+    }
     try {
       if (editingTask) {
         await updateMutation.mutateAsync({ id: editingTask.id, data: values });
@@ -269,7 +287,12 @@ export default function TasksPage() {
               >
                 <Button
                   className="w-full sm:w-auto bg-gradient-to-r from-gray-900 to-gray-800 dark:from-white dark:to-gray-100 text-white dark:text-black hover:shadow-lg hover:shadow-gray-900/20 dark:hover:shadow-white/20 transition-all duration-300 border-0"
+                  disabled={demoMode}
                   onClick={() => {
+                    if (demoMode) {
+                      toast.error('Demo mode is read-only');
+                      return;
+                    }
                     setEditingTask(null);
                     setModalOpen(true);
                   }}
@@ -406,6 +429,10 @@ export default function TasksPage() {
             viewMode === 'kanban' ? (
               <DndContext
                 onDragEnd={(event: DragEndEvent) => {
+                  if (demoMode) {
+                    toast.error('Demo mode is read-only');
+                    return;
+                  }
                   const { active, over } = event;
                   if (!over) return;
                   const taskId = Number(active.id);

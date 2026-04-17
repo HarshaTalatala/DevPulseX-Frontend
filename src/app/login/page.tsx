@@ -8,6 +8,8 @@ import { Input } from '@/components/ui/Input';
 import { Brand } from '@/components/ui/Brand';
 import { demoCurrentUser } from '@/lib/demoData';
 import { setDemoMode } from '@/lib/demoMode';
+import { authApi } from '@/lib/api/auth';
+import { generateOAuthState, persistOAuthState } from '@/lib/oauthState';
 import { toast } from 'sonner';
 import { Github, Mail, Lock, User } from 'lucide-react';
 import Link from 'next/link';
@@ -57,11 +59,18 @@ export default function LoginPage() {
     }
   };
 
-  const handleGoogleOAuth = () => {
-    const redirectUri = encodeURIComponent(process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI || 'http://localhost:3000/auth/callback');
-    const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${googleClientId}&redirect_uri=${redirectUri}&response_type=code&scope=${encodeURIComponent('openid email profile')}&access_type=offline&prompt=consent&state=google`;
-    // Direct redirect instead of popup - simpler and more reliable
-    window.location.href = url;
+  const handleGoogleOAuth = async () => {
+    try {
+      const state = generateOAuthState('google');
+      persistOAuthState('google', state);
+      await authApi.prepareOAuthState('google', state);
+
+      const redirectUri = encodeURIComponent(process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI || 'http://localhost:3000/auth/callback');
+      const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${googleClientId}&redirect_uri=${redirectUri}&response_type=code&scope=${encodeURIComponent('openid email profile')}&access_type=offline&prompt=consent&state=${encodeURIComponent(state)}`;
+      window.location.href = url;
+    } catch {
+      toast.error('Failed to initialize Google OAuth');
+    }
   };
 
   const handleDemoMode = () => {
@@ -109,11 +118,19 @@ export default function LoginPage() {
                   type="button"
                   variant="outline"
                   className="w-full h-11 text-sm font-medium"
-                  onClick={() => {
-                    const redirectUri = encodeURIComponent(process.env.NEXT_PUBLIC_GITHUB_REDIRECT_URI || 'http://localhost:3000/auth/callback');
-                    const scope = encodeURIComponent('read:user,repo,user:email');
-                    const url = `https://github.com/login/oauth/authorize?client_id=${githubClientId}&redirect_uri=${redirectUri}&scope=${scope}`;
-                    window.location.href = url;
+                  onClick={async () => {
+                    try {
+                      const state = generateOAuthState('github');
+                      persistOAuthState('github', state);
+                      await authApi.prepareOAuthState('github', state);
+
+                      const redirectUri = encodeURIComponent(process.env.NEXT_PUBLIC_GITHUB_REDIRECT_URI || 'http://localhost:3000/auth/callback');
+                      const scope = encodeURIComponent('read:user,repo,user:email');
+                      const url = `https://github.com/login/oauth/authorize?client_id=${githubClientId}&redirect_uri=${redirectUri}&scope=${scope}&state=${encodeURIComponent(state)}`;
+                      window.location.href = url;
+                    } catch {
+                      toast.error('Failed to initialize GitHub OAuth');
+                    }
                   }}
                 >
                   <Github className="w-5 h-5 mr-2" />

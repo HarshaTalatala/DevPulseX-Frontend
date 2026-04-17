@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { deploymentsApi } from '@/lib/api/deployments';
 import { DeploymentDto, DeploymentStatus } from '@/types';
 import { demoDeployments } from '@/lib/demoData';
-import { isDemoMode } from '@/lib/demoMode';
+import { enforceDemoReadOnly, isDemoMode } from '@/lib/demoMode';
 
 export const useDeployments = () => {
   return useQuery({
@@ -23,7 +23,10 @@ export const useCreateDeployment = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: Omit<DeploymentDto, 'id' | 'timestamp'>) => deploymentsApi.create(data),
+    mutationFn: (data: Omit<DeploymentDto, 'id' | 'timestamp'>) => {
+      enforceDemoReadOnly();
+      return deploymentsApi.create(data);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['deployments'] });
     },
@@ -34,8 +37,10 @@ export const useUpdateDeployment = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: number; data: Omit<DeploymentDto, 'id' | 'timestamp'> }) =>
-      deploymentsApi.update(id, data),
+    mutationFn: ({ id, data }: { id: number; data: Omit<DeploymentDto, 'id' | 'timestamp'> }) => {
+      enforceDemoReadOnly();
+      return deploymentsApi.update(id, data);
+    },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['deployments'] });
       queryClient.invalidateQueries({ queryKey: ['deployments', variables.id] });
@@ -47,8 +52,10 @@ export const useTransitionDeploymentStatus = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, status }: { id: number; status: DeploymentStatus }) =>
-      deploymentsApi.transitionStatus(id, status),
+    mutationFn: ({ id, status }: { id: number; status: DeploymentStatus }) => {
+      enforceDemoReadOnly();
+      return deploymentsApi.transitionStatus(id, status);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['deployments'] });
     },
@@ -59,7 +66,10 @@ export const useDeleteDeployment = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: number) => deploymentsApi.delete(id),
+    mutationFn: (id: number) => {
+      enforceDemoReadOnly();
+      return deploymentsApi.delete(id);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['deployments'] });
     },

@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/Badge';
 import ProjectCard from '@/components/ProjectCard';
+import { isDemoMode } from '@/lib/demoMode';
 
 type ViewMode = 'grid' | 'list';
 
@@ -24,8 +25,13 @@ export default function ProjectsPage() {
   const deleteMutation = useDeleteProject();
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [searchQuery, setSearchQuery] = useState('');
+  const demoMode = isDemoMode();
 
   const handleDelete = async (id: number, name: string) => {
+    if (demoMode) {
+      toast.error('Demo mode is read-only');
+      return;
+    }
     if (confirm(`Are you sure you want to delete "${name}"?`)) {
       try {
         await deleteMutation.mutateAsync(id);
@@ -137,7 +143,7 @@ export default function ProjectsPage() {
                 <span className="truncate">Manage and monitor all your projects</span>
               </p>
             </div>
-            <Button className="w-full sm:w-auto bg-white text-black hover:bg-gray-100 dark:bg-white dark:text-black dark:hover:bg-gray-100 text-sm">
+            <Button className="w-full sm:w-auto bg-white text-black hover:bg-gray-100 dark:bg-white dark:text-black dark:hover:bg-gray-100 text-sm" disabled={demoMode}>
               <Plus className="h-4 w-4 mr-2" />
               New Project
             </Button>
@@ -366,7 +372,7 @@ export default function ProjectsPage() {
                   : 'Get started by creating your first project'}
               </p>
               {!searchQuery && (
-                <Button className="bg-white text-black hover:bg-gray-100 text-sm">
+                <Button className="bg-white text-black hover:bg-gray-100 text-sm" disabled={demoMode}>
                   <Plus className="h-4 w-4 mr-2" />
                   Create Project
                 </Button>

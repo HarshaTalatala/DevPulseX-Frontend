@@ -8,17 +8,7 @@ export const useTrelloBoards = () => {
   
   return useQuery({
     queryKey: ['trello', 'boards', user?.id],
-    queryFn: async () => {
-      console.log('[useTrelloBoards] Fetching boards for user:', user?.id);
-      try {
-        const data = await trelloApi.getBoards();
-        console.log('[useTrelloBoards] Successfully fetched boards:', data);
-        return data;
-      } catch (error) {
-        console.error('[useTrelloBoards] Error fetching boards:', error);
-        throw error;
-      }
-    },
+    queryFn: async () => trelloApi.getBoards(),
     enabled: isTrelloLinked,
     retry: 1,
     refetchOnWindowFocus: false,

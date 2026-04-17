@@ -17,6 +17,7 @@ import { Calendar, CheckCircle2, Plus, Search, Trash2, XCircle, Rocket, Trending
 import { formatDateTime, formatRelativeTime } from '@/lib/utils';
 import { toast } from 'sonner';
 import { DeploymentStatus, ProjectDto } from '@/types';
+import { isDemoMode } from '@/lib/demoMode';
 
 type SortKey = 'timestamp' | 'status' | 'project';
 
@@ -33,12 +34,17 @@ export default function DeploymentsPage() {
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const demoMode = isDemoMode();
 
   const getProjectName = (projectId: number) => {
     return projects?.find((p) => p.id === projectId)?.name || 'Unknown';
   };
 
   const handleDelete = async (id: number) => {
+    if (demoMode) {
+      toast.error('Demo mode is read-only');
+      return;
+    }
     if (confirm('Are you sure you want to delete this deployment?')) {
       try {
         await deleteMutation.mutateAsync(id);
@@ -249,6 +255,7 @@ export default function DeploymentsPage() {
                   transition={{ duration: 0.6, delay: 0.2 }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
+                  disabled={demoMode}
                   className="w-full sm:w-auto px-5 py-2.5 bg-black dark:bg-white text-white dark:text-black rounded-lg font-medium hover:bg-gray-900 dark:hover:bg-gray-100 transition-all duration-200 flex items-center justify-center gap-2 border border-black dark:border-white text-sm"
                 >
                   <Plus className="h-4 w-4" />

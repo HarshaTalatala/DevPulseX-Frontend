@@ -19,6 +19,9 @@ apiClient.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    if (isDemoMode()) {
+      config.headers['X-Demo-Mode'] = '1';
+    }
     return config;
   },
   (error) => {

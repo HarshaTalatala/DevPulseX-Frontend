@@ -1,5 +1,6 @@
 import apiClient from './client';
 import { LoginRequest, RegisterRequest, AuthResponse } from '@/types';
+import { OAuthProvider } from '@/lib/oauthState';
 
 export const authApi = {
   login: async (data: LoginRequest): Promise<AuthResponse> => {
@@ -12,13 +13,29 @@ export const authApi = {
     return response.data;
   },
 
-  githubLogin: async (code: string): Promise<AuthResponse> => {
-    const response = await apiClient.post<AuthResponse>('/auth/github', { code });
+  prepareOAuthState: async (provider: OAuthProvider, state: string): Promise<void> => {
+    await apiClient.post(
+      `/auth/oauth/state/${provider}`,
+      { state },
+      { withCredentials: true }
+    );
+  },
+
+  githubLogin: async (code: string, state: string): Promise<AuthResponse> => {
+    const response = await apiClient.post<AuthResponse>(
+      '/auth/github',
+      { code, state },
+      { withCredentials: true }
+    );
     return response.data;
   },
 
-  googleLogin: async (code: string): Promise<AuthResponse> => {
-    const response = await apiClient.post<AuthResponse>('/auth/google', { code });
+  googleLogin: async (code: string, state: string): Promise<AuthResponse> => {
+    const response = await apiClient.post<AuthResponse>(
+      '/auth/google',
+      { code, state },
+      { withCredentials: true }
+    );
     return response.data;
   },
 
