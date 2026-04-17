@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth';
+import { isDemoMode } from '@/lib/demoMode';
 
 export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -10,6 +11,10 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
 
   useEffect(() => {
     if (!hasHydrated) return;
+
+    if (isDemoMode()) {
+      return;
+    }
 
     if (!isAuthenticated) {
       router.push('/');
@@ -20,7 +25,7 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
     refreshSession();
   }, [hasHydrated, isAuthenticated, refreshSession, router]);
 
-  if (!hasHydrated || !isAuthenticated) {
+  if (!hasHydrated || (!isAuthenticated && !isDemoMode())) {
     return null;
   }
 

@@ -29,6 +29,7 @@ import { Brand } from '@/components/ui/Brand';
 import CommandPalette, { CommandItem } from '@/components/CommandPalette';
 import MobileNav from '@/components/MobileNav';
 import { Role } from '@/types';
+import { isDemoMode } from '@/lib/demoMode';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -46,6 +47,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [menuOpen, setMenuOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [newOpen, setNewOpen] = useState(false);
+  const [demoMode, setDemoMode] = useState(false);
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
   const { user } = useAuthStore();
@@ -54,8 +56,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   React.useEffect(() => {
     try {
       setIsMac(navigator.platform.toUpperCase().includes('MAC'));
+      setDemoMode(isDemoMode());
     } catch {
       setIsMac(false);
+      setDemoMode(false);
     }
   }, []);
 
@@ -102,11 +106,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
           {/* Actions */}
           <div className="ml-auto flex items-center gap-2">
+            {demoMode && (
+              <span className="hidden sm:inline-flex items-center rounded-md border border-amber-300 bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700 dark:border-amber-700 dark:bg-amber-900/20 dark:text-amber-300">
+                Demo Mode (Read-only)
+              </span>
+            )}
             <div className="relative">
               <Button
                 variant="secondary"
                 size="sm"
                 className="hidden sm:inline-flex"
+                disabled={demoMode}
                 onClick={() => setNewOpen((v) => !v)}
                 onBlur={() => setTimeout(() => setNewOpen(false), 150)}
               >

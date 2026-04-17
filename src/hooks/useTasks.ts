@@ -1,11 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { tasksApi } from '@/lib/api/tasks';
 import { TaskDto, TaskStatus } from '@/types';
+import { demoTasks } from '@/lib/demoData';
+import { isDemoMode } from '@/lib/demoMode';
 
 export const useTasks = () => {
   return useQuery({
     queryKey: ['tasks'],
-    queryFn: () => tasksApi.getAll(),
+    queryFn: () => (isDemoMode() ? Promise.resolve(demoTasks) : tasksApi.getAll()),
   });
 };
 

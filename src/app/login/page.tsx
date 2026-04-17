@@ -5,13 +5,12 @@ import { useRouter } from 'next/navigation';
 import { useLogin, useRegister } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { Select } from '@/components/ui/Select';
 import { Brand } from '@/components/ui/Brand';
-import { Role } from '@/types';
+import { demoCurrentUser } from '@/lib/demoData';
+import { setDemoMode } from '@/lib/demoMode';
 import { toast } from 'sonner';
-import { Github, Mail, Lock, User, Briefcase } from 'lucide-react';
+import { Github, Mail, Lock, User } from 'lucide-react';
 import Link from 'next/link';
-import { authApi } from '@/lib/api/auth';
 import { useAuthStore } from '@/stores/auth';
 
 export default function LoginPage() {
@@ -32,11 +31,11 @@ export default function LoginPage() {
     name: '',
     email: '',
     password: '',
-    role: 'DEVELOPER' as Role,
   });
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setDemoMode(false);
     try {
       await loginMutation.mutateAsync(loginForm);
       toast.success('Welcome back!');
@@ -48,6 +47,7 @@ export default function LoginPage() {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    setDemoMode(false);
     try {
       await registerMutation.mutateAsync(registerForm);
       toast.success('Account created successfully!');
@@ -62,6 +62,13 @@ export default function LoginPage() {
     const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${googleClientId}&redirect_uri=${redirectUri}&response_type=code&scope=${encodeURIComponent('openid email profile')}&access_type=offline&prompt=consent&state=google`;
     // Direct redirect instead of popup - simpler and more reliable
     window.location.href = url;
+  };
+
+  const handleDemoMode = () => {
+    setDemoMode(true);
+    setAuth(demoCurrentUser, 'demo-token');
+    toast.success('Demo mode enabled');
+    router.push('/dashboard');
   };
 
   return (
@@ -90,6 +97,14 @@ export default function LoginPage() {
             <div className="p-6">
               {/* OAuth buttons */}
               <div className="space-y-3 mb-6">
+                <Button
+                  type="button"
+                  variant="primary"
+                  className="w-full h-11 text-sm font-medium"
+                  onClick={handleDemoMode}
+                >
+                  Try Demo Mode (No Login)
+                </Button>
                 <Button
                   type="button"
                   variant="outline"
@@ -211,20 +226,6 @@ export default function LoginPage() {
                       required
                     />
                   </div>
-                  <div className="relative">
-                    <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 z-10" />
-                    <Select
-                      options={[
-                        { value: 'DEVELOPER', label: 'Developer' },
-                        { value: 'MANAGER', label: 'Manager' },
-                        { value: 'ADMIN', label: 'Admin' },
-                      ]}
-                      className="pl-10 h-11"
-                      value={registerForm.role}
-                      onChange={(e) => setRegisterForm({ ...registerForm, role: e.target.value as Role })}
-                      required
-                    />
-                  </div>
 
                   <div className="text-xs text-gray-500 dark:text-gray-400">
                     By creating an account, you agree to our{' '}
@@ -265,7 +266,7 @@ export default function LoginPage() {
           {/* Trust indicators */}
           <div className="mt-8 text-center">
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              Trusted by developers worldwide • Enterprise-grade security
+              Built for transparent engineering metrics
             </p>
           </div>
         </div>

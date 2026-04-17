@@ -41,6 +41,7 @@ export const useAuthStore = create<AuthState>()(
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         localStorage.removeItem('trello_access_token');
+        localStorage.removeItem('devpulsex_demo_mode');
         set({ user: null, token: null, isAuthenticated: false, sessionExpiresAt: null });
       },
     }),

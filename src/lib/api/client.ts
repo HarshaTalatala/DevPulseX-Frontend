@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import { ApiError } from '@/types';
+import { isDemoMode } from '@/lib/demoMode';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
 
@@ -30,6 +31,10 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error: AxiosError<ApiError>) => {
     if (error.response?.status === 401) {
+      if (isDemoMode()) {
+        return Promise.reject(error);
+      }
+
       // Clear token and redirect to login
       localStorage.removeItem('token');
       localStorage.removeItem('user');

@@ -1,11 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { teamsApi } from '@/lib/api/teams';
 import { TeamDto } from '@/types';
+import { demoTeams } from '@/lib/demoData';
+import { isDemoMode } from '@/lib/demoMode';
 
 export const useTeams = () => {
   return useQuery({
     queryKey: ['teams'],
-    queryFn: () => teamsApi.getAll(),
+    queryFn: () => (isDemoMode() ? Promise.resolve(demoTeams) : teamsApi.getAll()),
   });
 };
 

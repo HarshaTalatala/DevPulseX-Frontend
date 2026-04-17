@@ -64,6 +64,20 @@ export default function DashboardPage() {
 
   const effectiveProjectId = selectedProjectId === 'none' ? undefined : (selectedProjectId || firstProjectId);
   const projectSelectValue = selectedProjectId === 'none' ? '' : (selectedProjectId ?? firstProjectId ?? '');
+  const isLive = Boolean(gh) && !ghError;
+
+  const connectGitHub = () => {
+    const clientId = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
+    if (!clientId) {
+      window.location.href = '/login';
+      return;
+    }
+
+    const redirectUri = encodeURIComponent(process.env.NEXT_PUBLIC_GITHUB_REDIRECT_URI || `${window.location.origin}/auth/callback`);
+    const scope = encodeURIComponent('read:user,repo,user:email');
+    const url = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`;
+    window.location.href = url;
+  };
 
   // Show skeleton while any critical data is loading
   const isInitialLoading = ghLoading && !gh;
@@ -119,14 +133,14 @@ export default function DashboardPage() {
             </div>
             <motion.div
               whileHover={{ scale: 1.02 }}
-              className="bg-gray-900 dark:bg-white text-white dark:text-black px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg shadow-sm cursor-pointer self-start sm:self-auto"
+              className={`px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg shadow-sm cursor-pointer self-start sm:self-auto ${isLive ? 'bg-gray-900 dark:bg-white text-white dark:text-black' : 'bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300'}`}
             >
               <div className="flex items-center gap-2">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                  {isLive && <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>}
+                  <span className={`relative inline-flex rounded-full h-2 w-2 ${isLive ? 'bg-green-500' : 'bg-gray-400 dark:bg-gray-500'}`}></span>
                 </span>
-                <span className="font-medium text-sm">Live</span>
+                <span className="font-medium text-sm">{isLive ? 'Live' : 'Cached / Demo'}</span>
               </div>
             </motion.div>
           </motion.div>
@@ -379,7 +393,7 @@ export default function DashboardPage() {
                 Link your GitHub account to see comprehensive analytics including repositories, commits, pull requests, issues, and more.
               </p>
               <button
-                onClick={() => window.location.href = 'http://localhost:8080/oauth2/authorization/github'}
+                onClick={connectGitHub}
                 className="px-5 py-2.5 bg-gray-900 hover:bg-black dark:bg-white dark:hover:bg-gray-100 text-white dark:text-black rounded-lg text-sm font-medium transition-colors inline-flex items-center gap-2"
               >
                 <GitCommit className="h-4 w-4" />

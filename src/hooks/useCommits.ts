@@ -1,11 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { commitsApi } from '@/lib/api/commits';
 import { CommitDto } from '@/types';
+import { demoCommits } from '@/lib/demoData';
+import { isDemoMode } from '@/lib/demoMode';
 
 export const useCommits = () => {
   return useQuery({
     queryKey: ['commits'],
-    queryFn: () => commitsApi.getAll(),
+    queryFn: () => (isDemoMode() ? Promise.resolve(demoCommits) : commitsApi.getAll()),
   });
 };
 

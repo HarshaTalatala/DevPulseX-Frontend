@@ -1,11 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { usersApi } from '@/lib/api/users';
 import { CreateUserRequest, UpdateUserRequest } from '@/types';
+import { demoUsers } from '@/lib/demoData';
+import { isDemoMode } from '@/lib/demoMode';
 
 export const useUsers = () => {
   return useQuery({
     queryKey: ['users'],
-    queryFn: () => usersApi.getAll(),
+    queryFn: () => (isDemoMode() ? Promise.resolve(demoUsers) : usersApi.getAll()),
   });
 };
 

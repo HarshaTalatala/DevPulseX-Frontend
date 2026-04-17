@@ -1,11 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { issuesApi } from '@/lib/api/issues';
 import { IssueDto, IssueStatus } from '@/types';
+import { demoIssues } from '@/lib/demoData';
+import { isDemoMode } from '@/lib/demoMode';
 
 export const useIssues = () => {
   return useQuery({
     queryKey: ['issues'],
-    queryFn: () => issuesApi.getAll(),
+    queryFn: () => (isDemoMode() ? Promise.resolve(demoIssues) : issuesApi.getAll()),
   });
 };
 

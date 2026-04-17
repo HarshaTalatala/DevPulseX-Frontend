@@ -1,11 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { projectsApi } from '@/lib/api/projects';
 import { ProjectDto } from '@/types';
+import { demoProjects } from '@/lib/demoData';
+import { isDemoMode } from '@/lib/demoMode';
 
 export const useProjects = () => {
   return useQuery({
     queryKey: ['projects'],
-    queryFn: () => projectsApi.getAll(),
+    queryFn: () => (isDemoMode() ? Promise.resolve(demoProjects) : projectsApi.getAll()),
   });
 };
 
