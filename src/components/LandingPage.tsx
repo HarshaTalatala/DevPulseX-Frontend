@@ -18,9 +18,13 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Brand } from '@/components/ui/Brand';
+import { setDemoMode } from '@/lib/demoMode';
+import { demoCurrentUser } from '@/lib/demoData';
+import { useAuthStore } from '@/stores/auth';
 
 export default function LandingPage() {
   const router = useRouter();
+  const { setAuth } = useAuthStore();
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   // Initialize theme from localStorage or system preference
@@ -45,6 +49,12 @@ export default function LandingPage() {
 
   const handleGetStarted = () => {
     router.push('/login');
+  };
+
+  const handleTryDemo = () => {
+    setDemoMode(true);
+    setAuth(demoCurrentUser, 'demo-token');
+    router.push('/dashboard');
   };
 
   return (
@@ -78,6 +88,14 @@ export default function LandingPage() {
                 className="hidden sm:inline-flex"
               >
                 Sign In
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleTryDemo}
+                className="hidden sm:inline-flex"
+              >
+                Try Demo
               </Button>
               <Button variant="primary" size="sm" onClick={handleGetStarted}>
                 Get Started
@@ -177,11 +195,11 @@ export default function LandingPage() {
             <Button
               variant="outline"
               size="md"
-              onClick={scrollToFeatures}
+              onClick={handleTryDemo}
               className="group relative overflow-hidden min-w-[140px] sm:min-w-[156px] border-2 transition-all duration-300 hover:bg-gray-50 dark:hover:bg-gray-900"
             >
               <span className="flex items-center gap-2 font-semibold">
-                Learn More
+                Try Demo
                 <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
               </span>
             </Button>
@@ -608,12 +626,13 @@ export default function LandingPage() {
                 <ul className="space-y-3">
                   {['Dashboard', 'Analytics', 'Teams', 'Integrations'].map((item) => (
                     <li key={item}>
-                      <a
-                        href="#"
+                      <button
+                        type="button"
+                        onClick={handleGetStarted}
                         className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
                       >
                         {item}
-                      </a>
+                      </button>
                     </li>
                   ))}
                 </ul>
@@ -627,12 +646,13 @@ export default function LandingPage() {
                 <ul className="space-y-3">
                   {['Commit Tracking', 'Issue Management', 'Deployments', 'Reports'].map((item) => (
                     <li key={item}>
-                      <a
-                        href="#"
+                      <button
+                        type="button"
+                        onClick={handleGetStarted}
                         className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
                       >
                         {item}
-                      </a>
+                      </button>
                     </li>
                   ))}
                 </ul>
@@ -646,12 +666,13 @@ export default function LandingPage() {
                 <ul className="space-y-3">
                   {['Documentation', 'API Reference', 'GitHub', 'Support'].map((item) => (
                     <li key={item}>
-                      <a
-                        href="#"
+                      <button
+                        type="button"
+                        onClick={handleGetStarted}
                         className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
                       >
                         {item}
-                      </a>
+                      </button>
                     </li>
                   ))}
                 </ul>
@@ -665,12 +686,13 @@ export default function LandingPage() {
                 <ul className="space-y-3">
                   {['About', 'Privacy', 'Terms', 'Contact'].map((item) => (
                     <li key={item}>
-                      <a
-                        href="#"
+                      <button
+                        type="button"
+                        onClick={handleGetStarted}
                         className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
                       >
                         {item}
-                      </a>
+                      </button>
                     </li>
                   ))}
                 </ul>
@@ -700,7 +722,9 @@ export default function LandingPage() {
                   <Github className="w-5 h-5" />
                 </a>
                 <a
-                  href="#"
+                  href="https://x.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
                   aria-label="Twitter"
                 >
@@ -709,7 +733,9 @@ export default function LandingPage() {
                   </svg>
                 </a>
                 <a
-                  href="#"
+                  href="https://www.linkedin.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
                   aria-label="LinkedIn"
                 >
