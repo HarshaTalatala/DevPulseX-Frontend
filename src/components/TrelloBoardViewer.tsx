@@ -1,6 +1,5 @@
 "use client";
 
-import { useMemo } from 'react';
 import { useTrelloBoardAggregate } from '@/hooks/useTrello';
 import { useAuthStore } from '@/stores/auth';
 import { useProject } from '@/hooks/useProjects';
@@ -51,7 +50,7 @@ export default function TrelloBoardViewer({ projectId, boardId }: Props) {
     );
   }
 
-  const lists = useMemo(() => data?.lists || [], [data]);
+  const lists = data?.lists || [];
 
   if (!lists || lists.length === 0) {
     return (
