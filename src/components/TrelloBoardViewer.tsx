@@ -51,6 +51,7 @@ export default function TrelloBoardViewer({ projectId, boardId }: Props) {
   }
 
   const lists = data?.lists || [];
+  const totalCards = lists.reduce((count: number, list: any) => count + (list.cards?.length || 0), 0);
 
   if (!lists || lists.length === 0) {
     return (
@@ -66,17 +67,36 @@ export default function TrelloBoardViewer({ projectId, boardId }: Props) {
   }
 
   return (
-    <div className="overflow-x-auto">
-      <div className="min-w-[700px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        <div className="rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900/60 p-3">
+          <p className="text-[11px] uppercase tracking-wide text-gray-500 dark:text-gray-400">Lists</p>
+          <p className="mt-1 text-xl font-semibold text-gray-900 dark:text-white">{lists.length}</p>
+        </div>
+        <div className="rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900/60 p-3">
+          <p className="text-[11px] uppercase tracking-wide text-gray-500 dark:text-gray-400">Cards</p>
+          <p className="mt-1 text-xl font-semibold text-gray-900 dark:text-white">{totalCards}</p>
+        </div>
+        <div className="rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900/60 p-3 col-span-2 sm:col-span-1">
+          <p className="text-[11px] uppercase tracking-wide text-gray-500 dark:text-gray-400">Status</p>
+          <p className="mt-1 text-sm font-semibold text-green-600 dark:text-green-400">Board Synced</p>
+        </div>
+      </div>
+
+      <div className="overflow-x-auto">
+      <div className="min-w-[760px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {lists.map((list: any) => (
-          <div key={list.listId} className="bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-white/10 rounded-lg p-3">
-            <div className="mb-3 px-2 py-1 rounded-md bg-gray-200 dark:bg-white/10 text-gray-800 dark:text-gray-100 text-sm font-semibold">
-              {list.listName}
+          <div key={list.listId} className="rounded-xl border border-gray-200 dark:border-white/10 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900/80 dark:to-gray-900/50 p-3 shadow-sm">
+            <div className="mb-3 flex items-center justify-between gap-2 px-2 py-1.5 rounded-md bg-gray-200/90 dark:bg-white/10 text-gray-800 dark:text-gray-100">
+              <span className="text-sm font-semibold truncate">{list.listName}</span>
+              <span className="text-[11px] px-2 py-0.5 rounded-full bg-white/80 dark:bg-black/30 border border-gray-200 dark:border-white/10">
+                {list.cards?.length || 0}
+              </span>
             </div>
             <div className="space-y-3">
               {list.cards?.map((card: any) => (
-                <div key={card.id} className="p-3 rounded-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-white/10">
-                  <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">{card.name}</div>
+                <div key={card.id} className="p-3 rounded-md bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-white/10 shadow-sm">
+                  <div className="text-sm font-semibold text-gray-900 dark:text-gray-100 leading-snug">{card.name}</div>
                   {card.desc && (
                     <div className="mt-1 text-xs text-gray-600 dark:text-gray-300 line-clamp-3">{card.desc}</div>
                   )}
@@ -97,13 +117,14 @@ export default function TrelloBoardViewer({ projectId, boardId }: Props) {
                 </div>
               ))}
               {(!list.cards || list.cards.length === 0) && (
-                <div className="text-xs text-gray-500 dark:text-gray-400 text-center py-6 border border-dashed border-gray-200 dark:border-white/10 rounded-md">
+                <div className="text-xs text-gray-500 dark:text-gray-400 text-center py-6 border border-dashed border-gray-200 dark:border-white/10 rounded-md bg-gray-50/60 dark:bg-black/20">
                   No cards
                 </div>
               )}
             </div>
           </div>
         ))}
+      </div>
       </div>
     </div>
   );

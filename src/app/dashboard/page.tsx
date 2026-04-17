@@ -402,23 +402,37 @@ export default function DashboardPage() {
           )}
 
           {activeTab === 'trello' && (
-            <div className="space-y-4">
-              <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                <div className="flex items-center gap-2">
-                  <label className="text-sm text-gray-700 dark:text-gray-300">Project</label>
-                  <select
-                    className="px-3 py-1.5 rounded-md bg-gray-100 dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-white/10"
-                    value={projectSelectValue}
-                    onChange={(e) => setSelectedProjectId(e.target.value ? Number(e.target.value) : 'none')}
-                  >
-                    <option value="">No project selected</option>
-                    {projects?.map((p) => (
-                      <option key={p.id} value={p.id}>{p.name}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="w-full md:w-[520px]">
-                  <TrelloBoardSelector projectId={effectiveProjectId} onBoardChange={setSelectedBoardId} />
+            <div className="space-y-5">
+              <div className="relative overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-gradient-to-br from-white via-gray-50 to-gray-100 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 p-4 sm:p-5">
+                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_20%,rgba(59,130,246,0.18),transparent_45%)] dark:bg-[radial-gradient(circle_at_85%_20%,rgba(59,130,246,0.26),transparent_45%)]" />
+                <div className="relative">
+                  <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">Trello Workspace Overview</h2>
+                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1">
+                    Link a board to a project or preview any board from your connected Trello account.
+                  </p>
+                  <div className="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
+                    <div className="lg:col-span-1 rounded-lg border border-gray-200/80 dark:border-white/10 bg-white/80 dark:bg-black/20 p-3 sm:p-4">
+                      <label className="block text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-2">
+                        Project Scope
+                      </label>
+                      <select
+                        className="w-full px-3 py-2 rounded-md bg-gray-100 dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-white/10"
+                        value={projectSelectValue}
+                        onChange={(e) => setSelectedProjectId(e.target.value ? Number(e.target.value) : 'none')}
+                      >
+                        <option value="">No project selected</option>
+                        {projects?.map((p) => (
+                          <option key={p.id} value={p.id}>{p.name}</option>
+                        ))}
+                      </select>
+                      <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                        Pick a project to save a board mapping, or leave empty for preview mode.
+                      </p>
+                    </div>
+                    <div className="lg:col-span-2">
+                      <TrelloBoardSelector projectId={effectiveProjectId} onBoardChange={setSelectedBoardId} />
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -437,9 +451,14 @@ export default function DashboardPage() {
               {effectiveProjectId || selectedBoardId ? (
                 <TrelloBoardViewer projectId={effectiveProjectId} boardId={selectedBoardId} />
               ) : (
-                <div className="p-8 text-center bg-gray-50 dark:bg-white/[0.02] rounded-xl border border-dashed border-gray-300 dark:border-white/10">
-                  <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2">Select a Trello board</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Choose a board above to view lists and cards from your linked Trello account.</p>
+                <div className="relative overflow-hidden p-8 text-center bg-gray-50 dark:bg-white/[0.02] rounded-xl border border-dashed border-gray-300 dark:border-white/10">
+                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.08),transparent_55%)]" />
+                  <div className="relative">
+                    <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2">Select a Trello board</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 max-w-lg mx-auto">
+                      Choose a board above to view lists and cards from your linked Trello account.
+                    </p>
+                  </div>
                 </div>
               )}
             </div>
