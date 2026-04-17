@@ -404,7 +404,7 @@ export default function DashboardPage() {
           {activeTab === 'trello' && (
             <div className="space-y-5">
               <div className="relative overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-gradient-to-br from-white via-gray-50 to-gray-100 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 p-4 sm:p-5">
-                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_20%,rgba(59,130,246,0.18),transparent_45%)] dark:bg-[radial-gradient(circle_at_85%_20%,rgba(59,130,246,0.26),transparent_45%)]" />
+                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_20%,rgba(17,24,39,0.08),transparent_45%)] dark:bg-[radial-gradient(circle_at_85%_20%,rgba(255,255,255,0.08),transparent_45%)]" />
                 <div className="relative">
                   <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">Trello Workspace Overview</h2>
                   <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -452,7 +452,7 @@ export default function DashboardPage() {
                 <TrelloBoardViewer projectId={effectiveProjectId} boardId={selectedBoardId} />
               ) : (
                 <div className="relative overflow-hidden p-8 text-center bg-gray-50 dark:bg-white/[0.02] rounded-xl border border-dashed border-gray-300 dark:border-white/10">
-                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.08),transparent_55%)]" />
+                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(17,24,39,0.08),transparent_55%)] dark:bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.06),transparent_55%)]" />
                   <div className="relative">
                     <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2">Select a Trello board</h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400 max-w-lg mx-auto">

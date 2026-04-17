@@ -79,7 +79,7 @@ export default function TrelloBoardViewer({ projectId, boardId }: Props) {
         </div>
         <div className="rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900/60 p-3 col-span-2 sm:col-span-1">
           <p className="text-[11px] uppercase tracking-wide text-gray-500 dark:text-gray-400">Status</p>
-          <p className="mt-1 text-sm font-semibold text-green-600 dark:text-green-400">Board Synced</p>
+          <p className="mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100">Board Synced</p>
         </div>
       </div>
 
@@ -103,7 +103,7 @@ export default function TrelloBoardViewer({ projectId, boardId }: Props) {
                   {(card.labels?.length || 0) > 0 && (
                     <div className="mt-2 flex flex-wrap gap-1">
                       {card.labels.map((label: string, idx: number) => (
-                        <span key={idx} className="px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-[11px]">
+                        <span key={idx} className="px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700/50 text-gray-700 dark:text-gray-200 text-[11px] border border-gray-200 dark:border-white/10">
                           {label || 'Label'}
                         </span>
                       ))}

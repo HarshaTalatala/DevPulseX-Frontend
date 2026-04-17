@@ -146,7 +146,7 @@ export default function TrelloBoardSelector({ projectId, onBoardChange }: Props)
                 <button
                   onClick={handleSave}
                   disabled={updateProjectMutation.isPending || !selectedBoardId}
-                  className="px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="px-4 py-2 rounded-md bg-gray-900 hover:bg-black text-white dark:bg-white dark:text-black dark:hover:bg-gray-100 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   {updateProjectMutation.isPending ? 'Saving…' : 'Save to Project'}
                 </button>
