@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { projectsApi } from '@/lib/api/projects';
 import { useProject } from '@/hooks/useProjects';
 import { useTrelloBoards } from '@/hooks/useTrello';
+import { useTrelloAuth } from '@/hooks/useTrelloAuth';
 import { useAuthStore } from '@/stores/auth';
 
 interface Props {
@@ -18,6 +19,7 @@ export default function TrelloBoardSelector({ projectId, onBoardChange }: Props)
   const { data: project } = useProject(projectId);
   const isTrelloLinked = !!(user?.trelloId && user?.trelloUsername);
   const canLinkBoardToProject = user?.role === 'ADMIN' || user?.role === 'MANAGER';
+  const { initiateTrelloLogin, loading: trelloAuthLoading } = useTrelloAuth();
 
   const { data: boards, isLoading, error, refetch, isFetching } = useTrelloBoards();
 
@@ -57,6 +59,9 @@ export default function TrelloBoardSelector({ projectId, onBoardChange }: Props)
     return boards.map((b: any) => ({ id: b.id, name: b.name }));
   }, [boards]);
 
+  const errorMessage = (error as any)?.response?.data?.message || (error as any)?.message || 'Unknown error';
+  const showRelinkAction = /token missing|re-link|reconnect/i.test(errorMessage);
+
   if (!isTrelloLinked) {
     return (
       <div className="w-full p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg">
@@ -92,7 +97,16 @@ export default function TrelloBoardSelector({ projectId, onBoardChange }: Props)
         {error && (
           <div className="p-3 rounded-md bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 text-xs text-red-700 dark:text-red-300">
             <div className="font-medium mb-1">Failed to load boards:</div>
-            <div className="text-xs">{(error as any)?.response?.data?.message || (error as any)?.message || 'Unknown error'}</div>
+            <div className="text-xs">{errorMessage}</div>
+            {showRelinkAction && (
+              <button
+                onClick={() => initiateTrelloLogin()}
+                disabled={trelloAuthLoading}
+                className="mt-2 px-3 py-1.5 rounded-md bg-amber-600 hover:bg-amber-700 text-white text-xs font-medium disabled:opacity-60"
+              >
+                {trelloAuthLoading ? 'Redirecting…' : 'Re-link Trello Now'}
+              </button>
+            )}
             {process.env.NODE_ENV === 'development' && (
               <div className="mt-2 p-2 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300 font-mono text-[10px] overflow-auto max-h-40">
                 {JSON.stringify(error, null, 2)}
