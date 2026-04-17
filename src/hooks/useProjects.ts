@@ -9,10 +9,10 @@ export const useProjects = () => {
   });
 };
 
-export const useProject = (id: number) => {
+export const useProject = (id?: number) => {
   return useQuery({
     queryKey: ['projects', id],
-    queryFn: () => projectsApi.getById(id),
+    queryFn: () => projectsApi.getById(id!),
     enabled: !!id,
   });
 };

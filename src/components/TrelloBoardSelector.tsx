@@ -8,14 +8,16 @@ import { useTrelloBoards } from '@/hooks/useTrello';
 import { useAuthStore } from '@/stores/auth';
 
 interface Props {
-  projectId: number;
+  projectId?: number;
+  onBoardChange?: (boardId?: string) => void;
 }
 
-export default function TrelloBoardSelector({ projectId }: Props) {
+export default function TrelloBoardSelector({ projectId, onBoardChange }: Props) {
   const queryClient = useQueryClient();
   const { user } = useAuthStore();
   const { data: project } = useProject(projectId);
   const isTrelloLinked = !!(user?.trelloId && user?.trelloUsername);
+  const canLinkBoardToProject = user?.role === 'ADMIN' || user?.role === 'MANAGER';
 
   const { data: boards, isLoading, error, refetch, isFetching } = useTrelloBoards();
 
@@ -27,6 +29,10 @@ export default function TrelloBoardSelector({ projectId }: Props) {
     }
   }, [project?.trelloBoardId]);
 
+  useEffect(() => {
+    onBoardChange?.(selectedBoardId);
+  }, [onBoardChange, selectedBoardId]);
+
   // Auto-refetch when component mounts or when Trello is linked
   useEffect(() => {
     refetch();
@@ -34,14 +40,16 @@ export default function TrelloBoardSelector({ projectId }: Props) {
   
   const updateProjectMutation = useMutation({
     mutationFn: async (boardId: string | null) => {
-      if (!project) return;
+      if (!project || !projectId) return;
       const payload = { name: project.name, teamId: project.teamId, trelloBoardId: boardId ?? null } as any;
       return projectsApi.update(project.id, payload);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projects'] });
-      queryClient.invalidateQueries({ queryKey: ['projects', projectId] });
-      queryClient.invalidateQueries({ queryKey: ['trello', 'project', projectId] });
+      if (projectId) {
+        queryClient.invalidateQueries({ queryKey: ['projects', projectId] });
+        queryClient.invalidateQueries({ queryKey: ['trello', 'project', projectId] });
+      }
     },
   });
 
@@ -73,7 +81,9 @@ export default function TrelloBoardSelector({ projectId }: Props) {
         <div className="flex justify-between items-center">
           <div>
             <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200">Trello Boards</h4>
-            <p className="text-xs text-gray-600 dark:text-gray-400">Uses your linked Trello account</p>
+            <p className="text-xs text-gray-600 dark:text-gray-400">
+              {projectId ? 'Uses your linked Trello account' : 'Select a board to preview Trello data'}
+            </p>
           </div>
           <button
             onClick={() => refetch()}
@@ -120,23 +130,33 @@ export default function TrelloBoardSelector({ projectId }: Props) {
           </div>
         )}
 
-        <div className="flex gap-2">
-          <button
-            onClick={handleSave}
-            disabled={updateProjectMutation.isPending || !selectedBoardId}
-            className="px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {updateProjectMutation.isPending ? 'Saving…' : 'Save to Project'}
-          </button>
-          {project?.trelloBoardId && (
-            <button
-              onClick={() => updateProjectMutation.mutate(null)}
-              className="px-4 py-2 rounded-md bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm"
-            >
-              Unlink Board
-            </button>
-          )}
-        </div>
+        {projectId && (
+          <div className="flex flex-col gap-2">
+            {canLinkBoardToProject ? (
+              <div className="flex gap-2">
+                <button
+                  onClick={handleSave}
+                  disabled={updateProjectMutation.isPending || !selectedBoardId}
+                  className="px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {updateProjectMutation.isPending ? 'Saving…' : 'Save to Project'}
+                </button>
+                {project?.trelloBoardId && (
+                  <button
+                    onClick={() => updateProjectMutation.mutate(null)}
+                    className="px-4 py-2 rounded-md bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm"
+                  >
+                    Unlink Board
+                  </button>
+                )}
+              </div>
+            ) : (
+              <div className="text-xs text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-md px-3 py-2">
+                You can preview boards, but only Admin/Manager can link a board to this project.
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

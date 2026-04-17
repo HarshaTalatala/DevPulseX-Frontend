@@ -18,6 +18,7 @@ import TrelloBoardSelector from '@/components/TrelloBoardSelector';
 import TrelloAccountLink from '@/components/TrelloAccountLink';
 import OAuthAccountsStatus from '@/components/OAuthAccountsStatus';
 import { useProjects } from '@/hooks/useProjects';
+import { ProjectDto } from '@/types';
 
 // Lazy load heavy components for better performance
 const AnimatedChart = dynamic(
@@ -45,16 +46,24 @@ export default function DashboardPage() {
   const { data: projectMetrics, isLoading: projectsLoading } = useProjectMetrics();
   const { data: userMetrics, isLoading: usersLoading } = useUserMetrics();
   const { data: gh, isLoading: ghLoading, error: ghError } = useGithubInsights();
-  const { data: projects } = useProjects();
+  const { data: projectsData, isLoading: projectsQueryLoading, error: projectsQueryError } = useProjects();
   const [activeTab, setActiveTab] = useState<'overview' | 'trello' | 'accounts'>('overview');
-  const [selectedProjectId, setSelectedProjectId] = useState<number | undefined>(undefined);
+  const [selectedProjectId, setSelectedProjectId] = useState<number | 'none' | undefined>(undefined);
+  const [selectedBoardId, setSelectedBoardId] = useState<string | undefined>(undefined);
+
+  const projects = useMemo(() => {
+    if (Array.isArray(projectsData)) return projectsData as ProjectDto[];
+    if (projectsData && Array.isArray((projectsData as any).content)) return (projectsData as any).content as ProjectDto[];
+    return [] as ProjectDto[];
+  }, [projectsData]);
 
   const firstProjectId = useMemo(() => {
     if (!projects || projects.length === 0) return undefined;
     return projects[0].id;
   }, [projects]);
 
-  const effectiveProjectId = selectedProjectId || firstProjectId;
+  const effectiveProjectId = selectedProjectId === 'none' ? undefined : (selectedProjectId || firstProjectId);
+  const projectSelectValue = selectedProjectId === 'none' ? '' : (selectedProjectId ?? firstProjectId ?? '');
 
   // Show skeleton while any critical data is loading
   const isInitialLoading = ghLoading && !gh;
@@ -399,27 +408,38 @@ export default function DashboardPage() {
                   <label className="text-sm text-gray-700 dark:text-gray-300">Project</label>
                   <select
                     className="px-3 py-1.5 rounded-md bg-gray-100 dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-white/10"
-                    value={effectiveProjectId || ''}
-                    onChange={(e) => setSelectedProjectId(Number(e.target.value))}
+                    value={projectSelectValue}
+                    onChange={(e) => setSelectedProjectId(e.target.value ? Number(e.target.value) : 'none')}
                   >
+                    <option value="">No project selected</option>
                     {projects?.map((p) => (
                       <option key={p.id} value={p.id}>{p.name}</option>
                     ))}
                   </select>
                 </div>
-                {effectiveProjectId && (
-                  <div className="w-full md:w-[520px]">
-                    <TrelloBoardSelector projectId={effectiveProjectId} />
-                  </div>
-                )}
+                <div className="w-full md:w-[520px]">
+                  <TrelloBoardSelector projectId={effectiveProjectId} onBoardChange={setSelectedBoardId} />
+                </div>
               </div>
 
-              {effectiveProjectId ? (
-                <TrelloBoardViewer projectId={effectiveProjectId} />
+              {projectsQueryError && (
+                <div className="p-3 rounded-md bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 text-xs text-amber-700 dark:text-amber-300">
+                  Could not load DevPulseX projects. You can still preview Trello boards below.
+                </div>
+              )}
+
+              {!projectsQueryLoading && projects.length === 0 && (
+                <div className="p-3 rounded-md bg-gray-50 dark:bg-white/[0.02] border border-dashed border-gray-300 dark:border-white/10 text-xs text-gray-600 dark:text-gray-400">
+                  No DevPulseX projects found. Trello board preview mode is enabled.
+                </div>
+              )}
+
+              {effectiveProjectId || selectedBoardId ? (
+                <TrelloBoardViewer projectId={effectiveProjectId} boardId={selectedBoardId} />
               ) : (
                 <div className="p-8 text-center bg-gray-50 dark:bg-white/[0.02] rounded-xl border border-dashed border-gray-300 dark:border-white/10">
-                  <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2">Select a project</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Choose a project to view Trello board data.</p>
+                  <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2">Select a Trello board</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Choose a board above to view lists and cards from your linked Trello account.</p>
                 </div>
               )}
             </div>

@@ -50,6 +50,41 @@ export const useProjectTrello = (projectId?: number) => {
   });
 };
 
+export const useTrelloBoardAggregate = (boardId?: string) => {
+  const { user } = useAuthStore();
+  const isTrelloLinked = !!(user?.trelloId && user?.trelloUsername);
+
+  return useQuery({
+    queryKey: ['trello', 'board-aggregate', boardId, user?.id],
+    queryFn: async () => {
+      const lists = await trelloApi.getLists(boardId!);
+      const normalizedLists = Array.isArray(lists) ? lists : [];
+
+      const listsWithCards = await Promise.all(
+        normalizedLists.map(async (list: any) => {
+          const cards = await trelloApi.getCards(list.id);
+          const normalizedCards = Array.isArray(cards) ? cards : [];
+
+          return {
+            listId: list.id,
+            listName: list.name,
+            cards: normalizedCards.map((card: any) => ({
+              id: card.id,
+              name: card.name,
+              desc: card.desc,
+              labels: Array.isArray(card.labels) ? card.labels.map((label: any) => label?.name || '') : [],
+              memberIds: Array.isArray(card.idMembers) ? card.idMembers : [],
+            })),
+          };
+        })
+      );
+
+      return { lists: listsWithCards };
+    },
+    enabled: !!boardId && isTrelloLinked,
+  });
+};
+
 export const useLinkTrelloAccount = () => {
   const queryClient = useQueryClient();
   const { setAuth } = useAuthStore();
