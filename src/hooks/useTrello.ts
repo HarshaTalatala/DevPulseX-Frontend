@@ -20,6 +20,8 @@ export const useTrelloBoards = () => {
       }
     },
     enabled: isTrelloLinked,
+    retry: 1,
+    refetchOnWindowFocus: false,
   });
 };
 

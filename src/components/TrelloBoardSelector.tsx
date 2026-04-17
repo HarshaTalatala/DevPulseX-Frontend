@@ -33,11 +33,6 @@ export default function TrelloBoardSelector({ projectId, onBoardChange }: Props)
     onBoardChange?.(selectedBoardId);
   }, [onBoardChange, selectedBoardId]);
 
-  // Auto-refetch when component mounts or when Trello is linked
-  useEffect(() => {
-    refetch();
-  }, [refetch, isTrelloLinked]);
-  
   const updateProjectMutation = useMutation({
     mutationFn: async (boardId: string | null) => {
       if (!project || !projectId) return;

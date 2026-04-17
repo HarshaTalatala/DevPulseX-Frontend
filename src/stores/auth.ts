@@ -24,6 +24,7 @@ export const useAuthStore = create<AuthState>()(
       clearAuth: () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
+        localStorage.removeItem('trello_access_token');
         set({ user: null, token: null, isAuthenticated: false });
       },
     }),

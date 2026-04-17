@@ -32,7 +32,14 @@ async function getWithRetry<T = any>(url: string, maxRetries = 3, baseDelay = 80
 
 const TRELLO_API_KEY = process.env.NEXT_PUBLIC_TRELLO_API_KEY || '';
 
-const getTrelloToken = () => useAuthStore.getState().user?.trelloAccessToken || '';
+const getTrelloToken = () => {
+  const fromUser = useAuthStore.getState().user?.trelloAccessToken || '';
+  if (fromUser) return fromUser;
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('trello_access_token') || '';
+  }
+  return '';
+};
 
 async function fetchTrelloJson<T = any>(path: string): Promise<T> {
   const token = getTrelloToken();
@@ -54,6 +61,9 @@ async function fetchTrelloJson<T = any>(path: string): Promise<T> {
 
 export const trelloApi = {
   getBoards: async () => {
+    if (!TRELLO_API_KEY || !getTrelloToken()) {
+      return getWithRetry(`/trello/boards`);
+    }
     try {
       return await fetchTrelloJson(`/members/me/boards`);
     } catch (error) {
@@ -61,6 +71,9 @@ export const trelloApi = {
     }
   },
   getLists: async (boardId: string) => {
+    if (!TRELLO_API_KEY || !getTrelloToken()) {
+      return getWithRetry(`/trello/boards/${encodeURIComponent(boardId)}/lists`);
+    }
     try {
       return await fetchTrelloJson(`/boards/${encodeURIComponent(boardId)}/lists`);
     } catch (error) {
@@ -68,6 +81,9 @@ export const trelloApi = {
     }
   },
   getCards: async (listId: string) => {
+    if (!TRELLO_API_KEY || !getTrelloToken()) {
+      return getWithRetry(`/trello/lists/${encodeURIComponent(listId)}/cards`);
+    }
     try {
       return await fetchTrelloJson(`/lists/${encodeURIComponent(listId)}/cards`);
     } catch (error) {
