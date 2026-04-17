@@ -61,34 +61,31 @@ async function fetchTrelloJson<T = any>(path: string): Promise<T> {
 
 export const trelloApi = {
   getBoards: async () => {
-    if (!TRELLO_API_KEY || !getTrelloToken()) {
-      return getWithRetry(`/trello/boards`);
+    if (!TRELLO_API_KEY) {
+      throw new Error('Missing NEXT_PUBLIC_TRELLO_API_KEY in frontend/.env.production');
     }
-    try {
-      return await fetchTrelloJson(`/members/me/boards`);
-    } catch (error) {
-      return getWithRetry(`/trello/boards`);
+    if (!getTrelloToken()) {
+      throw new Error('Trello token missing. Re-link your Trello account from the Accounts tab.');
     }
+    return fetchTrelloJson(`/members/me/boards`);
   },
   getLists: async (boardId: string) => {
-    if (!TRELLO_API_KEY || !getTrelloToken()) {
-      return getWithRetry(`/trello/boards/${encodeURIComponent(boardId)}/lists`);
+    if (!TRELLO_API_KEY) {
+      throw new Error('Missing NEXT_PUBLIC_TRELLO_API_KEY in frontend/.env.production');
     }
-    try {
-      return await fetchTrelloJson(`/boards/${encodeURIComponent(boardId)}/lists`);
-    } catch (error) {
-      return getWithRetry(`/trello/boards/${encodeURIComponent(boardId)}/lists`);
+    if (!getTrelloToken()) {
+      throw new Error('Trello token missing. Re-link your Trello account from the Accounts tab.');
     }
+    return fetchTrelloJson(`/boards/${encodeURIComponent(boardId)}/lists`);
   },
   getCards: async (listId: string) => {
-    if (!TRELLO_API_KEY || !getTrelloToken()) {
-      return getWithRetry(`/trello/lists/${encodeURIComponent(listId)}/cards`);
+    if (!TRELLO_API_KEY) {
+      throw new Error('Missing NEXT_PUBLIC_TRELLO_API_KEY in frontend/.env.production');
     }
-    try {
-      return await fetchTrelloJson(`/lists/${encodeURIComponent(listId)}/cards`);
-    } catch (error) {
-      return getWithRetry(`/trello/lists/${encodeURIComponent(listId)}/cards`);
+    if (!getTrelloToken()) {
+      throw new Error('Trello token missing. Re-link your Trello account from the Accounts tab.');
     }
+    return fetchTrelloJson(`/lists/${encodeURIComponent(listId)}/cards`);
   },
   getProjectTrelloData: async (projectId: number) =>
     getWithRetry(`/dashboard/trello/${projectId}`) as Promise<{ lists: Array<{ listId: string; listName: string; cards: any[] }> }>,
