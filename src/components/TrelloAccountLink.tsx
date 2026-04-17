@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from 'react';
 import { useTrelloAuth } from '@/hooks/useTrelloAuth';
 import { useAuthStore } from '@/stores/auth';
 import { CheckCircle, Link as LinkIcon } from 'lucide-react';
@@ -8,47 +7,14 @@ import { CheckCircle, Link as LinkIcon } from 'lucide-react';
 export default function TrelloAccountLink() {
   const { user } = useAuthStore();
   const { initiateTrelloLogin, error, loading } = useTrelloAuth();
-  const [hasStoredToken, setHasStoredToken] = useState(false);
 
   const isLinked = !!(user?.trelloId && user?.trelloUsername);
-  const hasRuntimeToken = !!(user?.trelloAccessToken || hasStoredToken);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    setHasStoredToken(!!localStorage.getItem('trello_access_token'));
-  }, [user?.trelloAccessToken]);
 
   const handleLink = () => {
     initiateTrelloLogin();
   };
 
   if (isLinked) {
-    if (!hasRuntimeToken) {
-      return (
-        <div className="p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg">
-          <div className="flex flex-col gap-3">
-            <div>
-              <h3 className="text-sm font-semibold text-amber-900 dark:text-amber-100">
-                Trello Re-link Required
-              </h3>
-              <p className="text-xs text-amber-700 dark:text-amber-300 mt-0.5">
-                Your Trello account is connected as <span className="font-medium">@{user?.trelloUsername}</span>, but the token is missing.
-                Re-link once to restore board access.
-              </p>
-            </div>
-            <button
-              onClick={handleLink}
-              disabled={loading}
-              className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-md text-sm font-medium inline-flex items-center gap-2 transition-colors disabled:opacity-60 w-fit"
-            >
-              <LinkIcon className="h-4 w-4" />
-              {loading ? 'Redirecting…' : 'Re-link Trello Account'}
-            </button>
-          </div>
-        </div>
-      );
-    }
-
     return (
       <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg">
         <div className="flex items-center justify-between gap-3">

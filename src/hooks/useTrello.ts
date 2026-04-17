@@ -92,7 +92,7 @@ export const useLinkTrelloAccount = () => {
   const { setAuth } = useAuthStore();
 
   return useMutation({
-    mutationFn: (token: string) => trelloApi.linkAccount(token),
+    mutationFn: ({ token, state }: { token: string; state: string }) => trelloApi.linkAccount(token, state),
     onSuccess: (data) => {
       // Update auth store with new token and user data
       if (data.token && data.user) {

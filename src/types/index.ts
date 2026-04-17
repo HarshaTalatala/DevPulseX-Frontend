@@ -48,7 +48,6 @@ export interface UserDto {
   // Trello OAuth fields
   trelloId?: string;
   trelloUsername?: string;
-  trelloAccessToken?: string;
 }
 
 export interface CreateUserRequest {

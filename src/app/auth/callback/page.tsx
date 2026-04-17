@@ -63,10 +63,6 @@ function CallbackInner() {
           clearTimeout(timeoutId);
           console.log('[Auth Callback] Trello account linked:', resp);
           setAuth(resp.user, resp.token);
-
-          // Persist raw Trello token client-side for direct Trello API reads.
-          // This avoids hard dependency on backend Trello proxy availability.
-          localStorage.setItem('trello_access_token', token);
           
           // Invalidate all Trello-related queries to force refetch with new token
           await queryClient.invalidateQueries({ queryKey: ['trello'] });
