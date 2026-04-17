@@ -14,7 +14,7 @@ export default function TrelloBoardViewer({ projectId, boardId }: Props) {
   const { user } = useAuthStore();
   const isTrelloLinked = !!(user?.trelloId && user?.trelloUsername);
   const { data: project } = useProject(projectId);
-  const effectiveBoardId = boardId || project?.trelloBoardId;
+  const effectiveBoardId = boardId ?? project?.trelloBoardId ?? undefined;
   const { data, isLoading, error } = useTrelloBoardAggregate(effectiveBoardId);
 
   if (!isTrelloLinked) {
