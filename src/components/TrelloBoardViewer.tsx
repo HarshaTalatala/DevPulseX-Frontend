@@ -1,8 +1,9 @@
 "use client";
 
 import { useMemo } from 'react';
-import { useProjectTrello, useTrelloBoardAggregate } from '@/hooks/useTrello';
+import { useTrelloBoardAggregate } from '@/hooks/useTrello';
 import { useAuthStore } from '@/stores/auth';
+import { useProject } from '@/hooks/useProjects';
 
 interface Props {
   projectId?: number;
@@ -12,12 +13,9 @@ interface Props {
 export default function TrelloBoardViewer({ projectId, boardId }: Props) {
   const { user } = useAuthStore();
   const isTrelloLinked = !!(user?.trelloId && user?.trelloUsername);
-  const projectQuery = useProjectTrello(projectId);
-  const boardQuery = useTrelloBoardAggregate(!projectId ? boardId : undefined);
-
-  const data = projectId ? projectQuery.data : boardQuery.data;
-  const isLoading = projectId ? projectQuery.isLoading : boardQuery.isLoading;
-  const error = projectId ? projectQuery.error : boardQuery.error;
+  const { data: project } = useProject(projectId);
+  const effectiveBoardId = boardId || project?.trelloBoardId;
+  const { data, isLoading, error } = useTrelloBoardAggregate(effectiveBoardId);
 
   if (!isTrelloLinked) {
     return (
