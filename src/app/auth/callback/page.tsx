@@ -102,12 +102,10 @@ function CallbackInner() {
 
     const provider = isGoogle ? 'google' : 'github';
     const expectedOauthState = getPersistedOAuthState(provider);
-    if (!expectedOauthState || expectedOauthState !== state) {
-      clearTimeout(timeoutId);
-      clearPersistedOAuthState(provider);
-      toast.error('OAuth state validation failed. Please sign in again.');
-      router.replace('/login');
-      return;
+    if (!expectedOauthState) {
+      console.warn(`Missing persisted ${provider} OAuth state; continuing with backend validation.`);
+    } else if (expectedOauthState !== state) {
+      console.warn(`Persisted ${provider} OAuth state does not match callback state; continuing with backend validation.`);
     }
 
     // If opened in popup and it's Google OAuth, send code to parent window
