@@ -171,17 +171,40 @@ export default function DashboardPage() {
               />
             </div>
           ) : ghError ? (
-            <div className="p-8 text-center bg-red-50/50 dark:bg-red-500/5 rounded-xl border border-red-200/60 dark:border-red-500/20">
-              <div className="inline-flex p-3 rounded-full bg-red-100 dark:bg-red-500/10 mb-3">
-                <AlertCircle className="h-6 w-6 text-red-600 dark:text-red-500" />
+            // Detect specific backend message for unlinked GitHub account
+            ((ghError as any)?.response?.data?.message === 'GitHub account not linked') ? (
+              <div className="p-8 text-center bg-yellow-50/60 dark:bg-yellow-900/5 rounded-xl border border-yellow-200/60 dark:border-yellow-500/20">
+                <div className="inline-flex p-3 rounded-full bg-yellow-100 dark:bg-yellow-500/10 mb-3">
+                  <AlertCircle className="h-6 w-6 text-yellow-700 dark:text-yellow-400" />
+                </div>
+                <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2">
+                  Connect your GitHub account
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                  Link your GitHub account to view live insights on this dashboard.
+                </p>
+                <div className="flex items-center justify-center gap-3">
+                  <button
+                    onClick={connectGitHub}
+                    className="px-4 py-2 bg-gray-900 hover:bg-black dark:bg-white dark:hover:bg-gray-100 text-white dark:text-black rounded-md text-sm font-medium"
+                  >
+                    Link GitHub Account
+                  </button>
+                </div>
               </div>
-              <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2">
-                Failed to Load GitHub Data
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                {ghError?.message || 'Please check your connection and try again.'}
-              </p>
-            </div>
+            ) : (
+              <div className="p-8 text-center bg-red-50/50 dark:bg-red-500/5 rounded-xl border border-red-200/60 dark:border-red-500/20">
+                <div className="inline-flex p-3 rounded-full bg-red-100 dark:bg-red-500/10 mb-3">
+                  <AlertCircle className="h-6 w-6 text-red-600 dark:text-red-500" />
+                </div>
+                <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2">
+                  Failed to Load GitHub Data
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {ghError?.message || 'Please check your connection and try again.'}
+                </p>
+              </div>
+            )
           ) : gh ? (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
