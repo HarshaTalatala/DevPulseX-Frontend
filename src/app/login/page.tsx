@@ -42,8 +42,17 @@ export default function LoginPage() {
       await loginMutation.mutateAsync(loginForm);
       toast.success('Welcome back!');
       router.push('/dashboard');
-    } catch (error) {
-      toast.error('Invalid credentials. Please try again.');
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : '';
+      if (msg.toLowerCase().includes('400') || msg.toLowerCase().includes('bad')) {
+        toast.error('Incorrect email or password. Please try again.');
+      } else if (msg.toLowerCase().includes('401')) {
+        toast.error('Incorrect email or password. Please try again.');
+      } else if (msg) {
+        toast.error(msg);
+      } else {
+        toast.error('Login failed. Please check your credentials.');
+      }
     }
   };
 
@@ -54,8 +63,13 @@ export default function LoginPage() {
       await registerMutation.mutateAsync(registerForm);
       toast.success('Account created successfully!');
       router.push('/dashboard');
-    } catch (error) {
-      toast.error('Registration failed. Please try again.');
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : '';
+      if (msg) {
+        toast.error(msg);
+      } else {
+        toast.error('Registration failed. Please try again.');
+      }
     }
   };
 
