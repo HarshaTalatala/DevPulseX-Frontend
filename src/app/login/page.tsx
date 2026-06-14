@@ -44,14 +44,13 @@ export default function LoginPage() {
       router.push('/dashboard');
     } catch (error: unknown) {
       const msg = error instanceof Error ? error.message : '';
-      if (msg.toLowerCase().includes('400') || msg.toLowerCase().includes('bad')) {
-        toast.error('Incorrect email or password. Please try again.');
-      } else if (msg.toLowerCase().includes('401')) {
+      // Backend returns 401 for wrong credentials, 400 for validation failures
+      if (msg.toLowerCase().includes('incorrect') || msg.toLowerCase().includes('401') || msg.toLowerCase().includes('unauthorized')) {
         toast.error('Incorrect email or password. Please try again.');
       } else if (msg) {
         toast.error(msg);
       } else {
-        toast.error('Login failed. Please check your credentials.');
+        toast.error('Login failed. Please check your credentials and try again.');
       }
     }
   };
