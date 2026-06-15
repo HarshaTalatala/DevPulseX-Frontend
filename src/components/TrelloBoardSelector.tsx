@@ -112,7 +112,7 @@ export default function TrelloBoardSelector({ projectId, onBoardChange }: Props)
         <div className="flex justify-between items-start sm:items-center gap-3">
           <div>
             <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-              <Link2 className="h-4 w-4 text-blue-500" />
+              <Link2 className="h-4 w-4 text-gray-500 dark:text-gray-400" />
               Trello Boards Selector
             </h4>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
@@ -152,14 +152,14 @@ export default function TrelloBoardSelector({ projectId, onBoardChange }: Props)
         {/* Loading / dropdown selection */}
         {isLoading ? (
           <div className="py-4 text-center rounded-lg border border-dashed border-gray-200 dark:border-white/5 bg-gray-50/50 dark:bg-black/10">
-            <div className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900 dark:border-white"></div>
+            <div className="inline-block animate-spin rounded-full h-4 w-5 border-b-2 border-gray-900 dark:border-white"></div>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1.5">Fetching Trello Boards…</p>
           </div>
         ) : (
           <div className="space-y-1.5">
             <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Trello Board</label>
             <select
-              className="w-full px-3 py-2.5 rounded-lg bg-white/70 dark:bg-gray-800 border border-gray-200 dark:border-white/5 text-xs text-gray-900 dark:text-gray-100 hover:border-gray-300 dark:hover:border-white/10 transition-colors focus:ring-1 focus:ring-blue-500 outline-none"
+              className="w-full px-3 py-2.5 rounded-lg bg-white/70 dark:bg-gray-800 border border-gray-200 dark:border-white/5 text-xs text-gray-900 dark:text-gray-100 hover:border-gray-300 dark:hover:border-white/10 transition-colors focus:ring-1 focus:ring-gray-300 dark:focus:ring-white/20 outline-none"
               value={selectedBoardId || ''}
               onChange={(e) => setSelectedBoardId(e.target.value)}
               disabled={boardOptions.length === 0}

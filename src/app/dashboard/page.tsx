@@ -432,20 +432,19 @@ export default function DashboardPage() {
 
           {activeTab === 'trello' && (
             <div className="space-y-5">
-              <div className="relative overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-gradient-to-br from-white via-gray-50 to-gray-100 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 p-4 sm:p-5">
-                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_20%,rgba(17,24,39,0.08),transparent_45%)] dark:bg-[radial-gradient(circle_at_85%_20%,rgba(255,255,255,0.08),transparent_45%)]" />
+              <div className="relative overflow-hidden rounded-xl border border-gray-200/60 dark:border-white/5 bg-white/60 dark:bg-gray-900/60 backdrop-blur-md p-4 sm:p-5">
                 <div className="relative">
                   <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">Trello Workspace Overview</h2>
                   <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1">
                     Link a board to a project or preview any board from your connected Trello account.
                   </p>
                   <div className="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
-                    <div className="lg:col-span-1 rounded-lg border border-gray-200/80 dark:border-white/10 bg-white/80 dark:bg-black/20 p-3 sm:p-4">
-                      <label className="block text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-2">
+                    <div className="lg:col-span-1 rounded-xl border border-gray-200/60 dark:border-white/5 bg-white/50 dark:bg-black/20 p-3 sm:p-4">
+                      <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">
                         Project Scope
                       </label>
                       <select
-                        className="w-full px-3 py-2 rounded-md bg-gray-100 dark:bg-gray-800 text-sm text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-white/10"
+                        className="w-full px-3 py-2.5 rounded-lg bg-white/70 dark:bg-gray-800 border border-gray-200 dark:border-white/5 text-xs text-gray-900 dark:text-gray-100 hover:border-gray-300 dark:hover:border-white/10 transition-colors focus:ring-1 focus:ring-gray-300 dark:focus:ring-white/20 outline-none"
                         value={projectSelectValue}
                         onChange={(e) => setSelectedProjectId(e.target.value ? Number(e.target.value) : 'none')}
                       >
@@ -454,7 +453,7 @@ export default function DashboardPage() {
                           <option key={p.id} value={p.id}>{p.name}</option>
                         ))}
                       </select>
-                      <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                      <p className="mt-2 text-[10px] text-gray-500 dark:text-gray-400 leading-normal">
                         Pick a project to save a board mapping, or leave empty for preview mode.
                       </p>
                     </div>
