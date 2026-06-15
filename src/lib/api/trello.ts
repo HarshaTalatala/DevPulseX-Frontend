@@ -35,4 +35,8 @@ export const trelloApi = {
     const response = await apiClient.post<AuthResponse>('/auth/trello/link', { token, state }, { withCredentials: true });
     return response.data;
   },
+  syncTasks: async (projectId: number): Promise<{ created: number; updated: number; ignored: number }> => {
+    const response = await apiClient.post(`/trello/project/${projectId}/sync-tasks`);
+    return response.data;
+  },
 };

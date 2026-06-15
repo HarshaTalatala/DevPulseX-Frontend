@@ -94,3 +94,16 @@ export const useLinkTrelloAccount = () => {
     },
   });
 };
+
+export const useSyncTrelloTasks = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (projectId: number) => trelloApi.syncTasks(projectId),
+    onSuccess: (data, projectId) => {
+      // Invalidate local tasks and Trello project cache
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      queryClient.invalidateQueries({ queryKey: ['trello', 'project', projectId] });
+    },
+  });
+};
