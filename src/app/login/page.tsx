@@ -9,7 +9,7 @@ import { Brand } from '@/components/ui/Brand';
 import { demoCurrentUser } from '@/lib/demoData';
 import { setDemoMode } from '@/lib/demoMode';
 import { authApi } from '@/lib/api/auth';
-import { generateOAuthState, persistOAuthState } from '@/lib/oauthState';
+import { generateOAuthState, persistOAuthState, resolveOAuthRedirectUri } from '@/lib/oauthState';
 import { toast } from 'sonner';
 import { Github, Mail, Lock, User } from 'lucide-react';
 import Link from 'next/link';
@@ -78,7 +78,7 @@ export default function LoginPage() {
       persistOAuthState('google', state);
       await authApi.prepareOAuthState('google', state);
 
-      const redirectUri = encodeURIComponent(process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI || 'http://localhost:3000/auth/callback');
+      const redirectUri = encodeURIComponent(resolveOAuthRedirectUri(process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI));
       const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${googleClientId}&redirect_uri=${redirectUri}&response_type=code&scope=${encodeURIComponent('openid email profile')}&access_type=offline&prompt=consent&state=${encodeURIComponent(state)}`;
       window.location.href = url;
     } catch {
@@ -137,7 +137,7 @@ export default function LoginPage() {
                       persistOAuthState('github', state);
                       await authApi.prepareOAuthState('github', state);
 
-                      const redirectUri = encodeURIComponent(process.env.NEXT_PUBLIC_GITHUB_REDIRECT_URI || 'http://localhost:3000/auth/callback');
+                      const redirectUri = encodeURIComponent(resolveOAuthRedirectUri(process.env.NEXT_PUBLIC_GITHUB_REDIRECT_URI));
                       const scope = encodeURIComponent('read:user,repo,user:email');
                       const url = `https://github.com/login/oauth/authorize?client_id=${githubClientId}&redirect_uri=${redirectUri}&scope=${scope}&state=${encodeURIComponent(state)}`;
                       window.location.href = url;

@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { authApi } from '@/lib/api/auth';
 import { useAuthStore } from '@/stores/auth';
-import { generateOAuthState, persistOAuthState } from '@/lib/oauthState';
+import { generateOAuthState, persistOAuthState, resolveOAuthRedirectUri } from '@/lib/oauthState';
 
 const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!;
-const REDIRECT_URI = process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI || 'http://localhost:3000/auth/callback';
 
 export const useGoogleAuth = () => {
   const [loading, setLoading] = useState(false);
@@ -18,7 +17,7 @@ export const useGoogleAuth = () => {
 
     const params = new URLSearchParams({
       client_id: GOOGLE_CLIENT_ID,
-      redirect_uri: REDIRECT_URI,
+      redirect_uri: resolveOAuthRedirectUri(process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI),
       response_type: 'code',
       scope: 'openid email profile',
       access_type: 'offline',

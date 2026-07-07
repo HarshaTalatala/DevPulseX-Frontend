@@ -30,3 +30,17 @@ export const clearPersistedOAuthState = (provider: OAuthProvider): void => {
   if (typeof window === 'undefined') return;
   window.localStorage.removeItem(`${OAUTH_STATE_KEY_PREFIX}${provider}`);
 };
+
+export const resolveOAuthRedirectUri = (configuredRedirectUri?: string): string => {
+  if (typeof window !== 'undefined') {
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+    if (isLocalhost && configuredRedirectUri) {
+      return configuredRedirectUri;
+    }
+
+    return `${window.location.origin}/auth/callback`;
+  }
+
+  return configuredRedirectUri || 'http://localhost:3000/auth/callback';
+};

@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useAuthStore } from '@/stores/auth';
+import { resolveOAuthRedirectUri } from '@/lib/oauthState';
 
 const TRELLO_API_KEY = process.env.NEXT_PUBLIC_TRELLO_API_KEY || '';
 const TRELLO_APP_NAME = 'DevPulseX';
-const REDIRECT_URI = process.env.NEXT_PUBLIC_TRELLO_REDIRECT_URI || 'http://localhost:3000/auth/callback';
 const STATE_KEY = 'trello_oauth_state';
 
 const createState = () => {
@@ -47,7 +47,7 @@ export const useTrelloAuth = () => {
       expiration: '30days',
       response_type: 'token',
       scope: 'read,write',
-      return_url: `${REDIRECT_URI}?state=${state}`,
+      return_url: `${resolveOAuthRedirectUri(process.env.NEXT_PUBLIC_TRELLO_REDIRECT_URI)}?state=${state}`,
     });
 
     const authUrl = `https://trello.com/1/authorize?${params.toString()}`;

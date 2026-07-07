@@ -20,7 +20,7 @@ import OAuthAccountsStatus from '@/components/OAuthAccountsStatus';
 import { useProjects } from '@/hooks/useProjects';
 import { ProjectDto } from '@/types';
 import { authApi } from '@/lib/api/auth';
-import { generateOAuthState, persistOAuthState } from '@/lib/oauthState';
+import { generateOAuthState, persistOAuthState, resolveOAuthRedirectUri } from '@/lib/oauthState';
 
 // Lazy load heavy components for better performance
 const AnimatedChart = dynamic(
@@ -80,7 +80,7 @@ export default function DashboardPage() {
       persistOAuthState('github', state);
       await authApi.prepareOAuthState('github', state);
 
-      const redirectUri = encodeURIComponent(process.env.NEXT_PUBLIC_GITHUB_REDIRECT_URI || `${window.location.origin}/auth/callback`);
+      const redirectUri = encodeURIComponent(resolveOAuthRedirectUri(process.env.NEXT_PUBLIC_GITHUB_REDIRECT_URI));
       const scope = encodeURIComponent('read:user,repo,user:email');
       const url = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&state=${encodeURIComponent(state)}`;
       window.location.href = url;
