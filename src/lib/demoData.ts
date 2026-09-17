@@ -1,3 +1,75 @@
+export const demoTrelloBoards = [
+  { id: 'demo-board-api', name: 'API Service Board' },
+  { id: 'demo-board-ui', name: 'Dashboard UI Board' },
+  { id: 'demo-board-platform', name: 'Platform Operations' },
+];
+
+export const demoTrelloBoardAggregates: Record<string, { lists: Array<{ listId: string; listName: string; cards: any[] }> }> = {
+  'demo-board-api': {
+    lists: [
+      {
+        listId: 'demo-api-backlog',
+        listName: 'Backlog',
+        cards: [
+          { id: 'demo-api-card-1', name: 'Document rate-limit behavior', desc: 'Add examples for clients and operators.', labels: ['Documentation'], memberIds: ['Bob Chen'] },
+          { id: 'demo-api-card-2', name: 'Review webhook retry policy', desc: 'Confirm retry windows before the next release.', labels: ['Review'], memberIds: [] },
+        ],
+      },
+      {
+        listId: 'demo-api-progress',
+        listName: 'In Progress',
+        cards: [
+          { id: 'demo-api-card-3', name: 'Rate limiting middleware', desc: 'Protect auth endpoints from burst traffic.', labels: ['Engineering'], memberIds: ['Charlie Rao'] },
+        ],
+      },
+      {
+        listId: 'demo-api-done',
+        listName: 'Done',
+        cards: [
+          { id: 'demo-api-card-4', name: 'OAuth callback hardening', desc: 'Sanitize callback failures and recovery paths.', labels: ['Security'], memberIds: ['Alice Johnson'] },
+        ],
+      },
+    ],
+  },
+  'demo-board-ui': {
+    lists: [
+      {
+        listId: 'demo-ui-planning',
+        listName: 'Planning',
+        cards: [
+          { id: 'demo-ui-card-1', name: 'Refresh onboarding empty states', desc: 'Make the first-run dashboard feel useful immediately.', labels: ['Design'], memberIds: ['Diana Kim'] },
+        ],
+      },
+      {
+        listId: 'demo-ui-progress',
+        listName: 'In Progress',
+        cards: [
+          { id: 'demo-ui-card-2', name: 'Dashboard responsive pass', desc: 'Check dense analytics layouts at tablet widths.', labels: ['Frontend'], memberIds: ['Eve Park'] },
+          { id: 'demo-ui-card-3', name: 'Theme flash on first paint', desc: 'Resolve the initial light-mode flicker.', labels: ['Bug'], memberIds: [] },
+        ],
+      },
+      {
+        listId: 'demo-ui-done',
+        listName: 'Shipped',
+        cards: [
+          { id: 'demo-ui-card-4', name: 'Project list visual refresh', desc: 'Align cards with the monochrome dashboard language.', labels: ['Design'], memberIds: ['Alice Johnson'] },
+        ],
+      },
+    ],
+  },
+  'demo-board-platform': {
+    lists: [
+      {
+        listId: 'demo-platform-queue',
+        listName: 'Queue',
+        cards: [
+          { id: 'demo-platform-card-1', name: 'Audit CI quality gates', desc: 'Review failing checks and owner coverage.', labels: ['DevOps'], memberIds: ['Charlie Rao'] },
+        ],
+      },
+      { listId: 'demo-platform-done', listName: 'Completed', cards: [] },
+    ],
+  },
+};
 import {
   DashboardDto,
   DeploymentDto,
@@ -33,7 +105,7 @@ export const demoUsers: UserDto[] = [
   { id: 5, name: 'Eve Park', email: 'eve@devpulsex.demo', role: Role.DEVELOPER, githubUsername: 'evepark' },
 ];
 
-export const demoCurrentUser: UserDto = demoUsers[0];
+export const demoCurrentUser: UserDto = { ...demoUsers[0], trelloId: 'demo-trello-user', trelloUsername: 'devpulsex-demo' };
 
 export const demoTeams: TeamDto[] = [
   { id: 1, name: 'Backend Core', memberIds: [1, 2, 3] },

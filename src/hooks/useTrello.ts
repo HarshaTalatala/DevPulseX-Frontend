@@ -1,6 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { trelloApi } from '@/lib/api/trello';
 import { useAuthStore } from '@/stores/auth';
+import { demoTrelloBoardAggregates, demoTrelloBoards } from '@/lib/demoData';
+import { enforceDemoReadOnly, isDemoMode } from '@/lib/demoMode';
 
 export const useTrelloBoards = () => {
   const { user } = useAuthStore();
@@ -8,7 +10,7 @@ export const useTrelloBoards = () => {
   
   return useQuery({
     queryKey: ['trello', 'boards', user?.id],
-    queryFn: async () => trelloApi.getBoards(),
+    queryFn: async () => (isDemoMode() ? demoTrelloBoards : trelloApi.getBoards()),
     enabled: isTrelloLinked,
     retry: 1,
     refetchOnWindowFocus: false,
@@ -18,7 +20,7 @@ export const useTrelloBoards = () => {
 export const useTrelloLists = (boardId?: string) => {
   return useQuery({
     queryKey: ['trello', 'lists', boardId],
-    queryFn: () => trelloApi.getLists(boardId!),
+    queryFn: () => isDemoMode() ? (demoTrelloBoardAggregates[boardId!]?.lists || []) : trelloApi.getLists(boardId!),
     enabled: !!boardId,
   });
 };
@@ -26,7 +28,13 @@ export const useTrelloLists = (boardId?: string) => {
 export const useTrelloCards = (listId?: string) => {
   return useQuery({
     queryKey: ['trello', 'cards', listId],
-    queryFn: () => trelloApi.getCards(listId!),
+    queryFn: () => {
+      if (isDemoMode()) {
+        return Object.values(demoTrelloBoardAggregates).flatMap((aggregate) => aggregate.lists)
+          .find((list) => list.listId === listId)?.cards || [];
+      }
+      return trelloApi.getCards(listId!);
+    },
     enabled: !!listId,
   });
 };
@@ -37,7 +45,9 @@ export const useProjectTrello = (projectId?: number) => {
   
   return useQuery({
     queryKey: ['trello', 'project', projectId, user?.id],
-    queryFn: () => trelloApi.getProjectTrelloData(projectId!),
+    queryFn: () => isDemoMode()
+      ? Promise.resolve(demoTrelloBoardAggregates[`demo-board-${projectId === 1 ? 'api' : projectId === 2 ? 'ui' : 'platform'}`] || { lists: [] })
+      : trelloApi.getProjectTrelloData(projectId!),
     enabled: !!projectId && isTrelloLinked,
   });
 };
@@ -49,9 +59,11 @@ export const useTrelloBoardAggregate = (boardId?: string) => {
   return useQuery({
     queryKey: ['trello', 'board-aggregate', boardId, user?.id],
     queryFn: async () => {
+      if (isDemoMode()) {
+        return demoTrelloBoardAggregates[boardId!] || { lists: [] };
+      }
       const lists = await trelloApi.getLists(boardId!);
       const normalizedLists = Array.isArray(lists) ? lists : [];
-
       const listsWithCards = await Promise.all(
         normalizedLists.map(async (list: any) => {
           const cards = await trelloApi.getCards(list.id);
@@ -70,7 +82,6 @@ export const useTrelloBoardAggregate = (boardId?: string) => {
           };
         })
       );
-
       return { lists: listsWithCards };
     },
     enabled: !!boardId && isTrelloLinked,
@@ -99,7 +110,10 @@ export const useSyncTrelloTasks = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (projectId: number) => trelloApi.syncTasks(projectId),
+    mutationFn: (projectId: number) => {
+      if (isDemoMode()) enforceDemoReadOnly();
+      return trelloApi.syncTasks(projectId);
+    },
     onSuccess: (data, projectId) => {
       // Invalidate local tasks and Trello project cache
       queryClient.invalidateQueries({ queryKey: ['tasks'] });

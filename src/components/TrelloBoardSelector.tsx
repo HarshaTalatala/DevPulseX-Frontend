@@ -7,6 +7,7 @@ import { useProject } from '@/hooks/useProjects';
 import { useTrelloBoards } from '@/hooks/useTrello';
 import { useTrelloAuth } from '@/hooks/useTrelloAuth';
 import { useAuthStore } from '@/stores/auth';
+import { enforceDemoReadOnly, isDemoMode } from '@/lib/demoMode';
 import { toast } from 'sonner';
 import { RefreshCw, Link2, Link2Off, AlertTriangle, KeyRound } from 'lucide-react';
 
@@ -41,6 +42,7 @@ export default function TrelloBoardSelector({ projectId, onBoardChange }: Props)
 
   const updateProjectMutation = useMutation({
     mutationFn: async (boardId: string | null) => {
+      if (isDemoMode()) enforceDemoReadOnly();
       if (!project || !projectId) return;
       const payload = { 
         name: project.name, 

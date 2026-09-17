@@ -14,7 +14,9 @@ export const useProjects = () => {
 export const useProject = (id?: number) => {
   return useQuery({
     queryKey: ['projects', id],
-    queryFn: () => projectsApi.getById(id!),
+    queryFn: () => isDemoMode()
+      ? Promise.resolve(demoProjects.find((project) => project.id === id))
+      : projectsApi.getById(id!),
     enabled: !!id,
   });
 };
