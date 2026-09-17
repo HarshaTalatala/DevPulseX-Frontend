@@ -432,19 +432,19 @@ export default function DashboardPage() {
 
           {activeTab === 'trello' && (
             <div className="space-y-5">
-              <div className="relative overflow-hidden rounded-xl border border-gray-200/60 dark:border-white/5 bg-white/60 dark:bg-gray-900/60 backdrop-blur-md p-4 sm:p-5">
+              <div className="relative overflow-hidden rounded-xl border border-neutral-200/60 dark:border-white/10 bg-white/[0.03] dark:bg-neutral-950/70 backdrop-blur-md p-4 sm:p-5">
                 <div className="relative">
                   <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">Trello Workspace Overview</h2>
                   <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1">
                     Link a board to a project or preview any board from your connected Trello account.
                   </p>
                   <div className="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
-                    <div className="lg:col-span-1 rounded-xl border border-gray-200/60 dark:border-white/5 bg-white/50 dark:bg-black/20 p-3 sm:p-4">
+                    <div className="lg:col-span-1 rounded-xl border border-neutral-200/60 dark:border-white/10 bg-white/[0.02] dark:bg-black/20 p-3 sm:p-4">
                       <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">
                         Project Scope
                       </label>
                       <select
-                        className="w-full px-3 py-2.5 rounded-lg bg-white/70 dark:bg-gray-800 border border-gray-200 dark:border-white/5 text-xs text-gray-900 dark:text-gray-100 hover:border-gray-300 dark:hover:border-white/10 transition-colors focus:ring-1 focus:ring-gray-300 dark:focus:ring-white/20 outline-none"
+                        className="w-full px-3 py-2.5 rounded-lg bg-white/5 dark:bg-neutral-900 border border-neutral-200 dark:border-white/10 text-xs text-gray-900 dark:text-gray-100 hover:border-neutral-300 dark:hover:border-white/20 transition-colors focus:ring-1 focus:ring-neutral-300 dark:focus:ring-white/20 outline-none"
                         value={projectSelectValue}
                         onChange={(e) => setSelectedProjectId(e.target.value ? Number(e.target.value) : 'none')}
                       >
@@ -471,7 +471,7 @@ export default function DashboardPage() {
               )}
 
               {!projectsQueryLoading && projects.length === 0 && (
-                <div className="p-3 rounded-md bg-gray-50 dark:bg-white/[0.02] border border-dashed border-gray-300 dark:border-white/10 text-xs text-gray-600 dark:text-gray-400">
+                <div className="p-3 rounded-md bg-white/[0.02] dark:bg-white/[0.02] border border-dashed border-neutral-300 dark:border-white/10 text-xs text-gray-600 dark:text-gray-400">
                   No DevPulseX projects found. Trello board preview mode is enabled.
                 </div>
               )}
@@ -479,7 +479,7 @@ export default function DashboardPage() {
               {effectiveProjectId || selectedBoardId ? (
                 <TrelloBoardViewer projectId={effectiveProjectId} boardId={selectedBoardId} />
               ) : (
-                <div className="relative overflow-hidden p-8 text-center bg-gray-50 dark:bg-white/[0.02] rounded-xl border border-dashed border-gray-300 dark:border-white/10">
+                <div className="relative overflow-hidden p-8 text-center bg-white/[0.02] dark:bg-white/[0.02] rounded-xl border border-dashed border-neutral-300 dark:border-white/10">
                   <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(17,24,39,0.08),transparent_55%)] dark:bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.06),transparent_55%)]" />
                   <div className="relative">
                     <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2">Select a Trello board</h3>

@@ -80,15 +80,15 @@ export default function TrelloBoardViewer({ projectId, boardId }: Props) {
       <div className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-20 bg-gray-100 dark:bg-gray-800/40 rounded-xl animate-pulse border border-gray-200/50 dark:border-white/5"></div>
+            <div key={i} className="h-20 bg-neutral-100 dark:bg-neutral-950/70 rounded-xl animate-pulse border border-neutral-200/50 dark:border-white/10"></div>
           ))}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="p-4 rounded-xl bg-gray-50/60 dark:bg-gray-800/30 border border-gray-200/50 dark:border-white/5 animate-pulse h-80 flex flex-col gap-3">
-              <div className="h-7 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
-              <div className="h-24 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
-              <div className="h-24 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+            <div key={i} className="p-4 rounded-xl bg-neutral-50/60 dark:bg-neutral-950/50 border border-neutral-200/50 dark:border-white/10 animate-pulse h-80 flex flex-col gap-3">
+              <div className="h-7 bg-neutral-200 dark:bg-neutral-800 rounded w-1/2"></div>
+              <div className="h-24 bg-neutral-200 dark:bg-neutral-800 rounded-lg"></div>
+              <div className="h-24 bg-neutral-200 dark:bg-neutral-800 rounded-lg"></div>
             </div>
           ))}
         </div>
@@ -124,7 +124,7 @@ export default function TrelloBoardViewer({ projectId, boardId }: Props) {
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="p-10 text-center bg-gray-50/50 dark:bg-white/[0.01] rounded-xl border border-dashed border-gray-300 dark:border-white/10"
+        className="p-10 text-center bg-neutral-50/50 dark:bg-white/[0.01] rounded-xl border border-dashed border-neutral-300 dark:border-white/10"
       >
         <Kanban className="h-8 w-8 text-gray-400 dark:text-gray-600 mx-auto mb-3" />
         <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-1">No Trello board selected</h3>
@@ -143,7 +143,7 @@ export default function TrelloBoardViewer({ projectId, boardId }: Props) {
       <div className="flex flex-col gap-4 lg:flex-row lg:items-stretch">
         {/* Left Side: Stats Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 flex-1">
-          <div className="rounded-xl border border-gray-200/60 dark:border-white/5 bg-white/60 dark:bg-gray-900/60 backdrop-blur-md p-4 flex flex-col justify-between shadow-sm">
+          <div className="rounded-xl border border-neutral-200/60 dark:border-white/10 bg-white/[0.03] dark:bg-neutral-950/70 backdrop-blur-md p-4 flex flex-col justify-between shadow-sm">
             <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
               <Layers className="h-3.5 w-3.5" />
               Lists
@@ -151,7 +151,7 @@ export default function TrelloBoardViewer({ projectId, boardId }: Props) {
             <span className="mt-2 text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white">{lists.length}</span>
           </div>
 
-          <div className="rounded-xl border border-gray-200/60 dark:border-white/5 bg-white/60 dark:bg-gray-900/60 backdrop-blur-md p-4 flex flex-col justify-between shadow-sm">
+          <div className="rounded-xl border border-neutral-200/60 dark:border-white/10 bg-white/[0.03] dark:bg-neutral-950/70 backdrop-blur-md p-4 flex flex-col justify-between shadow-sm">
             <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
               <ClipboardList className="h-3.5 w-3.5" />
               Cards
@@ -159,7 +159,7 @@ export default function TrelloBoardViewer({ projectId, boardId }: Props) {
             <span className="mt-2 text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white">{totalCards}</span>
           </div>
 
-          <div className="rounded-xl border border-gray-200/60 dark:border-white/5 bg-white/60 dark:bg-gray-900/60 backdrop-blur-md p-4 flex flex-col justify-between shadow-sm col-span-2 sm:col-span-1">
+          <div className="rounded-xl border border-neutral-200/60 dark:border-white/10 bg-white/[0.03] dark:bg-neutral-950/70 backdrop-blur-md p-4 flex flex-col justify-between shadow-sm col-span-2 sm:col-span-1">
             <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
               <ArrowRightLeft className="h-3.5 w-3.5" />
               Integration
@@ -172,7 +172,7 @@ export default function TrelloBoardViewer({ projectId, boardId }: Props) {
         </div>
 
         {/* Right Side: Sync Controls Box */}
-        <div className="rounded-xl border border-gray-200/60 dark:border-white/5 bg-gradient-to-br from-gray-50/80 to-gray-100/50 dark:from-gray-900/60 dark:to-gray-950/40 backdrop-blur-md p-4 flex flex-col justify-center gap-3 lg:w-96 shadow-sm">
+        <div className="rounded-xl border border-neutral-200/60 dark:border-white/10 bg-gradient-to-br from-neutral-50/80 to-neutral-100/50 dark:from-neutral-950/70 dark:to-black/40 backdrop-blur-md p-4 flex flex-col justify-center gap-3 lg:w-96 shadow-sm">
           {projectId ? (
             <>
               {canSync ? (
@@ -191,7 +191,7 @@ export default function TrelloBoardViewer({ projectId, boardId }: Props) {
                   <button
                     onClick={handleSync}
                     disabled={syncMutation.isPending || isFetching}
-                    className="w-full py-2.5 px-4 rounded-lg bg-gradient-to-r from-gray-900 to-gray-800 dark:from-white dark:to-gray-100 hover:from-black dark:hover:from-gray-200 text-white dark:text-black font-semibold text-sm shadow-md hover:shadow-lg hover:shadow-gray-900/10 dark:hover:shadow-white/10 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center gap-2 border-0"
+                    className="w-full py-2.5 px-4 rounded-lg bg-gradient-to-r from-neutral-950 to-neutral-800 dark:from-white dark:to-neutral-100 hover:from-black dark:hover:from-neutral-200 text-white dark:text-black font-semibold text-sm shadow-md hover:shadow-lg hover:shadow-black/20 dark:hover:shadow-white/10 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center gap-2 border-0"
                   >
                     {syncMutation.isPending ? (
                       <>
@@ -217,7 +217,7 @@ export default function TrelloBoardViewer({ projectId, boardId }: Props) {
               )}
             </>
           ) : (
-            <div className="text-xs text-gray-500 dark:text-gray-400 bg-gray-500/5 border border-gray-500/10 rounded-lg p-3 flex gap-2 justify-center items-center text-center">
+            <div className="text-xs text-gray-500 dark:text-gray-400 bg-neutral-500/5 border border-neutral-500/10 rounded-lg p-3 flex gap-2 justify-center items-center text-center">
               <Sparkles className="h-4 w-4 text-gray-400 flex-shrink-0" />
               <span>Select a project in the <strong>Project Scope</strong> dropdown to enable database task syncing.</span>
             </div>
@@ -235,12 +235,12 @@ export default function TrelloBoardViewer({ projectId, boardId }: Props) {
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: listIdx * 0.05 }}
-                className="w-80 flex-shrink-0 rounded-2xl border border-gray-200/70 dark:border-white/5 bg-gray-50/50 dark:bg-black/20 p-3 flex flex-col"
+                className="w-80 flex-shrink-0 rounded-2xl border border-neutral-200/70 dark:border-white/10 bg-neutral-50/50 dark:bg-black/30 p-3 flex flex-col"
               >
                 {/* Column Header */}
-                <div className="mb-3 flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-white/70 dark:bg-white/[0.02] border border-gray-200/50 dark:border-white/5 shadow-sm">
+                <div className="mb-3 flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-white/5 dark:bg-white/[0.03] border border-neutral-200/50 dark:border-white/10 shadow-sm">
                   <span className="text-xs font-bold text-gray-800 dark:text-gray-200 truncate">{list.listName}</span>
-                  <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-gray-900 text-white dark:bg-white dark:text-black shadow-sm">
+                  <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-neutral-950 text-white dark:bg-white dark:text-black shadow-sm">
                     {list.cards?.length || 0}
                   </span>
                 </div>
@@ -251,10 +251,10 @@ export default function TrelloBoardViewer({ projectId, boardId }: Props) {
                     <motion.div 
                       key={card.id} 
                       whileHover={{ y: -2 }}
-                      className="p-4 rounded-xl bg-white dark:bg-gray-900/60 border border-gray-200/60 dark:border-white/5 hover:border-gray-300 dark:hover:border-white/20 transition-all duration-200 shadow-sm hover:shadow-md cursor-default relative overflow-hidden"
+                      className="p-4 rounded-xl bg-white dark:bg-neutral-950/70 border border-neutral-200/60 dark:border-white/10 hover:border-neutral-300 dark:hover:border-white/20 transition-all duration-200 shadow-sm hover:shadow-md cursor-default relative overflow-hidden"
                     >
                       {/* Vercel-style color strip for decorative purposes */}
-                      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-gray-200/80 to-gray-300/80 dark:from-white/10 dark:to-white/5" />
+                      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-neutral-200/80 to-neutral-300/80 dark:from-white/10 dark:to-white/5" />
 
                       <div className="text-xs font-semibold text-gray-900 dark:text-gray-100 leading-snug break-words">{card.name}</div>
                       
@@ -270,7 +270,7 @@ export default function TrelloBoardViewer({ projectId, boardId }: Props) {
                           {card.labels.map((label: string, idx: number) => (
                             <span 
                               key={idx} 
-                              className="px-2 py-0.5 rounded-full bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-gray-300 text-[9px] font-semibold border border-gray-200/50 dark:border-white/5 flex items-center gap-1"
+                              className="px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-white/5 text-gray-700 dark:text-gray-300 text-[9px] font-semibold border border-neutral-200/50 dark:border-white/10 flex items-center gap-1"
                             >
                               <Tag className="h-2 w-2 text-gray-400" />
                               {label || 'Label'}
@@ -281,13 +281,13 @@ export default function TrelloBoardViewer({ projectId, boardId }: Props) {
 
                       {/* Card Members */}
                       {(card.memberIds?.length || 0) > 0 && (
-                        <div className="mt-3 pt-2.5 border-t border-gray-100 dark:border-white/5 flex items-center gap-1.5 flex-wrap">
+                        <div className="mt-3 pt-2.5 border-t border-neutral-100 dark:border-white/10 flex items-center gap-1.5 flex-wrap">
                           <User className="h-3.5 w-3.5 text-gray-400 dark:text-gray-500" />
                           <div className="flex flex-wrap gap-1">
                             {card.memberIds.map((member: string, idx: number) => (
                               <span 
                                 key={idx} 
-                                className="px-1.5 py-0.5 rounded bg-gray-50 dark:bg-white/[0.02] text-gray-500 dark:text-gray-400 text-[9px] font-mono border border-gray-200/30 dark:border-white/5"
+                                className="px-1.5 py-0.5 rounded bg-neutral-50 dark:bg-white/[0.02] text-gray-500 dark:text-gray-400 text-[9px] font-mono border border-neutral-200/30 dark:border-white/10"
                               >
                                 {member}
                               </span>
@@ -299,7 +299,7 @@ export default function TrelloBoardViewer({ projectId, boardId }: Props) {
                   ))}
                   
                   {(!list.cards || list.cards.length === 0) && (
-                    <div className="text-[10px] text-gray-400 dark:text-gray-500 text-center py-8 border border-dashed border-gray-200/60 dark:border-white/5 rounded-xl bg-white/20 dark:bg-black/10">
+                    <div className="text-[10px] text-gray-400 dark:text-gray-500 text-center py-8 border border-dashed border-neutral-200/60 dark:border-white/10 rounded-xl bg-white/20 dark:bg-black/10">
                       Empty List
                     </div>
                   )}

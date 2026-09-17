@@ -106,7 +106,7 @@ export default function TrelloBoardSelector({ projectId, onBoardChange }: Props)
   }
 
   return (
-    <div className="w-full rounded-xl border border-gray-200/60 dark:border-white/5 bg-white/60 dark:bg-gray-900/60 backdrop-blur-md p-4 sm:p-5 shadow-sm">
+    <div className="w-full rounded-xl border border-neutral-200/60 dark:border-white/10 bg-white/[0.03] dark:bg-neutral-950/70 backdrop-blur-md p-4 sm:p-5 shadow-sm">
       <div className="flex flex-col gap-4">
         {/* Header bar */}
         <div className="flex justify-between items-start sm:items-center gap-3">
@@ -122,7 +122,7 @@ export default function TrelloBoardSelector({ projectId, onBoardChange }: Props)
           <button
             onClick={() => refetch()}
             disabled={isLoading || isFetching}
-            className="p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 disabled:opacity-50 transition-colors"
+            className="p-1.5 rounded-lg bg-neutral-100 hover:bg-neutral-200 dark:bg-white/5 dark:hover:bg-white/10 disabled:opacity-50 transition-colors"
             title="Reload Trello Boards"
           >
             <RefreshCw className={`h-4 w-4 text-gray-600 dark:text-gray-300 ${isFetching ? 'animate-spin' : ''}`} />
@@ -151,15 +151,15 @@ export default function TrelloBoardSelector({ projectId, onBoardChange }: Props)
 
         {/* Loading / dropdown selection */}
         {isLoading ? (
-          <div className="py-4 text-center rounded-lg border border-dashed border-gray-200 dark:border-white/5 bg-gray-50/50 dark:bg-black/10">
-            <div className="inline-block animate-spin rounded-full h-4 w-5 border-b-2 border-gray-900 dark:border-white"></div>
+          <div className="py-4 text-center rounded-lg border border-dashed border-neutral-200 dark:border-white/10 bg-neutral-50/50 dark:bg-black/10">
+            <div className="inline-block animate-spin rounded-full h-4 w-5 border-b-2 border-neutral-950 dark:border-white"></div>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1.5">Fetching Trello Boards…</p>
           </div>
         ) : (
           <div className="space-y-1.5">
             <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Trello Board</label>
             <select
-              className="w-full px-3 py-2.5 rounded-lg bg-white/70 dark:bg-gray-800 border border-gray-200 dark:border-white/5 text-xs text-gray-900 dark:text-gray-100 hover:border-gray-300 dark:hover:border-white/10 transition-colors focus:ring-1 focus:ring-gray-300 dark:focus:ring-white/20 outline-none"
+              className="w-full px-3 py-2.5 rounded-lg bg-white/5 dark:bg-neutral-900 border border-neutral-200 dark:border-white/10 text-xs text-gray-900 dark:text-gray-100 hover:border-neutral-300 dark:hover:border-white/20 transition-colors focus:ring-1 focus:ring-neutral-300 dark:focus:ring-white/20 outline-none"
               value={selectedBoardId || ''}
               onChange={(e) => setSelectedBoardId(e.target.value)}
               disabled={boardOptions.length === 0}
@@ -178,11 +178,11 @@ export default function TrelloBoardSelector({ projectId, onBoardChange }: Props)
         {projectId && (
           <div className="flex flex-col gap-2">
             {canLinkBoardToProject ? (
-              <div className="flex flex-wrap gap-2 pt-2 border-t border-gray-100 dark:border-white/5">
+              <div className="flex flex-wrap gap-2 pt-2 border-t border-neutral-100 dark:border-white/10">
                 <button
                   onClick={handleSave}
                   disabled={updateProjectMutation.isPending || !selectedBoardId || selectedBoardId === project?.trelloBoardId}
-                  className="px-4 py-2 rounded-lg bg-gray-900 hover:bg-black text-white dark:bg-white dark:text-black dark:hover:bg-gray-100 text-xs font-bold disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-sm border-0"
+                  className="px-4 py-2 rounded-lg bg-neutral-950 hover:bg-black text-white dark:bg-white dark:text-black dark:hover:bg-neutral-100 text-xs font-bold disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-sm border-0"
                 >
                   {updateProjectMutation.isPending ? 'Saving…' : 'Link Board to Project'}
                 </button>
@@ -190,7 +190,7 @@ export default function TrelloBoardSelector({ projectId, onBoardChange }: Props)
                   <button
                     onClick={handleUnlink}
                     disabled={updateProjectMutation.isPending}
-                    className="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 text-gray-900 dark:text-gray-100 text-xs font-bold transition-all duration-300 flex items-center gap-1 border-0"
+                    className="px-4 py-2 rounded-lg bg-neutral-100 hover:bg-neutral-200 dark:bg-white/5 dark:hover:bg-white/10 text-gray-900 dark:text-gray-100 text-xs font-bold transition-all duration-300 flex items-center gap-1 border-0"
                   >
                     <Link2Off className="h-3.5 w-3.5" />
                     Unlink Board

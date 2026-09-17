@@ -16,7 +16,7 @@ export default function TrelloAccountLink() {
 
   if (isLinked) {
     return (
-      <div className="p-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-white/10 rounded-lg">
+      <div className="p-4 bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-white/10 rounded-lg">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <CheckCircle className="h-5 w-5 text-gray-700 dark:text-gray-300" />
@@ -32,7 +32,7 @@ export default function TrelloAccountLink() {
           <button
             onClick={handleLink}
             disabled={loading}
-            className="px-3 py-1.5 bg-gray-900 hover:bg-black text-white dark:bg-white dark:text-black dark:hover:bg-gray-100 rounded-md text-xs font-medium inline-flex items-center gap-1.5 transition-colors disabled:opacity-60"
+            className="px-3 py-1.5 bg-neutral-950 hover:bg-black text-white dark:bg-white dark:text-black dark:hover:bg-neutral-100 rounded-md text-xs font-medium inline-flex items-center gap-1.5 transition-colors disabled:opacity-60"
           >
             <LinkIcon className="h-3.5 w-3.5" />
             {loading ? 'Redirecting…' : 'Re-link'}
@@ -43,7 +43,7 @@ export default function TrelloAccountLink() {
   }
 
   return (
-    <div className="p-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-white/10 rounded-lg">
+    <div className="p-4 bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-white/10 rounded-lg">
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1">
           <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1">
@@ -62,7 +62,7 @@ export default function TrelloAccountLink() {
       <button
         onClick={handleLink}
         disabled={loading}
-        className="px-4 py-2 bg-gray-900 hover:bg-black text-white dark:bg-white dark:text-black dark:hover:bg-gray-100 rounded-md text-sm font-medium inline-flex items-center gap-2 transition-colors"
+        className="px-4 py-2 bg-neutral-950 hover:bg-black text-white dark:bg-white dark:text-black dark:hover:bg-neutral-100 rounded-md text-sm font-medium inline-flex items-center gap-2 transition-colors"
       >
         <LinkIcon className="h-4 w-4" />
         {loading ? 'Redirecting…' : 'Link Trello Account'}
